@@ -1,0 +1,73 @@
+{
+    "home": "Главная",
+    "settings": "Настройки",
+    "explore": "Исследуйте",
+    "messages": "Сообщения",
+    "map": "Карта",
+    "search": "Поиск...",
+
+
+    "pushNotifications": "Push-уведомления",
+
+    "selectChat": "Выберите, кому хотели бы написать",
+    "typeSomething": "Напишите что-то...",
+    "isTyping": "печатает...",
+
+    "disable": "Выключить",
+    "enable": "Включить",
+    "loading": "Загрузка...",
+
+    "remove": "Удалить",
+    "pin": "Закрепить",
+    "unpin": "Открепить",
+    "edit": "Редактировать",
+    "report": "Пожаловаться",
+
+
+    "you": "Вы",
+
+    "all": "Все",
+
+    "years": "г",
+    "months": "мес",
+    "weeks": "нед",
+    "days": "д",
+    "hours": "ч",
+    "minutes": "м",
+    "now": "только что",
+
+    "yesterdayAt": "вчера в ",
+
+    "stories": "Истории",
+    "relevantNow": "Сейчас актуально",
+    "activeNow": "Активны сейчас",
+
+    "post": "Запись",
+    "showMore": "Показать полностью...",
+
+    "likedByAuthor": "Оценил автор",
+
+    "whatsNew": "Что нового?",
+    "createPost": "Создать публикацию",
+    "sendPost": "Опубликовать",
+
+    "following": "Подписки",
+    "recommendations": "Рекомендации",
+
+    "welcomeToLights": "Рады видеть в Lights",
+
+    "continue": "Продолжить",
+
+    "poll": "Опрос",
+
+    "signUp": "Создать аккаунт",
+    "signIn": "Войти в аккаунт",
+
+    "followUser": "Подписаться",
+    "followingUser": "Вы подписаны",
+
+    "name": "Имя",
+    "password": "Пароль",
+    "confirmPassword": "Подтвердите пароль",
+    "usernameOrEmail": "Username или E-mail"
+}

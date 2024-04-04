@@ -1,0 +1,175 @@
+{
+    "lang": "en-US",
+
+    "yourEmail": "Your email",
+
+    "home": "Home",
+    "settings":"Settings",
+    "explore": "Explore",
+    "messages": "Messages",
+    "map": "map",
+    "search": "Search...",
+
+
+    "pushNotifications": "Push Notifications",
+    "automaticMediaDownload": "Automatic media download",
+
+    "selectChat": "Select chat",
+    "typeSomething": "Type something...",
+    "isTyping": "is typing...",
+
+    "yourComment": "Your comment",
+
+    "disable": "Disable",
+    "enable": "Enable",
+    "loading": "Loading...",
+
+    "delete": "Delete",
+    "pin": "Pin",
+    "unpin": "Unpin",
+    "edit": "Edit",
+    "copy": "Copy",
+    "copySelectedText": "Copy selected text",
+    "report": "Report",
+    "ignore": "Ignore",
+    "translate": "Translate",
+    "share": "Share",
+    "forFriends": "For friends",
+    "everybody": "Everybody",
+    "friends": "Friends",
+    "onlyYou": "Only you",
+    "private": "Private",
+
+    "privacyAndSecurity": "Privacy and security",
+    "dataAndStorage": "Data and storage",
+    "notifications": "Notifications",
+    "language": "Language",
+    "appearance": "Appearance",
+    "theme": "Theme",
+    "light": "Light",
+    "dark": "Dark",
+    "system": "System",
+    "wallpaper": "Wallpaper",
+    "changeWallpaper": "Change wallpaper",
+    "translucency": "Translucency",
+    "activityStatus": "Activity status",
+    "nobody": "Nobody",
+    "myFriends": "My friends",
+    "neverShareWith": "Never share with",
+    "alwaysShareWith": "Always share with",
+    "exceptions": "Exceptions",
+    "addUsers": "Add users",
+    "whoCanSeeMyActivityStatus": "Who can see my activity status",
+    "general": "General",
+    "quickReaction": "Quick reaction",
+    "stickersAndEmoji": "Stickers and emoji",
+    "yourQuickReaction": "Your quick reaction",
+
+    "oops": "Oops...",
+    "heavy": "Heavy...",
+    "maxFileSizeWithRose": "The max file size with a Lights Rose is 50 MB.",
+    "maxFileSize": "The max file size is 25 MB.",
+    "postNotFound": "Post not found",
+    "userNotFound1": "User",
+    "userNotFound2": "not found",
+    "mapIsNotAvailable": "Map is not available",
+    "messagesIsNotAvailable": "Messenger is not available",
+    "momentsIsNotAvailable": "Moments is not available",
+    "tryAgainLater": "Try again later, we'll fix it;)",
+    "openLink": "Open link",
+    "doYouWantToOpenLink": "Do you want to open",
+    "cancel": "Cancel",
+    "open": "Open",
+    "deletePost": "Delete post",
+    "deletePostConfirmation": "Are you sure you want to delete this post?",
+
+    "deleteComment": "Delete comment",
+    "deleteCommentConfirmation": "Are you sure you want to delete this comment?",
+
+    "downloadTheUpdate": "Download the update",
+    "install": "Install",
+    "notNow": "Not now",
+    "updateDescription": "Hey, we've got an update out! Install it now or next time?\nJust keep in mind that the app will reboot :)",
+
+
+    "you": "You",
+
+    "all": "All",
+
+    "years": "y",
+    "months": "mo",
+    "weeks": "w",
+    "days": "d",
+    "hours": "h",
+    "minutes": "m",
+    "now": "just now",
+    "today": "Today",
+
+    "yd": "yd at ",
+
+    "moments": "Moments",
+    "relevantNow": "Relevant Now",
+    "activeContacts": "Active contacts",
+
+    "noCommentsHereYet": "No comments here yet...",
+    "noPostsHereYet": "No posts here yet...",
+
+    "incomingFriendRequest": "Incoming friend request",
+    "accept": "Accept",
+    "friendRequests": "Friend requests",
+    "incoming": "Incoming",
+    "outgoing": "Outgoing",
+
+    "post": "Post",
+    "showMore": "Show more...",
+
+    "likedByAuthor": "Liked by author",
+
+    "whatsNew": "What's new?",
+    "createPost": "Create post",
+    "editPost": "Edit post",
+
+    "following": "Following",
+    "forYou": "For You",
+
+    "heyItSLights": "Hey, it’s Lights!",
+
+    "continue": "Continue",
+
+    "poll": "Poll",
+
+    "signUp": "Sign Up",
+    "signIn": "Sign In",
+
+    "followUser": "Follow",
+    "followingUser": "Following",
+
+    "displayName": "Display name",
+    "displayNameDescription": "Name that users will see besides the username",
+    "deleteAvatar": "Delete avatar",
+    "about": "About",
+    "note": "Note",
+    "clickToAddANote": "Click to add a note",
+    "password": "Password",
+    "confirmPassword": "Confirm password",
+    "usernameOrEmail": "Username or E-mail",
+
+    "comments": "Comments",
+    "leaveAComment": "Leave a comment",
+    "edited": "edited",
+
+    "nobodyIsActive": {
+        "title": "Hey, where is everybody?",
+        "description": "Hrm, it seems none of your friends are active yet."
+    },
+    "offline": "Offline",
+    "cleanCache": "Clean cache",
+
+    "back": "Back",
+    "of": "of",
+
+    "copyLink": "Copy link",
+    "more": "More",
+    "thisPostIsUnavailable": "This post is unavailable",
+    "repost": "Repost"
+}

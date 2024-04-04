@@ -1,0 +1,49 @@
+:root {
+    color-scheme: light dark;
+    --accent-color: hsl(355, 100%, 71%);
+    accent-color: var(--accent-color);
+
+    --red-pallete-color: hsl(0, 98%, 66%);
+
+    --main-blur-color: color-mix(in srgb, var(--main-color) 85%, transparent);
+
+    --background-color-blur: color-mix(in srgb, var(--background-color) 85%, transparent);
+}
+:root[data-theme=light] {
+    --main-color: hsl(0, 0%, 100%);
+    --highlight-color: hsl(0, 0%, 94%);
+
+    --input-color: hsl(0, 0%, 94%);
+
+    --background-color: hsl(0, 0%, 95%);
+    --font-color: hsl(0, 0%, 29%);
+
+    --buttons-color: hsl(0deg 0% 77%);
+
+    --following-color: hsl(0deg 0% 79%);
+
+
+    --offline-status-color: hsl(0, 0%, 59%);
+    --active-status-color: hsl(112, 73%, 46%);
+
+    --switcher-color: hsl(0, 0%, 84%);
+}
+:root[data-theme=dark] {
+    --main-color: hsl(0, 0%, 12%);
+    --highlight-color: hsl(0deg 0% 17%);
+
+    --input-color: hsl(0deg 0% 18%);
+
+    --background-color: hsl(0deg 0% 10%);
+    --font-color: hsl(0, 0%, 100%);
+
+    --buttons-color: hsl(0, 0%, 66%);
+
+    --following-color: hsl(0deg 0% 25%);
+
+
+    --offline-status-color: hsl(0, 0%, 41%);
+    --active-status-color: hsl(112, 79%, 41%);
+
+    --switcher-color: hsl(0, 0%, 28%);
+}
