@@ -1,3 +1,3 @@
-# Hywer + Vite
+# Lights experimental hywer based client
 
-This template provides a minimal setup to get Hywer working in Vite with hot reload.
+
