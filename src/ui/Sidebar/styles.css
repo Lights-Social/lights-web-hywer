@@ -1,0 +1,32 @@
+.sideBar {
+    width: 340px;
+    display: grid;
+    gap: 20px;
+    position: sticky;
+    top: 95px;
+    height: fit-content;
+}
+.sideBar .block {
+    display: grid;
+    gap: 10px;
+    width: 100%;
+    height: fit-content;
+    border-radius: 20px;
+    padding: 20px;
+    background: var(--main-color);
+    box-sizing: border-box;
+}
+.sideBar .block .title {
+    font-weight: 500;
+    font-size: 19px;
+    font-family: 'Rubik', sans-serif;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+
+    height: 19px;
+}
+.sideBar .block .title svg {
+    fill: var(--following-color);
+    width: 23px;
+}

@@ -16,5 +16,6 @@ export async function Api(uri, method = 'GET', body = null, jsonBody = false) {
         body: body,
     })
 
+
     return response;
 }

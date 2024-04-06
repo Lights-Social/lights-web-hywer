@@ -1,0 +1,54 @@
+.themeSelector {
+    display: flex;
+    gap: 10px;
+
+    justify-content: center;
+}
+
+.themeSelector button {
+    
+    background: transparent;
+    border: none;
+    outline: none;
+    height: fit-content;
+    display: grid;
+    gap: 5px;
+    font-family: 'Rubik';
+    color: var(--font-color);
+    cursor: pointer;
+
+    font-size: 14px;
+    
+
+}
+
+.themeSelector button .icon {
+    border: 3px solid transparent;
+    transition: 0.2s;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.themeSelector button .icon svg {
+    width: 90px;
+
+    transition: 0.2s;
+    border-radius: 20px;
+    border: 2px solid color-mix(in srgb, hsl(0, 0%, 50%) 20%, var(--main-color));
+}
+
+.themeSelector button.selected .icon {
+    border: 3px solid 
+    color-mix(in srgb, var(--accent-color) 75%, transparent);
+}
+
+.themeSelector button.selected .icon svg {
+    scale: 0.92;
+}
+
+.window .blockTitle {
+    font-family: 'Rubik';
+    font-weight: 500;
+    opacity: 0.5;
+}

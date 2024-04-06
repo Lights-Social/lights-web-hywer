@@ -158,10 +158,9 @@
     "leaveAComment": "Leave a comment",
     "edited": "edited",
 
-    "nobodyIsActive": {
-        "title": "Hey, where is everybody?",
-        "description": "Hrm, it seems none of your friends are active yet."
-    },
+    "nobodyIsActive.title": "Hey, where is everybody?",
+    "nobodyIsActive.description": "Hrm, it seems none of your friends are active yet.",
+    
     "offline": "Offline",
     "cleanCache": "Clean cache",
 

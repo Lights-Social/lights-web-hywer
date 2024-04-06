@@ -1,0 +1,17 @@
+.momentsList {
+    display: flex;
+    width: fit-content;
+    width: 100%;
+    height: calc(80px + 20px);
+    overflow: auto;
+    gap: 10px;
+}
+
+.momentsList::-webkit-scrollbar { 
+    display: none;
+}
+
+.mobileHeader .momentsList {
+    --momentsListHeight: 0px;
+    height: var(--momentsListHeight);
+}

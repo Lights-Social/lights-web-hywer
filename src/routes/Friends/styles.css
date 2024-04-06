@@ -1,0 +1,122 @@
+
+main.friendsView  .window  {
+    background: var(--background-color);
+    padding: 15px;
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+
+}
+
+.friendList {
+    display: grid;
+    width: 610px;
+
+    border-radius: 15px;
+
+    background: var(--main-color);
+
+}
+
+
+
+
+
+
+@media only screen and (max-width: 480px) {
+	main.friendsView .window {
+		padding-top: calc(env(safe-area-inset-top) + 55px + 15px);
+        padding-bottom: calc(env(safe-area-inset-bottom) + 60px + 15px);
+        border-radius: 0px;
+        
+        flex: 1;
+
+    }
+
+    .friendList {
+		width: 100%;
+	}
+
+}
+
+
+/* .friendList .cell:hover {
+    background: color-mix(in srgb, var(--input-color) 90%, var(--font-color));
+
+} */
+
+
+
+
+
+.friendRequests {
+    display: flex;
+    align-items: center;
+    padding: 15px;
+    border-radius: 15px;
+    cursor: pointer;
+    font-size: 16px;
+    outline: none;
+    border: none;
+    font-family: 'Rubik';
+    background: var(--main-color);
+    color: var(--font-color);
+    transition: 0.2s background-color;
+}
+
+.friendRequests .title {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.friendRequests .title svg {
+    width: 25px;
+    height: 25px;
+    fill: var(--buttons-color);
+}
+
+.friendRequests .title .text {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.friendRequests .title .outgoing {
+    opacity: 0.5;
+    font-size: 16px;
+    
+}
+
+.friendRequests .subTitle {
+    margin-inline-start: auto;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 16px;
+    
+}
+
+.friendRequests .subTitle .badge {
+    min-width: 25px;
+    box-sizing: border-box;
+    padding: 5px;
+    border-radius: 20px;
+    background: var(--red-pallete-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-weight: 500;
+    font-size: 13px;
+    color: white;
+    
+}
+
+.friendRequests .arrow {
+    width: 15px;
+    height: 15px;
+    fill: var(--font-color);
+    opacity: 0.5;
+}

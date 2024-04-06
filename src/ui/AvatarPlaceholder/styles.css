@@ -1,0 +1,27 @@
+.avatar {
+    width: inherit;
+    height: inherit;
+    border-radius: inherit;
+
+    container-type: inline-size;
+    container-name: avatar;
+
+
+    overflow: hidden;
+}
+
+
+
+.avatar .background {
+    width: inherit;
+    height: inherit;
+    border-radius: inherit;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: color-mix(in srgb, var(--color) 20%, var(--main-color));
+    color: var(--color);
+    font-family: 'Rubik', sans-serif;
+    font-size: calc(100cqi / 2.3);
+    font-weight: 500;
+}

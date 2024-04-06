@@ -1,0 +1,19 @@
+.nobodyIsActive {
+    text-align: center;
+    font-family: 'Rubik';
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 7px;
+    height: 150px;
+}
+
+.nobodyIsActive h2 {
+    font-size: 16px;
+    font-weight: 500;
+}
+
+.nobodyIsActive p {
+    opacity: 0.7;
+    font-size: 15px;
+}

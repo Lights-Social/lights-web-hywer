@@ -1,0 +1,30 @@
+.moment {
+    min-width: 80px;
+    width: 80px;
+    height: 80px;
+    border-radius: 17px;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+
+.moment .avatar {
+    width: 30px;
+    height: 30px;
+    border: 4px solid var(--main-color);
+    border-radius: 50%;
+    position: absolute;
+    bottom: -20px;
+}
+.moment.placeholder {
+    cursor: unset;
+}
+
+.moment.create {
+    background: linear-gradient(180deg, rgba(255, 108, 121, 0.20) 0%, rgba(255, 168, 65, 0.20) 100%);
+}
+.moment.create svg {
+    width: 25px;
+}

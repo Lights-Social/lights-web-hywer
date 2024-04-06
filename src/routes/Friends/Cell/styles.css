@@ -1,0 +1,165 @@
+.friendList .cell {
+    display: flex;
+    align-items: center;
+    padding: 15px;
+    cursor: pointer;
+    font-size: 16px;
+    outline: none;
+    border: none;
+    font-family: 'Rubik';
+
+    color: var(--font-color);
+
+    transition: 0.2s background-color;
+
+    width: 100%;
+    gap: 10px;
+
+    overflow: hidden;
+    box-sizing: border-box;
+
+    position: relative;
+    
+}
+
+.friendList .cell:first-of-type {
+    border-radius: 15px 15px 0px 0px;
+}
+
+.friendList .cell:last-of-type {
+    border-radius: 0px 0px 15px 15px;
+}
+
+
+
+.friendList .cell:only-child {
+    border-radius: 15px;
+}
+
+.friendList .cell + .cell::before {
+    content: "";
+    position: absolute;
+    left: 15px;
+
+    top: 0;
+    width: calc(100% - 30px);
+    height: 1px; /* Высота линии разделения */
+    background-color: var(--highlight-color); /* Цвет линии разделения */
+}
+
+.friendList .cell .title {
+    display: grid;
+    height: 100%;
+}
+
+.friendList .cell .title .username {
+    opacity: 0.5;
+    font-size: 15px;
+}
+
+.friendList .cell .title .info {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    overflow: hidden;
+
+}
+
+.friendList .cell .title .info > svg {
+    fill: var(--buttons-color);
+    min-width: 16px;
+    width: 16px;
+
+}
+
+.friendList .cell .title .info svg.verified {
+    fill: var(--accent-color);
+}
+
+.friendList .cell .title .info .name {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    /* font-size: 15px;
+    font-weight: 500; */
+
+}
+
+
+
+.friendList .cell .avatarWrapper {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+
+    min-width: 40px;
+    min-height: 40px;
+    position: relative;
+
+    
+
+}
+
+
+
+
+
+
+
+
+.friendList .cell .buttons {
+    margin-inline-start: auto;
+    display: flex;
+    gap: 7px;
+
+}
+
+.friendList .cell .buttons button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: none;
+    outline: none;
+    padding: 10px;
+    border-radius: 15px;
+    background: var(--highlight-color);
+    transition: transform 0.1s;
+}
+
+.friendList .cell .buttons button:active {
+	transform: scale(0.95);
+}
+
+.friendList .cell .buttons button svg {
+    width: 20px;
+    fill: var(--buttons-color);
+}
+
+.friendList .cell .buttons button.accept {
+    --background: var(--active-status-color);
+    background: color-mix(in srgb, var(--background) 15%, var(--main-color));
+}
+
+.friendList .cell .buttons button.accept svg {
+    --background: var(--active-status-color);
+    fill: var(--background);
+}
+
+
+.friendList .cell.placeholder {
+    cursor: unset;
+}
+
+.friendList .cell.placeholder .info .name {
+    height: 13px;
+    width: 150px;
+    border-radius: 20px;
+}
+
+
+.friendList .cell.placeholder .buttons .button {
+    width: 40px;
+    height: 40px;
+    border-radius: 15px;
+
+}

@@ -22,12 +22,12 @@
     background: linear-gradient(90deg, var(--highlight-color) 0%, var(--following-color) 7%, var(--following-color) 13%, var(--highlight-color) 25%) 100% 0%;
     background-size: 900%;
 
-    animation: loadingPlaceholder 1.8s;
+    /* animation: loadingPlaceholder 1.8s;
     animation-iteration-count: infinite;
-    animation-timing-function: ease-in-out;
+    animation-timing-function: ease-in-out; */
 }
 
-@keyframes loadingPlaceholder {
+/* @keyframes loadingPlaceholder {
     0% {
         background-position: 100% 0%;
     }
@@ -37,7 +37,7 @@
     100% {
         background-position: 100% 0%;
     }
-}
+} */
 
 body {
     background: var(--background-color);
