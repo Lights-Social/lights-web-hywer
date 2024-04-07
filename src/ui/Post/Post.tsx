@@ -1,5 +1,4 @@
 import './styles.css'
-import Picture from "../Picture"
 import { store } from "@/data"
 import { type IPost, type IProfile } from "@/data/types/models"
 
@@ -9,6 +8,10 @@ import AccessBadge from "./AccessBadge/AccessBadge"
 import PinnedIcon from '@/ui/icons/pinned'
 import VerifiedIcon from '@/ui/icons/verified'
 import AvatarPlaceholder from '../AvatarPlaceholder/AvatarPlaceholder'
+import Pictures from './Pictures/index.tsx'
+import ForwardedPost from './ForwardedPost/ForwardedPost.tsx'
+import Duration from './Duration.tsx'
+import Picture from '../Picture/index.tsx'
 
 interface PostProps {
     post: IPost
@@ -17,7 +20,7 @@ interface PostProps {
 
 function Post({post, profile}: PostProps) {
 
-    const locale = store.locale()
+    const {strings} = store.locale()
     return (
         <article class="post">
             <div class="title">
@@ -25,10 +28,7 @@ function Post({post, profile}: PostProps) {
                     <a aria-label={profile.name != "" ? profile.name : profile.username} class="name" href={`/u/${profile.username}`} data-route>{profile.name != "" ? profile.name : profile.username}</a>
                     { profile.verified ? <VerifiedIcon /> : null }
                     { post.is_edited ? <EditedIcon /> : null }
-
-                    <time datetime={post.date}>
-                        {/* <Duration date={props.item.date} /> */}
-                    </time>
+                    <Duration date={post.date} />
                     { post.is_pinned ? <PinnedIcon /> : null}
                 </div>
 
@@ -64,13 +64,14 @@ function Post({post, profile}: PostProps) {
                     </Switch>
                 </Show>
                  */}
+                {
+                    post.reposts.count > 0 ? <ForwardedPost item={post.reposts.initialPosts[0]} profile={store.getProfileById(post.reposts.initialPosts[0].peer.id)!} /> : null
+                }
                 
-                {/* <Pictures onDownload={props.onPictureDownload} photos={props.item.attachments.photos} /> */}
+                {post.attachments.photos.length > 0 ? <Pictures pictures={post.attachments.photos}/> : null}
             </div>
-            <a aria-label={profile.name != "" ? profile.name : profile.username} class="name" href={`/u/${profile.username}`}>
-                {/* <Picture picture={profile.avatar[0].photo_id} /> */}
-
-                {profile.avatar[0] ? null : <AvatarPlaceholder width={40} height={40} name={profile.name != "" ? profile.name : profile.username} />}
+            <a aria-label={profile.name != "" ? profile.name : profile.username} class="avatar" href={`/u/${profile.username}`} data-route>
+                {profile.avatar.length > 0 ? <Picture picture={{photo_id: profile.avatar[0].photo_id, alt: "", preview: profile.avatar[0].preview, width: 1, height: 1}} /> : <AvatarPlaceholder width={40} height={40} name={profile.name != "" ? profile.name : profile.username} />}
             </a>
 
             {/* <A onDblClick={(e: Event) => e.stopPropagation()} onClick={showUserModal} aria-label={props.profile.name != "" ? props.profile.name : props.profile.username} class="avatarWrapper" href={`/u/${props.profile.username}`}>
@@ -84,7 +85,7 @@ function Post({post, profile}: PostProps) {
                     <div class="replies">
                         <CommentIcon />
                         {
-                            post.comments.count == 0 ? locale["leaveAComment"] : `${post.comments.count}`
+                            post.comments.count == 0 ? strings["leaveAComment"] : `${post.comments.count}`
                         }
                     </div>
                 </div>

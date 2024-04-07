@@ -2,6 +2,8 @@
     "lang": "en-US",
 
     "yourEmail": "Your email",
+    "enterCode": "Enter code",
+    "enterCodeDescription": "We sent you the activation code to your email",
 
     "home": "Home",
     "settings":"Settings",
@@ -110,6 +112,7 @@
     "moments": "Moments",
     "relevantNow": "Relevant Now",
     "activeContacts": "Active contacts",
+    "posts": "Posts",
 
     "noCommentsHereYet": "No comments here yet...",
     "noPostsHereYet": "No posts here yet...",
@@ -158,9 +161,10 @@
     "leaveAComment": "Leave a comment",
     "edited": "edited",
 
-    "nobodyIsActive.title": "Hey, where is everybody?",
-    "nobodyIsActive.description": "Hrm, it seems none of your friends are active yet.",
-    
+    "nobodyIsActive": {
+        "title": "Hey, where is everybody?",
+        "description": "Hrm, it seems none of your friends are active yet."
+    },
     "offline": "Offline",
     "cleanCache": "Clean cache",
 

@@ -13,6 +13,8 @@ dialog.modal {
     box-sizing: border-box;
     gap: 20px;
     flex-direction: column;
+
+    will-change: transform, opacity;
 }
 
 dialog.modal[open] {
@@ -21,6 +23,9 @@ dialog.modal[open] {
     animation: dialogFade 0.15s cubic-bezier(0.25, 0.1, 0.25, 1.0);
 }
 
+dialog.modal::backdrop {
+    will-change: opacity;
+}
 
 dialog.modal[open]::backdrop {
     background: linear-gradient(180deg, rgba(147, 64, 64, 0.40) 0%, rgba(255, 168, 65, 0.30) 100%);

@@ -9,7 +9,7 @@ import { store } from "@/data";
 
 export default function ThemeSelector() {
     const currentTheme = ref(localStorage.getItem("theme") || "system")
-    const locale = store.locale()
+    const {strings} = store.locale()
 
     
     async function setTheme(theme: string) {
@@ -40,19 +40,19 @@ export default function ThemeSelector() {
                             <div class="icon">
                                 <LightThemeIcon />
                             </div>
-                            <span>{locale["light"]}</span>
+                            <span>{strings["light"]}</span>
                         </button>
                         <button class={theme == "system" ? "selected" : ""} onClick={() => setTheme("system")}>
                             <div class="icon">
                                 <SystemThemeIcon />
                             </div>
-                            <span>{locale["system"]}</span>
+                            <span>{strings["system"]}</span>
                         </button>
                         <button class={theme == "dark" ? "selected" : ""} onClick={() => setTheme("dark")}>
                             <div class="icon">
                                 <DarkThemeIcon />
                             </div>
-                            <span>{locale["dark"]}</span>
+                            <span>{strings["dark"]}</span>
                         </button>
                     </div>
                 })

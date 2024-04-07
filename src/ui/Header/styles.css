@@ -14,6 +14,12 @@ header.desktop {
 	z-index: 1;
 }
 
+@media only screen and (max-width: 480px) {
+	header.desktop {
+		display: none;
+	}
+}
+
 header.desktop nav {
 	position: absolute;
 	display: grid;

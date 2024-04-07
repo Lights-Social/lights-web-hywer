@@ -7,7 +7,7 @@ interface AccessBadgeProps {
     access: IPost['access']
 }
 export default function AccessBadge({access}: AccessBadgeProps) {
-    const locale = store.locale()
+    const {strings} = store.locale()
 
     return (
         <>
@@ -15,7 +15,7 @@ export default function AccessBadge({access}: AccessBadgeProps) {
                 access == 'friends' ?
                 <div class="accessBadge">
                     <FriendsIcon />
-                    {locale["forFriends"]}
+                    {strings["forFriends"]}
                 </div> : null
             }
 
@@ -23,7 +23,7 @@ export default function AccessBadge({access}: AccessBadgeProps) {
                 access == 'private' ?
                 <div class="accessBadge">
                     <PrivateIcon />
-                    {locale["private"]}
+                    {strings["private"]}
                 </div> : null
             }
         

@@ -11,7 +11,7 @@ export default function Friends() {
 
     // const [searchQuery, setSearchQuery] = createSignal<string>();
 
-    const locale = store.locale()    
+    const {strings} = store.locale()    
 
 
 
@@ -33,7 +33,7 @@ export default function Friends() {
     return <>
         <main class="friendsView">
             <div class="window">
-                <input id="searchField" enterkeyhint="search" placeholder={locale["search"]} onInput={onInputQuery} type="text" />
+                <input id="searchField" enterkeyhint="search" placeholder={strings["search"]} onInput={onInputQuery} type="text" />
                 
                 {
                     <div class="friendList">

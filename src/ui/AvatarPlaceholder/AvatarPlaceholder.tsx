@@ -11,10 +11,11 @@ interface AvatarPlaceholderProps {
 }
 
 function AvatarPlaceholder({name, width, height}: AvatarPlaceholderProps) {
+   const styles = `--color: ${HSLtoString(generateHSL(name)).toString()}; width: ${width}px; height: ${height}px`
 
     return (
         <div class="avatar">
-            <div class="background" style={{"width": width, "height": height, "--color": HSLtoString(generateHSL(name)).toString()}}>
+            <div class="background" style={styles}>
                 {Array.from(name)[0]}
             </div>
         </div>

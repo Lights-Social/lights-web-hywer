@@ -1,5 +1,4 @@
-//import { JSXElement } from "solid-js";
-//import { IResponse } from "../components/api";
+
 
 export interface MediaAttachment {
     file?: File;
@@ -38,6 +37,11 @@ export interface IPeer {
     id: string;
 }
 
+interface Object {
+    post_id: string;
+    notAvailable: boolean;
+}
+
 
 export interface IPost {
     id: string;
@@ -58,7 +62,12 @@ export interface IPost {
     };
     views: number;
     peer: IPeer;
-    access: 'all' | 'friends' | 'private';
+    access: 'all' | 'friends' | 'private',
+    reposts: {
+        count: number;
+        objects: Object[];
+        initialPosts: IPost[];
+    }
 }
 
 export interface IMoment {
@@ -105,11 +114,12 @@ export interface IComment {
     peer: IPeer;
 }
 
-export interface Avatar {
-    picture: string;
+export interface IAvatar {
+    photo_id: string;
     wrapper: string;
     preview: string;
     date: number;
+    url?: string;
 }
 
 export interface IStatus {
@@ -124,7 +134,7 @@ export interface IProfile {
     username: string;
     is_premium: boolean;
     sex: null;
-    avatar: Avatar[];
+    avatar: IAvatar[];
     cover: string;
     verified: boolean;
     status: IStatus;
@@ -138,23 +148,9 @@ export interface IProfile {
     };
     note: string;
     wallet_uri: string;
+    posts: number;
+    moments: number;
 }
-
-
-// export interface ContextMenuButton {
-//     icon?: JSXElement;
-//     type: "button" | "delete" | "reactionsBar",
-//     title?: string;
-//     function?: Function;
-// }
-
-
-// export interface PostViewStateProps {
-// 	response: IResponse<IPost>
-// 	meta: {
-// 		prev: string
-// 	}
-// }
 
 type Includes = {
     users: IProfile[];

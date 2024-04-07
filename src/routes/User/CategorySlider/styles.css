@@ -1,0 +1,78 @@
+.categorySlider {
+    display: flex;
+    width: 100%;
+    background: var(--main-color);
+    padding: 15px;
+    border-radius: 20px;
+    gap: 15px;
+    box-sizing: border-box;
+    height: fit-content;
+}
+
+@media only screen and (max-width: 480px) {
+    .categorySlider {
+        border-top: 1px solid var(--highlight-color);
+        border-radius: 0px 0px 20px 20px;
+    }
+}
+
+.categorySlider button {
+    background: var(--highlight-color);
+
+    outline: none;
+    padding: 12px;
+    font-family: 'Rubik', sans-serif;
+    gap: 7px;
+
+
+    min-width: 50px;
+    height: 50px;
+    border-radius: 18px;
+    border: none;
+    color: white;
+    transition: transform 0.2s, background-color 0.3s;
+    font-size: 15px;
+    font-weight: 500;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.categorySlider button svg {
+    width: 20px;
+    fill: color-mix(in srgb, var(--font-color) 40%, var(--main-color));
+}
+
+
+.categorySlider button.active {
+    background: color-mix(in srgb, var(--accent-color) 15%, var(--main-color));
+
+}
+.categorySlider button .title {
+    display: flex;
+    gap: 5px;
+    align-items: center;
+    justify-content: center;
+    color: var(--font-color);
+
+}
+
+.categorySlider button span {
+    opacity: 0.65;
+    font-weight: 500;
+
+}
+
+
+
+.categorySlider button.active svg {
+    fill: var(--accent-color);
+}
+
+.categorySlider button.active .title {
+    color: var(--accent-color);
+}
+
+.categorySlider button:not(.placeholderAnimated):active {
+	transform: scale(0.9);
+}

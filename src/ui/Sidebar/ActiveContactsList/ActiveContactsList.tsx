@@ -2,17 +2,17 @@ import { store } from "@/data"
 import "./styles.css"
 
 export default function activeContactsList() {
-    const locale = store.locale()
+    const {strings} = store.locale()
 
     
     return (
         <div class="activeContactsList">
             <div class="nobodyIsActive">
                 <h2>
-                    {locale["nobodyIsActive.title"]}
+                    {strings["nobodyIsActive.title"]}
                 </h2>
                 <p>
-                    {locale["nobodyIsActive.description"]}
+                    {strings["nobodyIsActive.description"]}
                 </p>
             </div>
         </div>

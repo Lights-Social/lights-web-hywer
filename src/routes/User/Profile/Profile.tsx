@@ -3,6 +3,9 @@ import type { IProfile } from "@/data/types/models";
 import VerifiedIcon from '@/ui/icons/verified'
 import RoseIcon from '@/ui/icons/rose'
 import Buttons from "./Buttons";
+import Picture from "@/ui/Picture";
+import AvatarPlaceholder from "@/ui/AvatarPlaceholder/AvatarPlaceholder";
+import Cover from "./Cover/Cover";
 
 
 interface ProfileProps {
@@ -11,17 +14,22 @@ interface ProfileProps {
 
 export default function Profile({profile}: ProfileProps) {
 
-    const locale = store.locale()
+    const {strings} = store.locale()
     
     return (
         <>
             <div class="profile">
                 <div class="coverWrapper">
-                    {/* <Cover profile={props.profile}/> */}
+                    <Cover profile={profile}/>
                 </div>
                 <div class="wrapper">
                     <div class="avatarWrapper">
-                        {/* <Avatar avatar={props.profile.avatar} name={props.profile.name != "" ? props.profile.name : props.profile.username} /> */}
+                        {
+                            profile.avatar.length > 0 ?
+                            <div class="avatar">
+                                <Picture picture={{photo_id: profile.avatar[0].photo_id, alt: "", preview: profile.avatar[0].preview, width: 1, height: 1}} />
+                            </div> : <AvatarPlaceholder width={40} height={40} name={profile.name != "" ? profile.name : profile.username} />
+                        }
                         <div class="statusBubbleWrapper">
                             {/* <StatusContextBubble status={props.profile.status}/>
                             <StatusBubble status={props.profile.status} /> */}

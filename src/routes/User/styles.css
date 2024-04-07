@@ -1,0 +1,314 @@
+main.userView {
+    display: flex;
+    flex-direction: row-reverse;
+}
+
+.items {
+    display: grid;
+    gap: 20px;
+}
+
+@media only screen and (max-width: 480px) {
+	main.userView {
+        flex-direction: column;
+        gap: 0px;
+	}
+
+    .items {
+        display: grid;
+        gap: 10px;
+    }
+}
+
+.profile {
+    position: sticky;
+    top: 95px;
+    width: 340px;
+
+    height: fit-content;
+    border-radius: 20px;
+    overflow: hidden;
+    background: var(--main-color);
+
+}
+.profile .coverWrapper {
+    height: 250px;
+}
+
+.profile .cover {
+    height: 250px;
+    max-height: 250px;
+    transition: 0.5s;
+
+    background-image: radial-gradient(60% 100% at 50% 100%, var(--user-color) 0%, var(--main-color) 100%);
+    overflow: hidden;
+
+}
+
+.profile .cover img {
+    width: 100%;
+    transition: opacity 0.2s;
+    height: 100%;
+    z-index: -1;
+}
+
+.profile .cover img.hidden {
+    opacity: 0;
+}
+
+
+.profile .wrapper {
+    background: var(--main-color);
+    padding: 15px;
+    box-sizing: border-box;
+
+    border-radius: 20px;
+    margin-top: -20px;
+    display: flex;
+    flex-direction: column;
+    
+    position: sticky;
+    height: fit-content;
+    align-items: center;
+
+    
+}
+
+.profile .wrapper > div:not(:last-child) {
+    margin-bottom: 20px;
+}
+
+@media only screen and (max-width: 480px) {
+    .profile {
+        width: 100%;
+        position: unset;
+        top: unset;
+        border-radius: 0px 0px 20px 20px;
+        overflow: unset;
+
+    }
+    
+
+    .profile .cover {
+        max-width: 480px;
+
+    }
+
+    .profile:not(.empty) .wrapper {
+        border-radius: 20px 20px 0px 0px;
+    }
+    
+}
+
+.profile .wrapper .avatarWrapper {
+    width: 100px;
+    height: 100px;
+    margin-top: -50px;
+    border-radius: 50%;
+    outline: 5px solid var(--main-color);
+
+    position: relative;
+
+    cursor: pointer;
+}
+.profile .wrapper .avatarWrapper .statusBubbleWrapper {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    outline: 5px solid var(--main-color);
+    border-radius: 12px;
+    cursor: pointer;
+    
+}
+
+.profile .wrapper .avatarWrapper .statusBubbleWrapper .statusContextBubble {
+    pointer-events: none;
+    opacity: 0;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, 60%);
+    
+}
+
+.profile .wrapper .avatarWrapper .statusBubbleWrapper:hover .statusContextBubble {
+    pointer-events: unset;
+    opacity: 1;
+}
+
+
+.profile .wrapper .title {
+    width: fit-content;
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    font-weight: 400;
+    font-family: 'Rubik', sans-serif;
+    cursor: pointer;
+    height: 46px;
+    align-items: center;
+    max-width: 100%;
+}
+.profile .wrapper .title .username {
+    opacity: 0.6;
+    font-size: 16px;
+    height: 19px;
+    
+}
+.profile .wrapper .title .name {
+    display: flex;
+    align-items: center;
+    font-size: 21px;
+    font-weight: 500;
+    gap: 7px;
+    justify-self: center;
+    height: 20px;
+    max-width: 100%;
+}
+.profile .wrapper .title .name .text {
+    white-space: nowrap; 
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.profile .wrapper.title.placeholder {
+    cursor: unset;
+}
+
+.profile .wrapper .title .name.placeholderAnimated {
+    width: 160px;
+    border-radius: 10px;
+}
+
+.profile .wrapper .title .username.placeholderAnimated {
+    width: 115px;
+    border-radius: 10px;
+    height: 15px;
+
+}
+
+.profile .wrapper .title .name svg {
+    fill: var(--buttons-color);
+    min-width: 16px;
+    width: 16px;
+}
+
+.profile .title .name svg.verified {
+    fill: var(--accent-color);
+}
+
+.profile .wrapper .about {
+    background: var(--highlight-color);
+    border-radius: 15px;
+    padding: 10px;
+    word-break: break-word;
+    white-space: pre-wrap;
+    line-height: 1.3125;
+    box-sizing: border-box;
+    width: 100%;
+}
+
+.profile .wrapper .about a {
+    transition: 0.2s;
+    color: var(--accent-color);
+    width: fit-content;
+    height: fit-content;
+}
+.profile .wrapper .about a:hover {
+    opacity: 0.75;
+}
+
+.profile .wrapper > .buttons {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+}
+
+
+.profile .wrapper > .buttons button {
+    min-width: 50px;
+    height: 50px;
+    border-radius: 18px;
+    border: none;
+    color: white;
+    transition: transform 0.2s, background-color 0.3s;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.profile .wrapper > .buttons button:not(.placeholderAnimated) {
+    background: var(--highlight-color);
+
+}
+
+.profile .wrapper > .buttons button:disabled:not(.placeholderAnimated) {
+    opacity: 0.6;
+    transform: none;
+}
+
+
+.profile .wrapper > .buttons .friendshipButton.notFriends:not(.placeholderAnimated) {
+    --background: var(--active-status-color);
+    background: color-mix(in srgb, var(--background) 15%, var(--main-color));
+
+}
+
+.profile .wrapper > .buttons .friendshipButton.notFriends:not(.placeholderAnimated) svg {
+    fill: var(--background);
+}
+
+.profile .wrapper > .buttons .friendshipButton.pending:not(.placeholderAnimated) {
+    --background: hsl(51, 79%, 51%);
+    background: color-mix(in srgb, var(--background) 15%, var(--main-color));
+
+}
+
+.profile .wrapper > .buttons .friendshipButton.pending:not(.placeholderAnimated) svg {
+    fill: var(--background);
+}
+
+.profile .wrapper > .buttons .friendshipButton.confirmation:not(.placeholderAnimated) {
+    --background: hsl(51, 79%, 51%);
+    background: color-mix(in srgb, var(--background) 15%, var(--main-color));
+
+}
+
+.profile .wrapper > .buttons .friendshipButton.confirmation:not(.placeholderAnimated) svg {
+    fill: var(--background);
+}
+
+
+.profile .wrapper > .buttons svg {
+    width: 24px;
+    height: 24px;
+    fill: var(--buttons-color);
+}
+
+.profile .wrapper > .buttons button:not(.placeholderAnimated):active {
+	transform: scale(0.9);
+}
+
+.profile .wrapper .note {
+    width: 100%;
+    display: grid;
+    gap: 10px;
+}
+
+.profile .wrapper .note textarea {
+    width: 100%;
+    resize: none;
+    height: 75px;
+    outline: none;
+    border: none;
+    border-radius: 10px;
+    font-family: 'Rubik';
+    font-size: 14px;
+    padding: 7px;
+    box-sizing: border-box;
+    border: solid 2px var(--highlight-color);
+    background: transparent;
+    caret-color: var(--accent-color);
+    color: var(--font-color);
+}

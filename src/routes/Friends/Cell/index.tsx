@@ -16,8 +16,6 @@ interface CellProps {
 }
 
 export default function Cell(props: CellProps) {
-    const locale = store.locale()
-
 
 
     async function sendFriendRequest() {

@@ -1,0 +1,23 @@
+.singlePicture {
+    width: 100%;
+    max-height: 575px;
+
+    position: relative;
+    overflow: hidden;
+    border-radius: 15px;
+
+    .photo {
+        max-width: 100%;
+        height: 100%;
+        overflow: hidden;
+        max-height: inherit;
+        margin-left: auto;
+        margin-right: auto;
+    }
+}
+
+@media only screen and (max-width: 480px) {
+    .singlePicture {
+        max-height: 400px;
+    }
+}

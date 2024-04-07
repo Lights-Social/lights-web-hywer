@@ -1,0 +1,68 @@
+.tabBar {
+    position: fixed;
+    bottom: 0;
+	height: 60px;
+    width: 100%;
+
+    padding-top: 0px;
+	padding-left: calc(0px + env(safe-area-inset-left));
+	padding-right: calc(0px + env(safe-area-inset-right));
+	padding-bottom: calc(0px + env(safe-area-inset-bottom));
+
+    border-top: 1px solid color-mix(in srgb, hsl(0, 0%, 50%) 15%, var(--main-color));
+    background: var(--main-color);
+
+    display: grid;
+    grid-auto-flow: column;
+    align-items: center;
+    justify-items: center;
+	border-radius: 20px 20px 0px 0px;
+}
+
+@media only screen and (min-width: 480px) {
+	.tabBar {
+		display: none;
+	}
+}
+
+
+.tabBar a {
+	width: 28px;
+	height: 28px;
+	border: none;
+	background: transparent;
+	cursor: pointer;
+	transition: 0.2s;
+
+	display: grid;
+    align-items: center;
+}
+.tabBar a svg {
+	fill: var(--buttons-color);
+	width: auto;
+	transition: 0.1s;
+}
+.tabBar a:hover svg {
+	fill: #9e9e9e;
+}
+/* .tabBar nav a:active {
+	transform: scale(0.9);
+} */
+.tabBar a.selected svg {
+	fill: var(--accent-color);
+}
+
+.tabBar a.me {
+	outline: 2px solid transparent;
+}
+.tabBar a.me .avatar {
+    transition: 0.2s;
+}
+
+.tabBar a.me.selected {
+    outline: 2px solid color-mix(in srgb, var(--accent-color) 75%, transparent);;
+}
+
+.tabBar a.me.selected .avatar {
+    scale: 0.75;
+}

@@ -24,6 +24,12 @@
       "skipLibCheck": true,
       "strict": true,
       "noFallthroughCasesInSwitch": true,
-      "forceConsistentCasingInFileNames": true
+      "forceConsistentCasingInFileNames": true,
+
+      "types": [
+        "vite/client",
+        "vite-plugin-pwa/client"
+      ],
+      "isolatedModules": true
     }
 }

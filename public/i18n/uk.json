@@ -2,6 +2,8 @@
     "lang": "uk-UA",
 
     "yourEmail": "Твій email",
+    "enterCode": "Введіть код",
+    "enterCodeDescription": "Ми надіслали вам код активації на ваш email",
 
     "home": "Головна",
     "settings": "Налаштування",
@@ -110,6 +112,7 @@
     "moments": "Моменти",
     "relevantNow": "Зараз актуально",
     "activeContacts": "Активні контакти",
+    "posts": "Пости",
 
     "noCommentsHereYet": "Коментарів поки що немає...",
     "noPostsHereYet": "Записів поки що немає...",
@@ -158,9 +161,10 @@
     "leaveAComment": "Коментувати",
     "edited": "змінено",
 
-    "nobodyIsActive.title": "Гей, а де всі?..",
-    "nobodyIsActive.description": "Хм, здається, ніхто з ваших друзів поки що не активний.",
-    
+    "nobodyIsActive": {
+        "title": "Гей, а де всі?..",
+        "description": "Хм, здається, ніхто з ваших друзів поки що не активний."
+    },
     "offline": "Не в мережі",
     "cleanCache": "Очистити кеш",
 

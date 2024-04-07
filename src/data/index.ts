@@ -8,10 +8,14 @@ interface ILocale {
     [key: string]: string
 }
 
-let localeStrings: ILocale = {}
+let strings: ILocale = {}
+let locale = "en-US"
 
 const friends = ref<IProfile[]>([])
 
+const myPosts = ref<IPost[]>([])
+
+const userPosts = ref<IPost[]>([])
 
 const feedPosts = ref<IPost[]>([])
 let isEnd = false;
@@ -22,29 +26,53 @@ export class Store {
 
         if (locale) {
             document.documentElement.setAttribute("lang", locale)
+            locale = locale
         } else {
             navigator.languages.forEach(lang => {
                 if (availableLangs.includes(lang)) {
                     document.documentElement.setAttribute("lang", lang)
+                    locale = lang
                 }
             })
         }
 
         if (document.documentElement.getAttribute("lang") === null) {
             document.documentElement.setAttribute("lang", "en-US")
+
+            locale = "en-US"
         }
 
         await fetch(`/i18n/${document.documentElement.getAttribute("lang")}.json`).then(res => res.json()).then(json => {
 
-            localeStrings = json
+            strings = json
         })
     }
 
     locale() {
-        return localeStrings
+        return {strings, locale}
     }
 
+
     getPosts(uri: string, offset: number) {
+        if (uri != "feeds/forYou") {
+            userPosts.val = [];
+
+            (async () => {
+                const response = await Api(`${uri}?offset=${offset}&limit=${15}`);
+		
+                let json: IResponsePosts<IPost> = await response.json();
+
+                let newProfiles = new Map<string, IProfile>()
+
+                json.includes.users.forEach((profile) => {
+                    newProfiles.set(profile.id, profile)
+                })
+
+                profiles.val = new Map([...profiles.val, ...newProfiles])
+                userPosts.val = json.data
+            })()
+        }
+
         if (feedPosts.val.length == 0) {
             (async () => {
                 const response = await Api(`${uri}?offset=${offset}&limit=${15}`);
@@ -63,7 +91,7 @@ export class Store {
         }
         
 
-        return feedPosts
+        return uri != "feeds/forYou" ? userPosts : feedPosts 
     }
 
     getProfileById(user_id: string) {
@@ -88,24 +116,39 @@ export class Store {
         return profile
     }
 
-    getProfileByUsername(username: string) {
-        for (const id in profiles.val.values()) {
-            if (profiles.val.get(id)!.username === username) {
-                return profiles.val.get(id)
+    getProfileByUsername(username: string): IProfile | null {
+        let user: IProfile | null = null
+
+        profiles.val.forEach(profile => {
+            if (profile.username == username) {
+                user = profile
             }
-        }
+        })
 
-        (async () => {
-            const response = await Api(`users/getByUsername/${username}`);
+        console.log(user)
+
+        return user
+
+
+        //const profile = Object value = map.get(myCode);
+
+    //     (async () => {
+    //         profiles.val.forEach(profile => {
+    //             if (profile.username == username) {
+    //                 return profile
+    //             }
+    //         })
+
+    //         const response = await Api(`users/getByUsername/${username}`);
     
-            let json: IResponsePosts<IProfile> = await response.json();
+    //         let json: IResponsePosts<IProfile> = await response.json();
 
-            profiles.val.set(json.data[0].id, json.data[0])
+    //         profiles.val.set(json.data[0].id, json.data[0])
 
-            return json.data[0]
+    //         return json.data[0]
 
 
-        })()
+    //     })()
     }
 
     getFriends(offset: number) {

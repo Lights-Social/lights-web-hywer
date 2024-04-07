@@ -8,7 +8,7 @@ import ActiveIcon from '@/ui/icons/active';
 
 
 function SideBar() {
-    const locale = store.locale()
+    const {strings} = store.locale()
     
     return(
         <div class="sideBar">
@@ -16,7 +16,7 @@ function SideBar() {
                 <div class="title">
                     <MomentIcon />
 
-                    {locale["moments"]}
+                    {strings["moments"]}
                 </div>
 
                 <MomentsList />
@@ -24,7 +24,7 @@ function SideBar() {
             <div class="block">
                 <div class="title">
                     <ActiveIcon />
-                    {locale["activeContacts"]}
+                    {strings["activeContacts"]}
                 </div>
                 <ActiveContactsList />
             </div>

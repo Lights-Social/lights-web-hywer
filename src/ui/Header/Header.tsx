@@ -6,22 +6,18 @@ import './styles.css';
 import FriendsIcon from "@/ui/icons/friends"
 import HomeIcon from "@/ui/icons/home"
 
+export function scrollTopFeed() {
+	if (location.pathname == "/home") {
+		window.scrollTo({
+			top: 0,
+			behavior: 'smooth'
+		});
+	}
+}
 
 function Header() {
 
-    const locale = store.locale()
-
-
-	function scrollTopFeed() {
-
-		if (location.pathname == "/home") {
-			window.scrollTo({
-				top: 0,
-				behavior: 'smooth'
-			});
-		}
-	}
-
+    const {strings} = store.locale()
 
 	return (
 		<header class={localStorage.getItem("blurEnabled") == "true" ? "desktop blur" : "desktop"}>
@@ -29,11 +25,11 @@ function Header() {
 				<img width="45px" height="45px" src={"/logo.svg"} alt="" />
 			</a>
 			{<nav>
-				<a onClick={scrollTopFeed} data-route href="/home" aria-label={locale["home"]}>
+				<a onClick={scrollTopFeed} data-route href="/home" aria-label={strings["home"]}>
 					<HomeIcon />
 				</a>
 
-				<a data-route href="/friends" aria-label={locale["friends"]}>
+				<a data-route href="/friends" aria-label={strings["friends"]}>
 					<FriendsIcon />
 				</a>
 			</nav>}

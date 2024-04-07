@@ -1,5 +1,3 @@
-export default function generateRandomId() {
-    const randomId = 'id_' + Date.now() + '_' + Math.floor(Math.random() * 1000);
-        
-    return randomId
-}
+const random_id = () => "id" + Math.random().toString(16).slice(2)
+
+export default random_id;

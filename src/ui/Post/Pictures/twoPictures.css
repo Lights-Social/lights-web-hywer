@@ -1,0 +1,20 @@
+.twoPictures {
+    width: 100%;
+    max-height: 575px;
+    display: flex;
+    gap: 5px;
+
+    .photo {
+        width: 100%;
+        max-height: 575px;
+        overflow: hidden;
+
+        &:first-child {
+            border-radius: 15px 0px 0px 15px;
+        }
+
+        &:nth-child(2) {
+            border-radius: 0px 15px 15px 0px;
+        }
+    }
+}

@@ -6,7 +6,7 @@ import ThemeSelector from './ThemeSelector';
 
 
 export default function AppearanceSettings() {
-    const locale = store.locale()
+    const {strings} = store.locale()
 
 
     // const [blurEnabled, setBlurEnabled] = createSignal(localStorage.getItem("blurEnabled") == "true");
@@ -21,7 +21,7 @@ export default function AppearanceSettings() {
         <>
             <main class='settingsView'>
                 <div class='window'>
-                    <span class="blockTitle">{locale["theme"]}</span>
+                    <span class="blockTitle">{strings["theme"]}</span>
                     <ThemeSelector />
                     {/* <span class="blockTitle">{locale["wallpaper"]}</span>
 

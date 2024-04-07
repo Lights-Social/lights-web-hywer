@@ -13,7 +13,7 @@ article.post {
         "buttons buttons"
         "reactions reactions";
     height: fit-content;
-    will-change: contents;
+    /* will-change: contents; */
 }
 
 article.post.full {
@@ -209,11 +209,6 @@ article.post.placeholder {
     height: fit-content;
 }
 
-article.post .avatarWrapper {
-    position: relative;
-
-}
-
 article.post .accessBadge {
     padding: 7px 10px;
     background: color-mix(in srgb, var(--accent-color) 15%, var(--main-color));
@@ -233,18 +228,10 @@ article.post .accessBadge svg {
     fill: var(--accent-color);
 }
 
-article.post > .avatarWrapper {
-    width: 40px;
-    height: 40px;
-
-    grid-area: avatar;
-
-    border-radius: 20px;
-
-}
 article.post > .avatar {
     width: 40px;
     height: 40px;
+    border-radius: 20px;
 }
 
 article.post.placeholder .content {

@@ -4,19 +4,19 @@ import MomentFilledIcon from "@/ui/icons/momentFilled";
 import { store } from "@/data";
 
 function CreateMomentPlaceHolder() {
-    const locale = store.locale()
+    const {strings} = store.locale()
 
         
     return (
         <>
             <Modal
-                aria-labelledby={locale["momentsIsNotAvailable"]}
-                aria-describedby={locale["tryAgainLater"]}
+                aria-labelledby={strings["momentsIsNotAvailable"]}
+                aria-describedby={strings["tryAgainLater"]}
                 id="momentsErrorModal"
             >
-                <h1>{locale["momentsIsNotAvailable"]} 😅</h1>
+                <h1>{strings["momentsIsNotAvailable"]} 😅</h1>
                 <p>
-                    {locale["tryAgainLater"]}
+                    {strings["tryAgainLater"]}
                 </p>
                 <button class="close" onClick={() => closeModal("momentsErrorModal")}>OK</button>
             </Modal>
