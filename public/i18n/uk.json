@@ -161,10 +161,9 @@
     "leaveAComment": "Коментувати",
     "edited": "змінено",
 
-    "nobodyIsActive": {
-        "title": "Гей, а де всі?..",
-        "description": "Хм, здається, ніхто з ваших друзів поки що не активний."
-    },
+    "nobodyIsActive.title": "Гей, а де всі?..",
+    "nobodyIsActive.description": "Хм, здається, ніхто з ваших друзів поки що не активний.",
+
     "offline": "Не в мережі",
     "cleanCache": "Очистити кеш",
 
