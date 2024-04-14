@@ -12,6 +12,12 @@ import Pictures from './Pictures/index.tsx'
 import ForwardedPost from './ForwardedPost/ForwardedPost.tsx'
 import Duration from './Duration.tsx'
 import Picture from '../Picture/index.tsx'
+import Link from '@/ui/utils/crutches/Link.tsx'
+import shake from '../shake.ts'
+import { Svg } from 'hywer/x/html'
+import { isIOS } from '@/ui/utils/crutches/platform.ts'
+import Reactions from '@/ui/Reactions/Reactions.tsx'
+import Poll from '../Poll/Poll.tsx'
 
 interface PostProps {
     post: IPost
@@ -21,24 +27,42 @@ interface PostProps {
 function Post({post, profile}: PostProps) {
 
     const {strings} = store.locale()
+
+    function shakeOnClick() {
+        if (window.location.pathname == `/u/${profile.username}`) {
+            shake(document.querySelector(".postsList") as HTMLElement)
+        }
+    }
+
+    function onReact(reaction_id: string) {
+
+    }
+
+
     return (
         <article class="post">
             <div class="title">
-                <div class="info">
-                    <a aria-label={profile.name != "" ? profile.name : profile.username} class="name" href={`/u/${profile.username}`} data-route>{profile.name != "" ? profile.name : profile.username}</a>
+                <div class="info">                    
+                    <Link onClick={shakeOnClick} class="name" href={`/u/${profile.username}`} aria-label={profile.name != "" ? profile.name : profile.username}>
+                        {profile.name != "" ? profile.name : profile.username}
+                    </Link>
+                    
                     { profile.verified ? <VerifiedIcon /> : null }
                     { post.is_edited ? <EditedIcon /> : null }
                     <Duration date={post.date} />
                     { post.is_pinned ? <PinnedIcon /> : null}
                 </div>
 
-                {/* <Show when={isIOS}>
-                    <button onClick={(e) => {toggle({x: e.pageX - 330, y: e.pageY + 10}, contextMenuButtons())}} class="optionsButton">
-                        <svg viewBox="0 0 25 7" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M3.4725 0.274902C1.6925 0.274902 0.25 1.7199 0.25 3.4999C0.25 5.2799 1.6925 6.7249 3.4725 6.7249C5.2525 6.7249 6.695 5.2824 6.695 3.4999C6.6975 1.7199 5.255 0.274902 3.4725 0.274902ZM12.5 0.274902C10.72 0.274902 9.275 1.7174 9.275 3.4974C9.275 5.2774 10.7175 6.7224 12.5 6.7224C14.28 6.7224 15.7225 5.2799 15.7225 3.4974C15.7225 1.7199 14.28 0.274902 12.5 0.274902ZM21.5275 0.274902C19.7475 0.274902 18.305 1.7174 18.305 3.4974C18.305 5.2774 19.7475 6.7224 21.5275 6.7224C23.3075 6.7224 24.75 5.2799 24.75 3.4974C24.75 1.7199 23.3075 0.274902 21.5275 0.274902Z" />
-                        </svg>
-                    </button>
-                </Show> */}
+                {
+                    isIOS ?
+                    <button onClick={(e: Event) => {/*toggle({x: e.pageX - 330, y: e.pageY + 10}, contextMenuButtons())*/}} class="optionsButton">
+                        <Svg>
+                            <svg viewBox="0 0 25 7" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M3.4725 0.274902C1.6925 0.274902 0.25 1.7199 0.25 3.4999C0.25 5.2799 1.6925 6.7249 3.4725 6.7249C5.2525 6.7249 6.695 5.2824 6.695 3.4999C6.6975 1.7199 5.255 0.274902 3.4725 0.274902ZM12.5 0.274902C10.72 0.274902 9.275 1.7174 9.275 3.4974C9.275 5.2774 10.7175 6.7224 12.5 6.7224C14.28 6.7224 15.7225 5.2799 15.7225 3.4974C15.7225 1.7199 14.28 0.274902 12.5 0.274902ZM21.5275 0.274902C19.7475 0.274902 18.305 1.7174 18.305 3.4974C18.305 5.2774 19.7475 6.7224 21.5275 6.7224C23.3075 6.7224 24.75 5.2799 24.75 3.4974C24.75 1.7199 23.3075 0.274902 21.5275 0.274902Z" />
+                            </svg>
+                        </Svg>
+                    </button> : null
+                }
             </div>
             
             
@@ -69,10 +93,13 @@ function Post({post, profile}: PostProps) {
                 }
                 
                 {post.attachments.photos.length > 0 ? <Pictures pictures={post.attachments.photos}/> : null}
+
+
+                {/* <Poll /> */}
             </div>
-            <a aria-label={profile.name != "" ? profile.name : profile.username} class="avatar" href={`/u/${profile.username}`} data-route>
-                {profile.avatar.length > 0 ? <Picture picture={{photo_id: profile.avatar[0].photo_id, alt: "", preview: profile.avatar[0].preview, width: 1, height: 1}} /> : <AvatarPlaceholder width={40} height={40} name={profile.name != "" ? profile.name : profile.username} />}
-            </a>
+            <Link onClick={shakeOnClick} class="avatar" href={`/u/${profile.username}`} aria-label={profile.name != "" ? profile.name : profile.username}>
+                {profile.avatar.length > 0 ? <Picture picture={{photo_id: profile.avatar[0].photo_id, alt: "", preview: profile.avatar[0].preview, width: 1, height: 1}} /> : <AvatarPlaceholder name={profile.name != "" ? profile.name : profile.username} />}
+            </Link>
 
             {/* <A onDblClick={(e: Event) => e.stopPropagation()} onClick={showUserModal} aria-label={props.profile.name != "" ? props.profile.name : props.profile.username} class="avatarWrapper" href={`/u/${props.profile.username}`}>
                 <Avatar avatar={props.profile.avatar} name={props.profile.name != "" ? props.profile.name : props.profile.username} />
@@ -92,7 +119,7 @@ function Post({post, profile}: PostProps) {
             {/* </Show> */}
             
 
-            {/* <Reactions onReact={(reaction_id: string) => props.onReact(props.item.id, reaction_id)} reactions={props.item.reactions} /> */}
+            <Reactions onReact={onReact} reactions={post.reactions} />
         </article>
     )
 }

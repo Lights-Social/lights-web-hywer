@@ -1,0 +1,110 @@
+.reactions {
+    grid-area: reactions;
+    transition: 0.2s;
+    display: flex;
+    overflow: hidden;
+
+    overflow: hidden;
+    height: fit-content;
+    flex-wrap: wrap;
+    width: fit-content;   
+    gap: 7px; 
+}
+
+.reactions button {
+    border: none;
+    overflow: hidden;
+    transition: 0.2s;
+    background: none;
+
+}
+
+
+.reactions button .wrapper {
+    padding: 6px 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+
+    border-radius: 30px;
+
+    position: relative;
+    overflow: hidden;
+    background: color-mix(in srgb, var(--accent-color) 15%, var(--main-color));
+
+    cursor: pointer;
+    color: var(--accent-color);
+
+    font-family: 'Rubik', sans-serif;
+    font-weight: 400;
+    font-size: 13px;
+
+}
+
+
+.reactions button .wrapper:after {
+    content: "";
+    position: absolute;
+    display: block;
+
+    width: calc(100%);
+    height: calc(100%);
+
+
+    transform-origin: 45% 50%;
+
+    transform: scale(0);
+    background: var(--accent-color);
+    border-radius: 15px;
+    transition: 0.2s ease;
+    padding: 10px;
+    border-radius: 30px;
+
+    will-change: transform;
+}
+
+.reactions button.isReacted .wrapper {
+    color: white;
+}
+
+.reactions button.isReacted .wrapper:after {
+    transform: scale(1);
+}
+.reactions button svg {
+    z-index: 1;
+}
+
+.reactions button .emoji {
+    z-index: 1;
+    font-size: 16px;
+}
+
+.reactions button .digitCounter {
+    height: fit-content;
+    z-index: 1;
+}
+
+/* article.post .reactions button.slide-enter,
+article.post .reactions button.slide-exit-to {
+    max-height: 0px;
+}
+
+article.post .reactions button.slide-enter-active,
+article.post .reactions button.slide-exit-active {
+    max-height: 31px;
+}
+
+
+
+
+.slide-enter-active,
+.slide-exit-active {
+    opacity: 1;
+    scale: 1;
+}
+.slide-enter,
+.slide-exit-to {
+    opacity: 0;
+    scale: 0;
+} */

@@ -6,7 +6,7 @@ import { store } from "@/data";
 function Home() {
 
 
-    const posts = store.getPosts(`feeds/forYou`, 0)
+    const posts = store.getPosts(`feeds/following`, 0)
 
 
     return <>

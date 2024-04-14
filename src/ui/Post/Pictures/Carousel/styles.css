@@ -1,0 +1,99 @@
+article.post .carouselPictures {
+    display: grid;
+    gap: 7px;
+    position: relative;
+}
+
+article.post .carouselPictures .points {
+    display: flex;
+    gap: 10px;
+    width: 100%;
+
+    overflow-x: auto;
+    overflow-y:auto;
+
+
+}
+article.post .carouselPictures .points .point {
+    border-radius: 12px;
+    overflow: hidden;
+    min-width: 45px;
+    min-height: 45px;
+    width: 45px;
+    height: 45px;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: border 0.2s;
+    background: none;
+    
+
+}
+
+article.post .carouselPictures .points .point.selected {
+    border: 2px solid color-mix(in srgb, var(--accent-color) 75%, transparent);
+}
+
+article.post .carouselPictures .points .point .photo {
+    flex: 0 0 auto;
+    aspect-ratio: 1 !important;
+    transition: 0.2s;
+    overflow: hidden;
+    position: relative;
+    border-radius: 12px;
+
+
+}
+article.post .carouselPictures .points .point.selected .photo img {
+    border-radius: 12px;
+
+}
+
+article.post .carouselPictures .points .point.selected .photo {
+    scale: 0.85;
+}
+
+article.post .carouselPictures .container {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    gap: 10px;
+    -webkit-overflow-scrolling: touch;
+}
+
+
+article.post .carouselPictures .container::-webkit-scrollbar { width: 0; }
+
+
+article.post .carouselPictures .container .photo {
+    scroll-snap-align: start;
+    width: 100%;
+    flex: 0 0 auto;
+    aspect-ratio: 1 !important;
+    border-radius: 15px;
+    overflow: hidden;
+    position: relative;
+
+    transition: margin 0.3s;
+
+}
+
+
+article.post .carouselPictures .counter {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    height: 30px;
+    width: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Rubik', sans-serif;
+    font-weight: 400;
+    z-index: 1;
+    font-size: 13px;
+    background: #0000009a;
+    color: white;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border-radius: 15px;
+}

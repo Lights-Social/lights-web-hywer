@@ -1,9 +1,6 @@
-export function getCookieValue(name) {
-    const c = document.cookie.match(`(?:(?:^|.*; *)${name} *= *([^;]*).*$)|^.*$`)    
-    if (c && c[1]) return decodeURIComponent(c[1])
-}
+import { getCookieValue } from "./ui/utils/getCookieValue";
 
-export async function Api(uri, method = 'GET', body = null, jsonBody = false) {
+export async function Api(uri: string, method = 'GET', body = null, jsonBody = false) {
     const myHeaders = new Headers();
     let access_token = getCookieValue("access_token");
     if (access_token) myHeaders.set('Authorization', `Bearer ${access_token}`);

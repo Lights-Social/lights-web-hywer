@@ -1,0 +1,141 @@
+main.login {
+    width: 100%;
+    margin: unset;
+    display: flex;
+    flex-direction: column;
+    min-height: calc(100vh - 75px - env(safe-area-inset-top))
+}
+
+@media only screen and (max-width: 480px) {
+    main.login {
+        min-height: 100vh
+    }
+}
+
+main.login .window {
+    /* padding-top: calc(env(safe-area-inset-top) + 55px + 20px);
+    padding-bottom: calc(env(safe-area-inset-bottom) + 60px + 20px); */
+    border-radius: 0px;
+    flex: 1;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+main.login input {
+    text-align: center;
+}
+
+
+.codeInput {
+    display: flex;
+    gap: 10px;
+}
+
+input[type=email] {
+    background: var(--input-color);
+    width: fit-content;
+
+    height: 55px;
+    border-radius: 22px;
+    box-sizing: border-box;
+
+    font-family: 'Rubik', sans-serif;
+    font-weight: 400;
+    font-size: 24px;
+    caret-color: var(--accent-color);
+    color: var(--font-color);
+
+    transition: 0.15s;
+    border: none;
+    /* border: 2px solid color-mix(in srgb, var(--font-color) 15%, var(--input-color)); */
+
+}
+
+.codeInput input[type=number] {
+    background: var(--input-color);
+    width: 55px;
+
+    height: 55px;
+    border-radius: 22px;
+    box-sizing: border-box;
+
+    font-family: 'Rubik', sans-serif;
+    font-weight: 400;
+    font-size: 24px;
+    caret-color: var(--accent-color);
+
+    transition: 0.15s;
+    /* border: 2px solid color-mix(in srgb, var(--font-color) 15%, var(--input-color)); */
+    border: none;
+    color: var(--font-color);
+}
+
+
+.codeInput input[type=number]:focus {
+    border: 2px solid var(--accent-color);
+    background: color-mix(in srgb, var(--accent-color) 15%, var(--main-color));
+}
+
+.codeInput.loading input[type=number] {
+    opacity: 0.75;
+    pointer-events: none;
+}
+
+
+.codeInput.failed input[type=number] {
+    border: 2px solid var(--red-pallete-color);
+    background: color-mix(in srgb, var(--red-pallete-color) 15%, var(--main-color));
+}
+
+.codeInput.successful input[type=number] {
+    border: 2px solid var(--active-status-color);
+    background: color-mix(in srgb, var(--active-status-color) 15%, var(--main-color));
+}
+
+
+.codeInput input[type=number]::-webkit-outer-spin-button,
+.codeInput input[type=number]::-webkit-inner-spin-button {
+    /* display: none; <- Crashes Chrome on hover */
+    -webkit-appearance: none;
+    margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
+}
+
+.codeInput input[type=number] {
+    -moz-appearance:textfield; /* Firefox */
+}
+
+
+main.login .title {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 20px;
+    font-family: 'Rubik', sans-serif;
+    text-align: center;
+}
+
+main.login .title .titleText {
+    font-weight: 500;
+    font-size: 24px;
+    color: var(--font-color);
+}
+
+main.login .title .description {
+    color: var(--font-color);
+    opacity: 0.5;
+}
+
+main.login .title .description b {
+    font-weight: 500;
+
+}
+
+main.login .title svg {
+    width: 100px;
+
+    filter: drop-shadow(0 0 6px #ff6c78d7);
+
+}

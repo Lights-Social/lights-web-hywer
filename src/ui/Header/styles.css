@@ -11,7 +11,7 @@ header.desktop {
     top: 0;
     box-sizing: border-box;
 	view-transition-name: header-desktop;
-	z-index: 1;
+	z-index: 2;
 }
 
 @media only screen and (max-width: 480px) {

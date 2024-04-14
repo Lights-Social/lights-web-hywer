@@ -205,6 +205,9 @@ main.userView {
     line-height: 1.3125;
     box-sizing: border-box;
     width: 100%;
+
+    -webkit-user-select: text;
+    user-select: text;
 }
 
 .profile .wrapper .about a {

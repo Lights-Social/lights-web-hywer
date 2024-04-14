@@ -26,7 +26,7 @@ export default function ForwardedPost({ item, profile }: ForwardedPostProps) {
                     profile.avatar.length > 0 ?
                     <div class="avatar">
                         <Picture picture={{photo_id: profile.avatar[0].photo_id, alt: "", preview: profile.avatar[0].preview, width: 1, height: 1}} />
-                    </div> : <AvatarPlaceholder width={40} height={40} name={profile.name != "" ? profile.name : profile.username} />
+                    </div> : <AvatarPlaceholder name={profile.name != "" ? profile.name : profile.username} />
                 }
                 <div class="center">
                     <div class="title">

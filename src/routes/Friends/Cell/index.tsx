@@ -6,7 +6,12 @@ import MessengerIcon from '@/ui/icons/messenger'
 import MapIcon from '@/ui/icons/map'
 import CheckmarkIcon from "@/ui/icons/checkmark";
 import CloseIcon from "@/ui/icons/close";
-
+import Picture from "@/ui/Picture";
+import AvatarPlaceholder from "@/ui/AvatarPlaceholder/AvatarPlaceholder";
+import { navigateTo } from "hywer/x/router"
+import MapErrorModal from "@/ui/MapErrorModal";
+import MessengerErrorModal from "@/ui/MessengerErrorModal";
+import { openModal } from "@/ui/Modal/Modal";
 
 interface CellProps {
     item: IProfile;
@@ -36,9 +41,16 @@ export default function Cell(props: CellProps) {
 
     return (
         <>
-            <div class="cell">
+            <MapErrorModal />
+            <MessengerErrorModal />
+            <div class="cell" onClick={() => navigateTo(`/u/${props.item.username}`)}>
                 <div class="avatarWrapper">
-                    {/* <Avatar avatar={props.item.avatar} name={props.item.name != "" ? props.item.name : props.item.username} /> */}
+                    {
+                        props.item.avatar.length > 0 ?
+                        <div class="avatar">
+                            <Picture picture={{photo_id: props.item.avatar[0].photo_id, alt: "", preview: props.item.avatar[0].preview, width: 1, height: 1}} />
+                        </div> : <AvatarPlaceholder name={props.item.name != "" ? props.item.name : props.item.username} />
+                    }
                 </div>
                 <div class="title">
                     <div class="info">
@@ -58,10 +70,10 @@ export default function Cell(props: CellProps) {
                 
                 <div class="buttons">
                     {props.type == "friend" ? <>
-                        <button>
+                        <button onClick={(e: Event) => {e.stopPropagation(); openModal("messengerErrorModal", true, false)}}>
                             <MessengerIcon />
                         </button>
-                        <button>
+                        <button onClick={(e: Event) => {e.stopPropagation(); openModal("mapErrorModal", true, false)}}>
                             <MapIcon />
                         </button>
                     </> : null}

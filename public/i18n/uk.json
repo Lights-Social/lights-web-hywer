@@ -4,6 +4,8 @@
     "yourEmail": "Твій email",
     "enterCode": "Введіть код",
     "enterCodeDescription": "Ми надіслали вам код активації на ваш email",
+    "youCanAskNewCodeIn": "Ти можеш запитати новий код через",
+    "resendCode": "Надіслати новий код",
 
     "home": "Головна",
     "settings": "Налаштування",
@@ -74,6 +76,7 @@
     "postNotFound": "Пост не знайдено",
     "userNotFound1": "Користувача",
     "userNotFound2": "не знайдено",
+    "OopsServiceUnavailable": "Ой, сервіс недоступний",
     "mapIsNotAvailable": "Мапа недоступна",
     "messagesIsNotAvailable": "Повідомлення недоступні",
     "momentsIsNotAvailable": "Моменти недоступні",

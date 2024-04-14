@@ -25,10 +25,14 @@ article.post.full {
 
 }
 
-/* article.post .content p {
-    -webkit-user-select: text;
-    user-select: text;
-} */
+
+@media only screen and (min-width: 480px) {
+    article.post .content .text {
+        -webkit-user-select: text;
+        user-select: text;
+    }
+}
+
 
 article.post.loading {
     opacity: 0.6;
@@ -58,7 +62,7 @@ article.post > .content .text {
 }
 
 article.post a {
-    transition: 0.2s;
+    transition: opacity 0.2s;
     color: var(--accent-color);
     width: fit-content;
     height: fit-content;
@@ -94,7 +98,6 @@ article.post > .title .info {
 article.post > .title .info .name {
     color: var(--font-color);
     text-decoration: none;
-    transition: 0.2s;
     width: fit-content;
     height: fit-content;
     font-weight: 500;

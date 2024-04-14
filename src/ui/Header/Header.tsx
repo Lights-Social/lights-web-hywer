@@ -5,6 +5,7 @@ import './styles.css';
 // import Avatar from "../Avatar";
 import FriendsIcon from "@/ui/icons/friends"
 import HomeIcon from "@/ui/icons/home"
+import Link from "@/ui/utils/crutches/Link"
 
 export function scrollTopFeed() {
 	if (location.pathname == "/home") {
@@ -18,20 +19,21 @@ export function scrollTopFeed() {
 function Header() {
 
     const {strings} = store.locale()
+	//const isAuthorized = store.isAuthorized()
 
 	return (
-		<header class={localStorage.getItem("blurEnabled") == "true" ? "desktop blur" : "desktop"}>
-			<a data-route class="logo" href="/home" aria-label="Lights">
+		<header class={"desktop"}>
+			<Link class="logo" href='/home' aria-label="Lights">
 				<img width="45px" height="45px" src={"/logo.svg"} alt="" />
-			</a>
+			</Link>
 			{<nav>
-				<a onClick={scrollTopFeed} data-route href="/home" aria-label={strings["home"]}>
+				<Link href='/home' aria-label={strings["home"]} onClick={scrollTopFeed}>
 					<HomeIcon />
-				</a>
+				</Link>
 
-				<a data-route href="/friends" aria-label={strings["friends"]}>
+				<Link href='/friends' aria-label={strings["friends"]} onClick={scrollTopFeed}>
 					<FriendsIcon />
-				</a>
+				</Link>
 			</nav>}
 
 

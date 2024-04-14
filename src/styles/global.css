@@ -188,3 +188,12 @@ img {
 @keyframes slide-to-left {
     to { transform: translateX(-30px); }
 }
+
+main .window {
+    background: var(--main-color);
+    padding: 20px;
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}

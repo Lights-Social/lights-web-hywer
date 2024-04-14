@@ -144,7 +144,7 @@ export interface IProfile {
     };
     friends: {
         count: number;
-        friendship_state: "friends" | "notFriends" | "pending" | "confirmation";
+        friendship_state: string;
     };
     note: string;
     wallet_uri: string;

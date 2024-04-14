@@ -3,6 +3,7 @@ import HomeIcon from "@/ui/icons/home"
 import { scrollTopFeed } from "@/ui/Header/Header"
 import { store } from "@/data"
 import './styles.css'
+import Link from "@/ui/utils/crutches/Link"
 
 export default function TabBar() {
     
@@ -10,13 +11,13 @@ export default function TabBar() {
 
     return (
         <nav class="tabBar">
-            <a onClick={scrollTopFeed} data-route href="/home" aria-label={strings["home"]}>
+            <Link href='/home' aria-label={strings["home"]} onClick={scrollTopFeed}>
                 <HomeIcon />
-            </a>
+            </Link>
 
-            <a data-route href="/friends" aria-label={strings["friends"]}>
+            <Link href='/friends' aria-label={strings["friends"]} onClick={scrollTopFeed}>
                 <FriendsIcon />
-            </a>
+            </Link>
         </nav>
     )
 }

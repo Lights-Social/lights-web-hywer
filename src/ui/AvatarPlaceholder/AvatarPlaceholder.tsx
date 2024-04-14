@@ -6,12 +6,10 @@ import "./styles.css";
 
 interface AvatarPlaceholderProps {
     name: string;
-    width: number;
-    height: number;
 }
 
-function AvatarPlaceholder({name, width, height}: AvatarPlaceholderProps) {
-   const styles = `--color: ${HSLtoString(generateHSL(name)).toString()}; width: ${width}px; height: ${height}px`
+function AvatarPlaceholder({name}: AvatarPlaceholderProps) {
+   const styles = `--color: ${HSLtoString(generateHSL(name)).toString()};`
 
     return (
         <div class="avatar">

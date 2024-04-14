@@ -4,6 +4,8 @@
     "yourEmail": "Your email",
     "enterCode": "Enter code",
     "enterCodeDescription": "We sent you the activation code to your email",
+    "youCanAskNewCodeIn": "You can ask new code in",
+    "resendCode": "Resend code",
 
     "home": "Home",
     "settings":"Settings",
@@ -74,6 +76,7 @@
     "postNotFound": "Post not found",
     "userNotFound1": "User",
     "userNotFound2": "not found",
+    "OopsServiceUnavailable": "Oops, service unavailable",
     "mapIsNotAvailable": "Map is not available",
     "messagesIsNotAvailable": "Messenger is not available",
     "momentsIsNotAvailable": "Moments is not available",

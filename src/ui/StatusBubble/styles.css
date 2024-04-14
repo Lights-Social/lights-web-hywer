@@ -1,0 +1,37 @@
+.statusBubble {
+    background: var(--offline-status-color);
+    display: grid;
+    align-items: center;
+    justify-content: center;
+    width: fit-content;
+    min-width: 19px;
+    min-height: 19px;
+    border-radius: 12px;
+    box-sizing: border-box;
+    font-weight: 500;
+    font-size: 11px;
+    font-family: 'Rubik', sans-serif;
+    padding: 4px;
+    color: white;
+    overflow: hidden;
+    transition: 0.2s;
+}
+.statusBubble.active {
+    background: var(--active-status-color);
+}
+
+.statusBubble .lastActivity {
+    transition: 0.2s;
+}
+
+.statusBubble.active .lastActivity {
+    opacity: 0;
+    width: 0px;
+}
+
+.statusBubble .point {
+    width: 9px;
+    height: 9px;
+    border-radius: 11px;
+    background: var(--main-color);
+}
