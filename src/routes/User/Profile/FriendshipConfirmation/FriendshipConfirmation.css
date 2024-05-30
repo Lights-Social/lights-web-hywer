@@ -1,0 +1,55 @@
+.friendshipConfirmation {
+    width: 100%;
+    will-change: transform;
+    transition: max-height 0.15s, margin-bottom 0.15s;
+    max-height: 93px;
+    margin-bottom: 0px !important;
+    height: 93px;
+    overflow: hidden;
+}
+
+.friendshipConfirmation.hidden {
+    max-height: 0px;
+    margin-bottom: 0px !important;
+}
+
+
+.friendshipConfirmation .buttons {
+    margin-top: 10px;
+    display: flex;
+    gap: 10px;
+}
+
+.friendshipConfirmation .buttons button {
+    width: 100%;
+    height: 45px;
+    border-radius: 16px;
+    border: none;
+    font-size: 15px;
+    font-family: 'Rubik', sans-serif;
+    font-weight: 500;
+    cursor: pointer;
+    color: var(--font-color);
+    gap: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: var(--highlight-color);
+    transition: transform 0.1s;
+}
+
+.friendshipConfirmation .buttons button:active {
+	transform: scale(0.95);
+}
+
+.friendshipConfirmation .buttons button svg {
+    width: 12px;
+    fill: var(--active-status-color);
+}
+
+.friendshipConfirmation .buttons button.accept {
+    --background: var(--active-status-color);
+    background: color-mix(in srgb, var(--background) 15%, var(--main-color));
+    color: var(--background);
+
+}

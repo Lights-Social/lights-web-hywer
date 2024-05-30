@@ -168,13 +168,22 @@
     "nobodyIsActive.description": "Hrm, it seems none of your friends are active yet.",
     
     "offline": "Offline",
-    "cleanCache": "Clean cache",
+    "clearCache": "Clear cache",
+    "clearCacheDescription": "All media attachments are still available in the Lights servers, but you will have to re-download them.",
 
     "back": "Back",
+    "close": "Close",
     "of": "of",
 
     "copyLink": "Copy link",
     "more": "More",
     "thisPostIsUnavailable": "This post is unavailable",
-    "repost": "Repost"
+    "repost": "Repost",
+    "favorites": "Favorites",
+    "addToFavorites": "Add to favorites",
+    "removeFromFavorites": "Remove from favorites",
+    "music": "Music",
+    "findMusicDescription": "Find tracks on Spotify and add them to your posts!",
+    "add": "Add",
+    "photo": "Photo"
 }

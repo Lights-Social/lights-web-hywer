@@ -6,7 +6,7 @@ export default function ServiceUnavailableModal() {
     const {strings} = store.locale()
 
     return (
-        <Modal id="serviceUnavailableModal">
+        <Modal type="modal" id="serviceUnavailableModal">
             <h1>{strings["OopsServiceUnavailable"]} 😅</h1>
             <p>
                 {strings["tryAgainLater"]}

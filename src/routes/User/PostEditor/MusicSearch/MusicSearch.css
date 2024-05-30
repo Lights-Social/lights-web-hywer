@@ -1,0 +1,79 @@
+.findMusicDescription {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    text-align: center;
+    justify-content: center;
+}
+
+.findMusicDescription .text {
+    width: 80%;
+    opacity: 0.75;
+    font-family: 'Rubik', sans-serif;
+    font-size: 16px;
+    color: var(--font-color);
+}
+
+.addTracks {
+    display: flex;
+    align-items: center;
+    color: white;
+    background: var(--accent-color);
+    border: none;
+    outline: none;
+    font-family: 'Rubik', sans-serif;
+    justify-content: center;
+    cursor: pointer;
+    padding: 14px 24px 14px 24px;
+    font-size: 16px;
+    font-weight: 500;
+    border-radius: 18px;
+    transition: transform 0.2s;
+    gap: 10px;
+}
+
+.addTracks:active {
+    transform: scale(0.95);
+}
+
+.addTracks .counter {
+    min-width: 27px;
+    box-sizing: border-box;
+    padding: 5px;
+    border-radius: 20px;
+    background: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-weight: 500;
+    font-size: 14px;
+    color: var(--accent-color);
+}
+
+.secondBar {
+    position: fixed;
+    z-index: 1;
+    width: 100%;
+    bottom: 0;
+    left: 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 15px;
+    padding-bottom: calc(env(safe-area-inset-bottom) + 15px);
+    --background: color-mix(in srgb, var(--color) 30%, black);
+    background: var(--main-color);
+    justify-content: center;
+    box-sizing: border-box;
+
+    transition: transform 0.3s, opacity 0.3s;
+    opacity: 1;
+
+
+}
+
+.secondBar.hidden {
+    transform: translateY(150%);
+    opacity: 0;
+}

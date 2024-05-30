@@ -56,6 +56,7 @@
 
 .tabBar a.me {
 	outline: 2px solid transparent;
+	border-radius: 20px;
 }
 .tabBar a.me .avatar {
     transition: 0.2s;

@@ -48,7 +48,7 @@ export default function Cell(props: CellProps) {
                     {
                         props.item.avatar.length > 0 ?
                         <div class="avatar">
-                            <Picture picture={{photo_id: props.item.avatar[0].photo_id, alt: "", preview: props.item.avatar[0].preview, width: 1, height: 1}} />
+                            <Picture src={`${import.meta.env.VITE_LIGHTS_CDN_URL}/picture/${props.item.avatar[0].id}.webp`} picture={{id: props.item.avatar[0].id, alt: "", blurhash: props.item.avatar[0].blurhash, width: 1, height: 1, type: 'photo'}} />
                         </div> : <AvatarPlaceholder name={props.item.name != "" ? props.item.name : props.item.username} />
                     }
                 </div>
@@ -70,10 +70,10 @@ export default function Cell(props: CellProps) {
                 
                 <div class="buttons">
                     {props.type == "friend" ? <>
-                        <button onClick={(e: Event) => {e.stopPropagation(); openModal("messengerErrorModal", true, false)}}>
+                        <button onClick={(e: Event) => {e.stopPropagation(); openModal("messengerErrorModal", [7,7,7,7], false)}}>
                             <MessengerIcon />
                         </button>
-                        <button onClick={(e: Event) => {e.stopPropagation(); openModal("mapErrorModal", true, false)}}>
+                        <button onClick={(e: Event) => {e.stopPropagation(); openModal("mapErrorModal", [7,7,7,7], false)}}>
                             <MapIcon />
                         </button>
                     </> : null}

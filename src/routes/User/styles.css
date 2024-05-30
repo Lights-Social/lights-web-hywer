@@ -4,8 +4,9 @@ main.userView {
 }
 
 .items {
-    display: grid;
+    display: flex;
     gap: 20px;
+    flex-direction: column;
 }
 
 @media only screen and (max-width: 480px) {
@@ -15,7 +16,6 @@ main.userView {
 	}
 
     .items {
-        display: grid;
         gap: 10px;
     }
 }
@@ -108,9 +108,11 @@ main.userView {
     outline: 5px solid var(--main-color);
 
     position: relative;
-
+}
+.profile .wrapper .avatarWrapper .photo {
     cursor: pointer;
 }
+
 .profile .wrapper .avatarWrapper .statusBubbleWrapper {
     position: absolute;
     bottom: 0;
@@ -314,4 +316,20 @@ main.userView {
     background: transparent;
     caret-color: var(--accent-color);
     color: var(--font-color);
+}
+
+
+.userPosts {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+@media only screen and (max-width: 480px) {
+    .userPosts {
+        
+        gap: 10px;
+        
+    }
 }

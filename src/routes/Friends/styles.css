@@ -31,6 +31,7 @@ main.friendsView  .window  {
         border-radius: 0px;
         
         flex: 1;
+        width: auto;
 
     }
 

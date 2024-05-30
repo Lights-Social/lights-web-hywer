@@ -34,13 +34,14 @@ header.desktop nav {
 	align-items: center;
 	justify-items: center;
 }
-header.desktop nav #profileButtonMobile {
-	display: none;
+
+
+header.desktop .avatarWrapper {
+	height: inherit;
+	width: inherit;
+	border-radius: inherit;
 }
-header.desktop nav #profileButtonMobile .avatarWrapper {
-	width: 28px;
-	height: 28px;
-}
+
 header.desktop .otherButtons {
 	margin-inline-start: auto;
 	display: grid;

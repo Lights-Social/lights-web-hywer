@@ -6,13 +6,13 @@ export default function MessengerErrorModal() {
     const {strings} = store.locale()
 
     return (
-        <Modal id="messengerErrorModal">
+        <Modal type="modal" id="messengerErrorModal">
             <h1>{strings["messagesIsNotAvailable"]} 😅</h1>
             <p>
                 {strings["tryAgainLater"]}
             </p>
             <div class="buttons">
-                <button class="close" onClick={() => closeModal("messengerErrorModal")}>OK</button>
+                <button class="accent" onClick={() => closeModal("messengerErrorModal")}>OK</button>
             </div>
         </Modal>
     )

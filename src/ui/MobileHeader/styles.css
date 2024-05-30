@@ -1,0 +1,45 @@
+.mobileHeader {
+    padding: calc(env(safe-area-inset-top) + 10px) 10px 10px 10px;
+    position: fixed;
+
+    border-bottom: 1px solid color-mix(in srgb, hsl(0, 0%, 50%) 15%, var(--main-color));
+	box-shadow: none;
+    background: var(--main-color);
+
+    top: 0;
+	z-index: 4;
+	width: 100%;
+	min-height: calc(55px + env(safe-area-inset-top));
+
+    box-sizing: border-box;
+    view-transition-name: mobileHeader;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.mobileHeader .title {
+    display: flex;
+    font-size: 18px;
+    font-family: 'Rubik';
+    font-weight: 500;
+
+    height: 100%;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.mobileHeader .title .avatarWrapper {
+    width: 30px;
+    height: 30px;
+    border-radius: 20px;
+}
+
+@media only screen and (min-width: 480px) {
+    .mobileHeader {
+        display: none;
+    }
+
+}

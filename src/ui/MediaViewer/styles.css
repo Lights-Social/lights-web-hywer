@@ -1,0 +1,262 @@
+dialog.mediaViewer {
+    background: none;
+    border: none;
+
+    outline: none;
+
+    margin: 0; /* Убираем отступы */
+    padding: 0; /* Убираем внутренние отступы */
+
+    max-width: unset;
+    max-height: unset;
+
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+
+    gap: 10px;
+
+    height: 100%;
+    width: 100%;
+
+
+    transition: 0.2s;
+
+
+}
+
+dialog.mediaViewer::backdrop {
+    will-change: opacity;
+}
+
+dialog.mediaViewer[open]::backdrop {
+    background: color-mix(in srgb, var(--color) 30%, black);
+
+    animation: backdropFadeMedia 0.15s;
+}
+
+
+dialog.mediaViewer[open] {
+    display: flex;
+
+    animation: backdropFadeMedia 0.2s;
+}
+
+dialog.mediaViewer.hide::backdrop {
+    animation: backdropFadeHide 0.15s;
+}
+
+dialog.mediaViewer.hide {
+    animation: dialogFadeHide 0.15s;
+}
+
+
+
+/* @keyframes dialogFadeHide {
+    to {
+        opacity: 0;
+    }
+} */
+
+@keyframes backdropFadeHide {
+    0% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+    }
+}
+
+
+
+
+@keyframes backdropFadeMedia {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 0.85;
+    }
+}
+
+@keyframes backdropFadeMobile {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+
+dialog p b {
+    font-weight: 500;
+
+}
+
+dialog a {
+    transition: 0.2s;
+    color: var(--accent-color);
+}
+
+dialog.mediaViewer .bar {
+    position: fixed;
+    z-index: 1;
+    width: 100%;
+
+
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    padding: 15px;
+
+    padding-top: calc(15px + env(safe-area-inset-top));
+
+    --background: color-mix(in srgb, var(--color) 30%, black);
+
+
+    background: color-mix(in srgb, var(--background) 85%, transparent);
+
+    transition: background-color 0.2s;
+
+    justify-content: center;
+
+    box-sizing: border-box;
+
+    transition: 0.2s;
+    opacity: 0;
+    will-change: transform;
+
+}
+
+
+
+
+dialog.mediaViewer[open] .bar {
+
+    opacity: 1;
+    animation: barFade 0.2s;
+}
+
+
+@keyframes barFade {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+
+
+
+dialog.mediaViewer .bar button {
+
+    border: none;
+
+    font-family: 'Rubik', sans-serif;
+
+    font-weight: 400;
+    font-size: 18px;
+
+    transition: scale 0.2s;
+    cursor: pointer;
+
+    background: none;
+
+    display: flex;
+
+    align-items: center;
+    gap: 7px;
+
+    color: color-mix(in srgb, var(--color) 75%, white);
+
+
+
+
+}
+
+dialog.mediaViewer .bar button.close {
+    position: absolute;
+    left: 15px;
+}
+
+dialog.mediaViewer .bar button.download {
+    position: absolute;
+    right: 15px;
+}
+
+dialog.mediaViewer svg {
+    height: 22px;
+    fill: color-mix(in srgb, var(--color) 75%, white);
+}
+
+dialog.mediaViewer .bar .title {
+    font-size: 18px;
+    font-family: 'Rubik';
+    font-weight: 500;
+
+    color: color-mix(in srgb, var(--color) 55%, white);
+
+}
+
+
+dialog.mediaViewer .container {
+    gap: 10px;
+
+    height: 100%;
+    width: 100%;
+    flex: 0 0 auto;
+    scroll-snap-align: start;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding-bottom: 90px;
+    padding-top: 90px;
+
+    box-sizing: border-box;
+}
+
+
+dialog.mediaViewer .container::-webkit-scrollbar { width: 0; }
+
+
+dialog.mediaViewer .container .photo {
+    overflow: hidden;
+    position: relative;
+
+    max-height: 100%;
+    max-width: 100%;
+
+}
+
+
+dialog.mediaViewer[open] .container .photo {
+
+    opacity: 1;
+    animation: barFade 0.2s;
+    overflow-y: scroll;
+    -webkit-overflow-scrolling: touch; /* Для плавного скролла на iOS */
+    transition: transform 0.1s ease;
+}
+
+
+
+@media only screen and (max-width: 480px) {
+    dialog.mediaViewer[open]::backdrop {
+        opacity: 1;
+    
+        animation: backdropFadeMobile 0.15s;
+    }
+
+    dialog.mediaViewer .container {
+
+        padding-bottom: 0px;
+        padding-top: 0px;
+    
+    }
+}

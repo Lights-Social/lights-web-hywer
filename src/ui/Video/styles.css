@@ -1,0 +1,56 @@
+.video {
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+    height: 100%;
+}
+.video video {
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+
+/* .photo img.hidden {
+    display: none;
+}
+
+.photo .thumbnail {
+    width: 100%;
+    height: 100%;
+
+    position: absolute;
+    will-change: opacity;
+    transition: 0.2s;
+}
+
+.photo .thumbnail.hidden {
+    opacity: 0;
+    
+    z-index: 2;
+}
+
+
+
+.photo .blurredPreview {
+    width: 100%;
+    height: 100%;
+
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    filter: blur(25px);
+
+    margin: -25px;
+    padding: 25px;
+
+    position: absolute;
+    will-change: opacity;
+    transition: 0.2s;
+    z-index: 2;
+}
+
+.photo .blurredPreview.hidden {
+    opacity: 0;
+    
+
+} */

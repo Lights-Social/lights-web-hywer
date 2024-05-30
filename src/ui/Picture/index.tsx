@@ -1,13 +1,14 @@
-// import {Api} from "../../api"
-// import { ref, effect } from 'hywer'
-import type { IPhotoAttachment } from '@/data/types/models'
+import type { IMediaAttachment } from '@/data/types/models'
 import './picture.css'
 import random_id from '../utils/random_id'
+import * as blurhash from "blurhash-wasm";
 
 //import { pictureWorker } from '../PictureWorker/handler'
 
 interface PictureProps {
-    picture: IPhotoAttachment
+    picture?: IMediaAttachment
+    src: string
+    onClick?: () => void
 }
 
 // export async function loadImage(url: string, onProgress?: (event: ProgressEvent) => void): Promise<string> {
@@ -53,97 +54,63 @@ interface PictureProps {
 // }
 
 
-function Picture({picture}: PictureProps) {
+function Picture({picture, src, onClick}: PictureProps) {
     const id = random_id()
 
-
+    const WIDTH = 32; // pixels
+    const HEIGHT = 32; // pixels
 
     const img = new Image();
-    img.alt = picture.alt != "" ? picture.alt : ""
-    img.src = `${import.meta.env.VITE_LIGHTS_CDN_URL}/picture/${picture.photo_id}.webp`
+    img.alt = picture && picture.alt != "" ? picture.alt : ""
+    img.src = picture ? `${import.meta.env.VITE_LIGHTS_CDN_URL}/picture/${picture.id}.webp` : src
 
 
-    img.decode()
-    .then(() => {
-        document.getElementById(id)!.append(img)
+
+    setTimeout(() => {
+        img.decode()
+        .then(() => {
+            const elem = document.getElementById(id)
+
+            if (elem) {
+                elem.append(img)
+            }
+
+        })
+        .catch((encodingError) => {
+            console.log(encodingError)
+        });
+
+        try {
+            if (!picture) return
+
+            const pixels = blurhash.decode(picture.blurhash, WIDTH, HEIGHT);
+            // Set the pixels to the canvas
+            const asClamped = new Uint8ClampedArray(pixels!);
+            const imageData = new ImageData(asClamped, WIDTH, HEIGHT);
+    
+            const canvasEl = document.querySelector<HTMLCanvasElement>(`#${id} canvas`);
+    
+            if (canvasEl) {
+              const ctx = canvasEl.getContext('2d');
+              ctx!.putImageData(imageData, 0, 0);
+            }
+        } catch (error) {
+            if (!picture) return
+
+            console.log(picture.id)
+            console.error(error);
+        }
     })
-    .catch((encodingError) => {
-        // Do something with the error.
-    });
-
-    // function handleProcessedData(imageData: ImageData) {
-    //     const canvas = document.querySelector(`#pic_${picture.photo_id} .thumbnail`) as HTMLCanvasElement
-        
-    //     const ctx = canvas.getContext('2d')!;
-    //     ctx.putImageData(imageData, 0, 0);
-    // }
-
-
-    // img.src = `${import.meta.env.VITE_LIGHTS_CDN_URL}/picture/${picture.photo_id}.webp`
-
-    // const options = {
-    //     // родитель целевого элемента - область просмотра
-    //     root: null,
-    //     // без отступов
-    //     rootMargin: '0px',
-    //     // процент пересечения - половина изображения
-    //     threshold: 0.1
-    // }
-
-    // // создаем наблюдатель
-    // const observer = new IntersectionObserver((entries, observer) => {
-    //     // для каждой записи-целевого элемента
-    //     entries.forEach(entry => {
-    //         // если элемент является наблюдаемым
-    //         if (entry.isIntersecting) {
-    //             const lazyImg = entry.target
-    //             // выводим информацию в консоль - проверка работоспособности наблюдателя
-    //             // loadImage(`${import.meta.env.VITE_LIGHTS_CDN_URL}/picture/${picture.photo_id}.webp`).then(url => {
-    //             //     img.src = url
-    //             // })
-
-    //             // меняем фон контейнера
-    //             // прекращаем наблюдение
-    //             observer.unobserve(lazyImg)
-    //         }
-    //     })
-    // }, options)
-
-    // setTimeout(() => {
-    //     observer.observe(document.getElementById('pic_'+picture.photo_id)!)
-
-    // })
-
-    // const preview = new Image();
-    // preview.src = picture.preview
-
-    // preview.addEventListener('load', () => {
-
-    //     const RADIUS = 2;
-    //     const ITERATIONS = 2;
-
-    //     const canvas = document.createElement('canvas');
-    //     canvas.width = preview.width;
-    //     canvas.height = preview.height;
-
-    //     const ctx = canvas.getContext('2d')!;
-    //     ctx.drawImage(preview, 0, 0);
-
-    //     const canvasRef = document.querySelector(`#pic_${picture.photo_id} .thumbnail`) as HTMLCanvasElement
-    //     canvasRef.width = preview.width
-    //     canvasRef.height = preview.height
-
-    //     pictureWorker.blurImage(ctx.getImageData(0, 0, canvasRef.width, canvasRef.height), canvasRef.width, canvasRef.height, RADIUS, ITERATIONS, handleProcessedData);
-
-    // })
-
-      
-    // Устанавливаем обработчик сообщений от воркера
 
 
     return (
-        <div id={id} class={"photo"} style={`aspect-ratio: ${picture.width / picture.height}`}>
-            <div class="thumbnail"/>
+        <div onClick={onClick ? () => onClick() : undefined} id={id} class={"photo"} style={`aspect-ratio: ${picture ? picture.width / picture.height : 1}`}>
+            <canvas
+                width={WIDTH}
+                height={HEIGHT}
+                class="thumbnail"
+            />
+            {/* <div class="thumbnail"/> */}
         </div>
     )
 

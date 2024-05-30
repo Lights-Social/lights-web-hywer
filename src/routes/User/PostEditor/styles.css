@@ -1,0 +1,280 @@
+.createPost {
+    background: var(--main-color);
+    padding: 15px;
+    border-radius: 20px;
+    gap: 15px;
+    display: grid;
+  }
+  .createPost .title {
+    font-weight: 600;
+    font-size: 17px;
+  }
+  .createPost .editBlock {
+    display: flex;
+    gap: 10px;
+    position: relative;
+  }
+  .createPost .editBlock .avatarWrapper {
+    width: 45px;
+    height: 45px;
+    transition: 0.15s;
+    cursor: pointer;
+  }
+  .createPost .editBlock .avatarWrapper:hover {
+    opacity: 0.65;
+  }
+  .createPost .editBlock .addMenu {
+    position: absolute;
+    z-index: 1;
+    left: 25px;
+    top: 45px;
+    padding: 7px;
+    visibility: hidden;
+    background: var(--main-blur-color);
+    min-width: 175px;
+    backdrop-filter: blur(30px);
+    -webkit-backdrop-filter: blur(30px);
+    border-radius: 15px;
+    box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.25);
+    transform: scale(0.9);
+    transform-origin: -3px 0px;
+    opacity: 0;
+    transition: 0.15s;
+  }
+  .createPost .editBlock .addMenu input[type=file] {
+    display: none;
+  }
+  .createPost .editBlock .addMenu button {
+    background: transparent;
+    cursor: pointer;
+    font-size: 14px;
+    color: var(--var-font-color);
+    transition: 0.2s;
+    font-weight: 600;
+    border: none;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 5px;
+    border-radius: 5px;
+  }
+  .createPost .editBlock .addMenu button svg {
+    width: 22px;
+    height: 22px;
+    fill: var(--buttons-color);
+  }
+  .createPost .editBlock .addMenu button:hover {
+    background: var(--highlight-color);
+  }
+  .createPost .editBlock .addMenu button:active {
+    transform: scale(0.9);
+  }
+  .createPost .editBlock .addMenu.shown {
+    opacity: 1;
+    transform: scale(1);
+    visibility: visible;
+  }
+  .createPost .editBlock .inputArea {
+    width: 100%;
+    background: var(--input-color);
+    border-radius: 20px;
+    padding: 15px;
+    display: flex;
+    gap: 10px;
+    cursor: text;
+  }
+  .createPost .editBlock .inputArea .showAddMenuButton {
+    width: 25px;
+    height: 25px;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    transition: 0.2s;
+    position: absolute;
+    top: 15px;
+  }
+  .createPost .editBlock .inputArea .showAddMenuButton svg {
+    transition: 0.2s;
+    fill: #a6a6a6;
+  }
+  .createPost .editBlock .inputArea .showAddMenuButton.active svg {
+    transform: rotate(45deg);
+  }
+  .createPost .editBlock .inputArea .textInput {
+    background: transparent;
+    border: none;
+    color: var(--font-color);
+    outline: none;
+    resize: none;
+    font-style: normal;
+    font-family: system-ui;
+    font-size: 16px;
+    caret-color: var(--accent-color);
+    width: 100%;
+    padding: 0px 0px 0px 35px;
+    min-height: 45px;
+    max-height: 200px;
+    overflow: auto;
+    width: 100%;
+    word-break: break-word;
+    white-space: pre-wrap;
+    line-height: 1.3125;
+  }
+  .createPost .editBlock .inputArea .textInput::before {
+    content: attr(placeholder);
+    color: #a6a6a6;
+    opacity: 0;
+    transition: 0.2s;
+    position: absolute;
+    transform: translateX(25px);
+  }
+  .createPost .editBlock .inputArea .textInput:empty::before {
+    content: attr(placeholder);
+    color: #a6a6a6;
+    opacity: 1;
+    transform: translateX(0px);
+  }
+  .createPost .attachments {
+    height: fit-content;
+  }
+  .createPost .attachments .photos {
+    display: flex;
+  }
+  .createPost .attachments .photos .preview {
+    position: relative;
+    width: 40%;
+    border-radius: 20px;
+    overflow: hidden;
+  }
+  .createPost .attachments .photos .preview .remove {
+    top: 0;
+    right: 0;
+    position: absolute;
+    border: none;
+    outline: none;
+    width: 20px;
+    height: 20px;
+    background: rgba(0, 0, 0, 0.25);
+    transition: 0.1s;
+    cursor: pointer;
+    opacity: 0;
+    z-index: 1;
+  }
+  .createPost .attachments .photos .preview img {
+    width: 100%;
+  }
+  .createPost .attachments .photos .preview:hover .remove {
+    opacity: 1;
+  }
+  .createPost hr {
+    width: 100%;
+    background: rgba(128, 128, 128, 0.15);
+    border: none;
+    height: 1.25px;
+  }
+  .createPost .buttons {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+  .createPost .buttons .optionButton {
+    background: transparent;
+    border: 0;
+    display: flex;
+    cursor: pointer;
+    align-items: center;
+    color: var(--accent-color);
+    font-size: 15px;
+    font-weight: 600;
+    gap: 10px;
+  }
+  .createPost .buttons .optionButton svg {
+    width: 22px;
+    fill: var(--accent-color);
+    /*
+     .optionButton:hover {
+     background: var(--var-accent-color);
+     }
+     */
+  }
+  .createPost .buttons .postButtons {
+    margin-inline-start: auto;
+    display: flex;
+    gap: 10px;
+
+  }
+  .createPost .buttons .postButtons button {
+    width: fit-content;
+    background: color-mix(in srgb, var(--accent-color) 15%, var(--main-color));
+    border-radius: 50px;
+    border: none;
+    color: white;
+    transition: 0.2s;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+
+    width: 50px;
+    height: 50px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .createPost .buttons .cancelButton {
+    background: var(--highlight-color) !important;
+  }
+
+  .createPost .buttons .cancelButton svg {
+    fill: var(--buttons-color);
+
+  }
+
+  .createPost .buttons button svg {
+    width: 22px;
+    height: 22px;
+    fill: var(--accent-color);
+  }
+  .createPost .buttons button:disabled {
+    opacity: 0.65;
+  }
+  
+
+.createPost .forwardBadge {
+	background: var(--highlight-color);
+	width: fit-content;
+	padding: 15px;
+	border-radius: 20px;
+
+	font-family: 'Rubik', sans-serif;
+
+	display: flex;
+
+	gap: 10px;
+	max-height: 80px;
+	width: 100%;
+	box-sizing: border-box;
+}
+
+.createPost .forwardBadge .photo {
+    aspect-ratio: 1;
+    border-radius: 10px;
+	height: 44px;
+}
+
+.createPost .forwardBadge .text {
+	opacity: 0.65;
+    overflow: hidden;
+    text-overflow: ellipsis;
+	white-space: nowrap;
+	font-size: 15px;
+
+}
+
+.createPost .right {
+	display: grid;
+	gap: 7px;
+}

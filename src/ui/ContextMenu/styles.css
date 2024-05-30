@@ -1,0 +1,72 @@
+.contextMenu {
+    position: absolute;
+
+    padding: 7px;
+
+    min-width: 175px;
+    z-index: 1;
+    transform-origin: -3px 0px;
+
+    border-radius: 15px;
+
+    box-shadow: 0px 0px 4px hsla(0, 0%, 0%, 0.25);
+        
+    background: var(--main-color);
+    z-index: 3;
+
+}
+
+.contextMenu input[type=file] {
+    display: none;
+}
+
+.contextMenu > button {
+    background: transparent;
+    cursor: pointer;
+    font-size: 14px;
+    color: var(--font-color);
+    transition: 0.2s;
+    font-weight: 500;
+    border: none;
+    font-family: 'Rubik', sans-serif;
+
+    width: 100%;
+
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    
+
+    padding: 5px;
+    border-radius: 5px;
+}
+
+.contextMenu > button svg {
+    width: 22px;
+    height: 22px;
+    fill: var(--buttons-color);
+}
+
+.contextMenu > button:hover {
+    background: var(--highlight-color);
+}
+
+.contextMenu > button:active {
+    transform: scale(0.95);
+}
+
+.contextMenu > button.delete {
+    
+    color: var(--red-pallete-color);
+}
+
+.contextMenu > button.delete:hover {
+    background: hsla(0, 73%, 57%, 0.1);
+}
+
+.contextMenu > button.delete svg {
+    width: 22px;
+    height: 22px;
+    fill: hsl(0, 100%, 65%);
+}

@@ -3,19 +3,23 @@ import {HSLtoString, generateHSL } from "@/ui/utils/HSLgen";
 
 
 import "./styles.css";
+import type { Reactive } from "hywer/jsx-runtime";
 
 interface AvatarPlaceholderProps {
-    name: string;
+    name: Reactive<string>;
 }
 
 function AvatarPlaceholder({name}: AvatarPlaceholderProps) {
-   const styles = `--color: ${HSLtoString(generateHSL(name)).toString()};`
 
     return (
         <div class="avatar">
-            <div class="background" style={styles}>
-                {Array.from(name)[0]}
-            </div>
+            {
+                name.derive((val) => {
+                    return <div class="background" style={`--color: ${HSLtoString(generateHSL(val)).toString()};`}>
+                        {Array.from(val)[0]}
+                    </div>
+                })
+            }
         </div>
     );
 }

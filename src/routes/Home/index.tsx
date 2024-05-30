@@ -1,29 +1,19 @@
-import Post from "@/ui/Post/Post"
 import SideBar from "@/ui/Sidebar/Sidebar";
-import PostPlaceholder from "@/ui/Post/Placeholder";
+import {PostsList} from "@/ui/PostsList/PostsList";
+import { MobileHeader } from "@/ui/MobileHeader/MobileHeader";
 import { store } from "@/data";
 
 function Home() {
+    const {strings} = store.locale()
 
-
-    const posts = store.getPosts(`feeds/following`, 0)
-
+    console.log("dd")
 
     return <>
-        <main>
-            <div class="postsList feed">
-                {
-                    posts.derive(val => val.length == 0 ? <PostPlaceholder /> : <div style="display: none"></div>)
-                }
-                {posts.derive(val => {
-                    return val.map(post => {
-                        return <Post
-                            post={post}
-                            profile ={store.getProfileById(post.peer.id)!}
-                        />
-                    })
-                })}
-            </div>
+        <MobileHeader>
+            <div class="title">{strings["home"]}</div>
+        </MobileHeader>
+        <main class="homeView">
+            <PostsList uri={`feeds/following`} />
             <SideBar />
         </main>
     	

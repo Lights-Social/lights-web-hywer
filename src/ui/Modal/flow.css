@@ -1,0 +1,59 @@
+dialog.flow {
+    padding-top: 52px !important;
+
+    padding-bottom: calc(env(safe-area-inset-bottom) + 20px) !important;
+    overflow: hidden;
+}
+
+dialog.flow.full {
+    height: calc(80%);
+}
+
+@media only screen and (max-width: 480px) {
+    dialog.flow {
+        width: 100%;
+        max-width: 100%;
+        border-radius: 20px 20px 0px 0px;
+        margin: unset;
+        margin-top: auto;
+
+        max-height: unset;
+
+    }
+
+    dialog.flow.full {
+        height: calc(100% - 60px);
+    }
+
+    dialog.flow[open] {    
+        animation: flowFade 0.15s cubic-bezier(0.25, 0.1, 0.25, 1.0);
+    }
+
+    dialog.flow.hide {
+        animation: flowFadeHide 0.15s;
+    }
+
+}
+
+
+@keyframes flowFade {
+    0% {
+        transform: translateY(100%);
+        opacity: 0;
+    }
+    100% {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+@keyframes flowFadeHide {
+    0% {
+        transform: translateY(0);
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(100%);
+        opacity: 0;
+    }
+}

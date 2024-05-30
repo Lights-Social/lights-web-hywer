@@ -1,33 +1,45 @@
 import { store } from "@/data"
 import { ref } from "hywer/jsx-runtime"
 import AppearanceSettings from "./AppearanceSettings/AppearanceSettings"
+import CategoriesList from "./CategoriesList"
+import './styles.css'
+import General from "./General"
+import Privacy from "./Privacy"
+import CacheSettings from "./CacheSettings"
 
-export default function Settings() {
-    const {strings, locale} = store.locale()
+interface SettingsProps {
+    category?: string
+}
 
-    const language = ref<string>(locale)
-
-
-    async function changeLang(lang: string) {
-        await store.setLocale(lang)
-
-        language.val = lang
-
-    }
+export default function Settings(props: SettingsProps) {
+    const category = ref(props.category || "general");
 
     return (
         <>
-            <h1>{strings["language"]}</h1>
-            {language.derive(val => {
-                return <>
-                    <button disabled={val == "uk"} onClick={() => changeLang("uk")}>uk</button>
-                    <button disabled={val == "en-US"} onClick={() => changeLang("en-US")}>en-US</button>
-                </>
-                
-            })
+            <main class='settingsView'>
+                <CategoriesList category={category} />
 
-            }
-            <AppearanceSettings />
+                <div class='window'>
+                    {
+                        category.derive((val) => {
+                            switch (val) {
+                                case "general":
+                                    return <General />
+                                case "appearance":
+                                    return <AppearanceSettings />
+                                case "privacy":
+                                    return <Privacy />
+                                case "storage":
+                                    return <CacheSettings />
+                                case "language":
+                                    return <CacheSettings />
+                                default:
+                                    break;
+                            }
+                        })
+                    }
+                </div>
+            </main>
 
         </>
     )

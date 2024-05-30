@@ -1,6 +1,6 @@
 import './styles.css'
 import { store } from "@/data"
-import { type IPost, type IProfile } from "@/data/types/models"
+import { type IPost } from "@/data/types/models"
 
 import EditedIcon from "@/ui/icons/edited"
 import CommentIcon from "@/ui/icons/comment"
@@ -8,28 +8,79 @@ import AccessBadge from "./AccessBadge/AccessBadge"
 import PinnedIcon from '@/ui/icons/pinned'
 import VerifiedIcon from '@/ui/icons/verified'
 import AvatarPlaceholder from '../AvatarPlaceholder/AvatarPlaceholder'
-import Pictures from './Pictures/index.tsx'
+import Media from './Media/Media.tsx'
 import ForwardedPost from './ForwardedPost/ForwardedPost.tsx'
 import Duration from './Duration.tsx'
 import Picture from '../Picture/index.tsx'
-import Link from '@/ui/utils/crutches/Link.tsx'
+// import Link from '@/ui/utils/crutches/Link.tsx'
 import shake from '../shake.ts'
-import { Svg } from 'hywer/x/html'
 import { isIOS } from '@/ui/utils/crutches/platform.ts'
 import Reactions from '@/ui/Reactions/Reactions.tsx'
-import Poll from '../Poll/Poll.tsx'
+// import Poll from '../Poll/Poll.tsx'
+import FormatText from '../FormatText.tsx'
+import MusicWidget from '../MusicWidget/MusicWidget.tsx'
+import { Link } from 'hywer/x/router'
+import { showContextMenu } from '../ContextMenu/ContextMenu.tsx'
+import ShareIcon from '../icons/share.tsx'
+import { object } from './ShareFlow/ShareFlow.tsx'
+import { openModal } from '../Modal/Modal.tsx'
+import LanguageIcon from '../icons/language.tsx'
+import { showTranslateFlow } from '@/ui/TranslateFlow/TranslateFlow.tsx'
+import ErrorPlaceholder from './ForwardedPost/ErrorPlacheolder.tsx'
+import PointsIcon from '@/ui/icons/points'
+import DeleteIcon from '../icons/delete.tsx'
+import { derive, effect } from 'hywer/jsx-runtime'
 
 interface PostProps {
     post: IPost
-    profile: IProfile
+    onVisible?: () => void
+    onDelete: (id: string) => void
 }
 
-function Post({post, profile}: PostProps) {
+function Post({post, onVisible, onDelete}: PostProps) {
 
-    const {strings} = store.locale()
+    const options = {
+        // родитель целевого элемента - область просмотра
+        root: null,
+        // без отступов
+        rootMargin: '0px',
+        // процент пересечения - половина изображения
+        threshold: 0.1
+    }
+
+    // создаем наблюдатель
+    const observer = new IntersectionObserver((entries, observer) => {
+        // для каждой записи-целевого элемента
+        entries.forEach(entry => {
+            // если элемент является наблюдаемым
+            if (entry.isIntersecting) {
+                const element = entry.target
+
+                observer.unobserve(element)
+                element.classList.remove('trackable')
+
+                onVisible && onVisible()
+            }
+        })
+    }, options)
+
+    setTimeout(() => {
+        if (!onVisible) return
+
+        observer.observe(document.querySelector('.post.trackable')!)
+    })
+
+    const {strings, locale} = store.locale()
+
+    const {user, state} = store.getProfileById(post.peer.id)
+    const profile = user.get()
+
+    const user_id = store.auth.user_id()
+
+
 
     function shakeOnClick() {
-        if (window.location.pathname == `/u/${profile.username}`) {
+        if (window.location.pathname == `/u/${profile.username.val}`) {
             shake(document.querySelector(".postsList") as HTMLElement)
         }
     }
@@ -38,16 +89,66 @@ function Post({post, profile}: PostProps) {
 
     }
 
+    function Menu() {   
+
+        return (
+            <>
+                <button onClick={() => {object.val = {id: post.id, type: "post"}; openModal("shareFlow", [1], false)}}>
+                    <ShareIcon />
+                    {strings['share']}
+                </button>
+                {
+                    post.language != "notSet" && post.language != locale.split("-")[0] ?
+                    <button onClick={() => {showTranslateFlow(post)}}>
+                        <LanguageIcon />
+                        {strings['translate']}
+                    </button> : null
+                }
+                {
+                    post.peer.id == user_id ?
+                    <button class="delete" onClick={() => {onDelete(post.id)}}>
+                        <DeleteIcon />
+                        {strings['delete']}
+                    </button> : null
+                }
+            </>   
+        )
+    }
+
+    function showMenu(e: MouseEvent) {
+        e.preventDefault()
+
+        showContextMenu(<Menu />, {x: e.pageX, y: e.pageY})
+
+    }
+
+    function react() {
+        console.log("react")
+    }
+
 
     return (
-        <article class="post">
+        <article onDblClick={react} class={"post"+(onVisible ? " trackable" : "")} onContextMenu={showMenu}>
             <div class="title">
-                <div class="info">                    
-                    <Link onClick={shakeOnClick} class="name" href={`/u/${profile.username}`} aria-label={profile.name != "" ? profile.name : profile.username}>
-                        {profile.name != "" ? profile.name : profile.username}
-                    </Link>
-                    
-                    { profile.verified ? <VerifiedIcon /> : null }
+                <div class="info"> 
+                    {
+                        derive(([name, username]) => {
+                            return <Link onClick={shakeOnClick} class="name" path={`/u/${username.val}`} aria-label={name.val != "" ? name.val : username.val}>
+                                {name.val != "" ? name.val : username.val}
+                            </Link>
+                        }, [profile.name, profile.username])
+                    }
+
+                    {
+                        profile.verified.derive((val) => {
+                            if (val) {
+                                return <VerifiedIcon />
+                            } else {
+                                return <div style="display: none;" />
+                            }
+                        })
+
+                    }
                     { post.is_edited ? <EditedIcon /> : null }
                     <Duration date={post.date} />
                     { post.is_pinned ? <PinnedIcon /> : null}
@@ -56,11 +157,7 @@ function Post({post, profile}: PostProps) {
                 {
                     isIOS ?
                     <button onClick={(e: Event) => {/*toggle({x: e.pageX - 330, y: e.pageY + 10}, contextMenuButtons())*/}} class="optionsButton">
-                        <Svg>
-                            <svg viewBox="0 0 25 7" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M3.4725 0.274902C1.6925 0.274902 0.25 1.7199 0.25 3.4999C0.25 5.2799 1.6925 6.7249 3.4725 6.7249C5.2525 6.7249 6.695 5.2824 6.695 3.4999C6.6975 1.7199 5.255 0.274902 3.4725 0.274902ZM12.5 0.274902C10.72 0.274902 9.275 1.7174 9.275 3.4974C9.275 5.2774 10.7175 6.7224 12.5 6.7224C14.28 6.7224 15.7225 5.2799 15.7225 3.4974C15.7225 1.7199 14.28 0.274902 12.5 0.274902ZM21.5275 0.274902C19.7475 0.274902 18.305 1.7174 18.305 3.4974C18.305 5.2774 19.7475 6.7224 21.5275 6.7224C23.3075 6.7224 24.75 5.2799 24.75 3.4974C24.75 1.7199 23.3075 0.274902 21.5275 0.274902Z" />
-                            </svg>
-                        </Svg>
+                        <PointsIcon />
                     </button> : null
                 }
             </div>
@@ -71,35 +168,36 @@ function Post({post, profile}: PostProps) {
                 {
                     post.text != "" ?
                     <div class="text">
-                        {post.text}
+                        <FormatText>
+                            {post.text}
+                        </FormatText>
                     </div> : null
                 }
-
                 
-                {/* <Show when={props.item.reposts.count == 1}>
-                    <Switch>
-                        <Match when={props.item.reposts.objects[0].notAvailable}>
-                            <ErrorPlaceholder />
-                        </Match>
-                        <Match when={props.item.reposts.initialPosts[0]}>
-                            <ForwardedPost item={props.item.reposts.initialPosts[0]} profile={props.profileOfRepostedPost!} />
-
-                        </Match>
-                    </Switch>
-                </Show>
-                 */}
                 {
-                    post.reposts.count > 0 ? <ForwardedPost item={post.reposts.initialPosts[0]} profile={store.getProfileById(post.reposts.initialPosts[0].peer.id)!} /> : null
+                    post.reposts.count > 0 ? (post.reposts.objects[0].notAvailable ? <ErrorPlaceholder /> : <ForwardedPost item={post.reposts.initialPosts[0]} />) : null
                 }
                 
-                {post.attachments.photos.length > 0 ? <Pictures pictures={post.attachments.photos}/> : null}
+                {post.attachments.media.length > 0 ? <Media media={post.attachments.media}/> : null}
 
+                {post.attachments.audios.length > 0 ? <MusicWidget type='post' audios={post.attachments.audios}/> : null}
 
                 {/* <Poll /> */}
             </div>
-            <Link onClick={shakeOnClick} class="avatar" href={`/u/${profile.username}`} aria-label={profile.name != "" ? profile.name : profile.username}>
-                {profile.avatar.length > 0 ? <Picture picture={{photo_id: profile.avatar[0].photo_id, alt: "", preview: profile.avatar[0].preview, width: 1, height: 1}} /> : <AvatarPlaceholder name={profile.name != "" ? profile.name : profile.username} />}
+            <Link onClick={shakeOnClick} class="avatar" path={derive(([username]) => `/u/${username.val}`, [profile.username])} aria-label={derive(([name, username]) => name.val != "" ? name.val : username.val, [profile.name, profile.username])}>
+                {
+                    profile.avatar.derive((val) => {
+                        if (val.length > 0) {
+                            return <Picture src={val[0].id} picture={{id: val[0].id, alt: "", blurhash: val[0].blurhash, width: 1, height: 1, type: 'photo'}} />
+                        } else {
+                            return <AvatarPlaceholder name={derive(([name, username]) => name.val != "" ? name.val : username.val, [profile.name, profile.username])} />
+                        }
+                    })
+                }
             </Link>
+                
+
+
 
             {/* <A onDblClick={(e: Event) => e.stopPropagation()} onClick={showUserModal} aria-label={props.profile.name != "" ? props.profile.name : props.profile.username} class="avatarWrapper" href={`/u/${props.profile.username}`}>
                 <Avatar avatar={props.profile.avatar} name={props.profile.name != "" ? props.profile.name : props.profile.username} />

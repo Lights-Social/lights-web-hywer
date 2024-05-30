@@ -15,7 +15,8 @@
     position: absolute;
     will-change: opacity;
     transition: opacity 0.2s;
-    background: var(--following-color);
+    left: 0;
+    top: 0;
 }
 
 .photo:has(img) .thumbnail {

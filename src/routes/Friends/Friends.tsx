@@ -1,4 +1,3 @@
-// import { For, Match, Show, Switch, createEffect, createSignal, onMount } from "solid-js";
 //import { MobileHeader } from "../../components/MobileHeader";
 
 import './styles.css';
@@ -6,6 +5,7 @@ import Cell from "./Cell";
 //import Search from "./Search";
 import { Placeholder } from "./Cell/Placeholder";
 import { store } from "@/data";
+import { MobileHeader } from '@/ui/MobileHeader/MobileHeader';
 
 export default function Friends() {
 
@@ -31,6 +31,9 @@ export default function Friends() {
 
 
     return <>
+        <MobileHeader>
+            <span class="title">{strings["friends"]}</span>
+        </MobileHeader>
         <main class="friendsView">
             <div class="window">
                 <input id="searchField" enterkeyhint="search" placeholder={strings["search"]} onInput={onInputQuery} type="text" />
@@ -38,9 +41,9 @@ export default function Friends() {
                 {
                     <div class="friendList">
                         {
-                            friends.derive(val => val.length == 0 ? <Placeholder /> : <div style="display: none"></div>)
+                            friends.users.derive(val => val.length == 0 ? <Placeholder /> : <div style="display: none"></div>)
                         }
-                        {friends.derive(val => {
+                        {friends.users.derive(val => {
                             return val.map(item => {
                                 return <Cell type={"friend"} item={item} />
                             })

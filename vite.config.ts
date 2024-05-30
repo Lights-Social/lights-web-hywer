@@ -2,6 +2,8 @@ import { defineConfig } from 'vite'
 import { VitePWA } from 'vite-plugin-pwa'
 import viteCompression from 'vite-plugin-compression'
 import { resolve } from 'path'
+import wasm from 'vite-plugin-wasm';
+
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -9,6 +11,7 @@ export default defineConfig({
     target: 'es2022',
   },
   plugins: [
+    wasm(),
     VitePWA({
       registerType: 'prompt',
       manifest: {

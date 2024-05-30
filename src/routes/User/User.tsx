@@ -1,98 +1,93 @@
-import Post from "@/ui/Post/Post"
-import PostPlaceholder from "@/ui/Post/Placeholder";
 import { store } from "@/data";
 import Profile from "./Profile/Profile";
 import "./styles.css"
 import CategorySlider from "./CategorySlider/CategorySlider";
-import { ref } from "hywer/jsx-runtime";
+import { derive, ref } from "hywer/jsx-runtime";
 import { future } from "hywer/x/future";
-import type { IProfile } from "@/data/types/models";
 import { ReactiveProfile } from "@/data/ReactiveProfile";
 import Placeholder from "./Profile/Placeholder";
+import {PostsList} from "@/ui/PostsList/PostsList";
+import { showUserNotFoundModal } from "./UserNotFoundModal";
+import { openModal } from "@/ui/Modal/Modal";
+import PostEditor from "./PostEditor";
+import { navigateTo } from "hywer/x/router";
 
 interface UserProps {
     username: string
 }
+
+
+// } else {
+//     navigateTo(`/home`)
+
+//     setTimeout(() => {
+//         showUserNotFoundModal(username)
+//     })
+// }
+
 function User({username}: UserProps) {
-    const defaultProfile = {
-        id: "",
-        name: "",
-        about: "",
-        username: "",
-        is_premium: false,
-        sex: null,
-        avatar: [],
-        cover: "",
-        verified: false,
-        status: {last_activity: 0, status: "inactive"},
-        followers: {
-            count: 0,
-            is_following: false,
-        },
-        friends: {
-            count: 0,
-            friendship_state: "notFriends",
-        },
-        note: "",
-        wallet_uri: "",
-        posts: 0,
-        moments: 0,
-    }
+
+    const user_id = store.auth.user_id()
 
 
-    const pr = new ReactiveProfile(defaultProfile)
-
-
-
-    const profile = future(async () => store.getProfileByUsername(username), pr)
-
-    const posts = store.getPosts(`users/getByUsername/${username}/wall`, 0)
+    const {user, state} = store.getProfileByUsername(username)
+    const profile = user.get()
 
     const activeTab = ref("posts");
 
 	function selectTab(tab: string) {
 
 		if (tab == "moments") {
+            openModal("momentsErrorModal", [7,7,7,7], false);
 			activeTab.val = tab;
 
 			activeTab.val = "posts";
-
+            return
 		}
+
+        activeTab.val = tab;
 	}
 
     return <>
         <main class="userView">
             {
-                profile.derive((val) => {
-                    if (val) {
-                        return <>{val.get().val.id == "" ? <Placeholder /> : <Profile profile={val.get().val} />}</>
-                    }
+                state.derive((val) => {
+                    return <>{val != "success" ? <Placeholder /> : <Profile profile={profile} />}</>
                 })
             }
             <div class="items">
-                {
+                {/* {
                     profile.derive((val) => {
-                        if (val) {
-                            return <>{val.get().val.id == "" ? null : <CategorySlider onSelectTab={selectTab} tab={activeTab.val} posts={val.get().val.posts} moments={val.get().val.moments}/>}</>
-                        }
+                        return <>{val.id == "" ? null : <CategorySlider profile={val} onSelectTab={selectTab} tab={activeTab} posts={val.posts} moments={val.moments}/>}</>
                     })
+                } */}
+                {/* {
+                    derive(([tab, profileData]) => {
+                        if (tab.val == "posts" && profileData.val.id == user_id) {
+                            return <PostEditor type="create"/>
+                        } else {
+                            return <div style="display: none;" />
+                        }
+                    }, [activeTab, profile])
+
+                } */}
+
+                {
+                    derive(([tab]) => {
+                        switch (tab.val) {
+                            case "posts":
+                                return <div class="userPosts">
+                                    <PostsList uri={`users/getByUsername/${username}/wall`} />
+                                </div>
+                            case "favorites":
+                                return <div class="userPosts">
+                                    <PostsList uri={`favorites/posts`} />
+                                </div>
+                            }
+                    }, [activeTab])
                 }
-                <div class="postsList">
-                    {
-                        posts.derive(val => val.length == 0 ? <PostPlaceholder /> : <div style="display: none"></div>)
-                    }
-                    {posts.derive(val => {
-                        return val.map(post => {
-                            return <Post
-                                post={post}
-                                profile ={store.getProfileById(post.peer.id)!}
-                            />
-                        })
-                    })}
-                </div>
             </div>
         </main>
-    	
     </>
 }
 

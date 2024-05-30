@@ -4,6 +4,7 @@ import './styles.css'
 
 interface PlaceholderProps {
     count?: number;
+    onVisible?: () => void;
 }
 
 export default function Placeholder(props: PlaceholderProps) {
@@ -17,9 +18,10 @@ export default function Placeholder(props: PlaceholderProps) {
     //     return () => window.removeEventListener('resize', handleResize);
     // }, );
 
+
     return (
         <>
-            <article class="post placeholder">
+            <article class={"post placeholder"}>
                 <div class="title placeholderAnimated" />
                 <div class="avatar placeholderAnimated" />
                 <div class="content">

@@ -31,7 +31,7 @@ function OnBoarding() {
         if (response) {
             loginStep.val = "code"
         } else {
-            openModal("serviceUnavailableModal", true, false)
+            openModal("serviceUnavailableModal", [7,7,7,7], false)
         }
 
     }

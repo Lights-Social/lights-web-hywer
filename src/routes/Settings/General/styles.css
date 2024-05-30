@@ -1,0 +1,44 @@
+.categoriesList .category .subTitle.emoji {
+    opacity: 1;
+    font-size: 20px;
+
+}
+
+.reactionsSelector {
+    /* top: calc(-54px - 5px);
+    left: 0px;
+    position: absolute; */
+    min-width: 175px;
+    z-index: 1;
+
+    display: grid;
+    grid-auto-flow: column;
+}
+
+.reactionsSelector button {
+    background: none;
+    outline: none;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    transition: 0.2s;
+    border-radius: 50%;
+    padding: 5px;
+
+    align-items: center;
+    justify-content: center;
+
+    font-size: 24px;
+    width: fit-content;
+    height: fit-content;
+    
+}
+
+.reactionsSelector button:hover {
+    background: var(--highlight-color);
+}
+
+.reactionsSelector button svg {
+    width: 30px;
+    height: 30px;
+}

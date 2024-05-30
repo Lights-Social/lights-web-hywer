@@ -113,7 +113,7 @@ dialog.modal .buttons {
     width: 100%;
 }
 
-dialog.modal button {
+dialog.modal .buttons button {
     width: 100%;
     height: 50px;
     border-radius: 15px;
@@ -131,16 +131,11 @@ dialog.modal button {
     color: var(--font-color);
 }
 
-dialog.modal button.close {
+dialog.modal .buttons button.accent {
     background: var(--accent-color);
     color: white;
 }
 
-dialog.modal button.confirm {
-    background: var(--accent-color);
-    color: white;
-}
-
-dialog.modal button:active {
+dialog.modal .buttons button:active {
     scale: 0.95;
 }

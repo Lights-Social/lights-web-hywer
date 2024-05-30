@@ -1,0 +1,193 @@
+main .window  {
+    background: var(--main-color);
+    padding: 20px;
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    width: 500px;
+
+}
+@media only screen and (max-width: 480px) {
+	main .window {
+		padding-top: calc(env(safe-area-inset-top) + 55px + 20px);
+        padding-bottom: calc(env(safe-area-inset-bottom) + 60px + 20px);
+        border-radius: 0px;
+        
+        flex: 1;
+
+    }
+}
+
+main.settingsView .window .rose {
+    width: 20px;
+}
+
+.changeAvatar {
+    display: grid;
+    justify-content: center;
+    gap: 10px;
+}
+.changeAvatar .avatarWrapper {
+    width: 80px;
+    height: 80px;
+    border-radius: 40px;
+    position: relative;
+    cursor: pointer;
+    justify-self: center;
+}
+
+.changeAvatar .badge {
+    padding: 5px;
+    bottom: 0px;
+    position: absolute;
+    right: 0;
+    background: color-mix(in srgb, var(--accent-color) 15%, var(--main-color));
+    display: flex;
+    border-radius: 15px;
+    outline: 5px solid var(--main-color);
+}
+.changeAvatar .badge svg {
+    width: 15px;
+    height: 15px;
+    fill: var(--accent-color);
+}
+
+.changeAvatar .delete {
+    font-family: 'Rubik';
+    color: var(--accent-color);
+    background: transparent;
+    border: none;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.optionWrapper {
+    background: var(--input-color);
+    padding: 12px;
+
+    border-radius: 100px;
+
+    display: flex;
+    align-items: center;
+
+    font-family: 'Rubik';
+
+}
+
+.optionWrapper .switch {
+    margin-inline-start: auto;
+}
+
+
+.clearCache {
+    background: var(--accent-color);
+    outline: none;
+    border: none;
+    font-size: 15px;
+    font-family: 'Rubik';
+    border-radius: 15px;
+    padding: 16px;
+    font-weight: 450;
+
+    display: flex;
+    justify-content: center;
+    gap: 7px;
+    cursor: pointer;
+    color: white;
+
+    transition: scale 0.2s;
+}
+
+.clearCache:active {
+    scale: 0.95;
+}
+
+.clearCache span {
+    opacity: 0.75;
+
+}
+
+.categoriesList {
+    display: grid;
+    border-radius: 15px;
+
+    padding: 15px;
+    background: var(--main-color);
+    width: 280px;
+}
+
+.categoriesList .category {
+    display: flex;
+    align-items: center;
+    padding: 15px;
+    cursor: pointer;
+    font-size: 16px;
+    outline: none;
+    border: none;
+    font-family: 'Rubik';
+
+    background: var(--main-color);
+    color: var(--font-color);
+
+    transition: 0.2s background-color;
+}
+
+.categoriesList .category.selected {
+    background: var(--accent-color);
+    color: white;
+}
+
+.categoriesList .category.selected svg {
+    fill: white !important;
+}
+
+.categoriesList .category:not(.selected):hover {
+    background: color-mix(in srgb, var(--input-color) 90%, var(--font-color));
+
+}
+
+.categoriesList .category:first-of-type {
+    border-radius: 15px 15px 0px 0px;
+}
+
+.categoriesList .category:last-of-type {
+    border-radius: 0px 0px 15px 15px;
+}
+
+.categoriesList .category:only-child {
+    border-radius: 15px;
+}
+
+.categoriesList .category .title {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.categoriesList .category .title svg {
+    width: 25px;
+    height: 25px;
+    fill: var(--buttons-color);
+}
+
+
+.categoriesList .category .subTitle {
+    margin-inline-start: auto;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    opacity: 0.5;
+    font-size: 16px;
+    
+}
+.categoriesList .category .arrow {
+    width: 15px;
+    height: 15px;
+    fill: var(--font-color);
+}
+
+.modal .reset {
+    background: var(--red-pallete-color) !important;
+    color: white !important;
+}

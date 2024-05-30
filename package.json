@@ -9,14 +9,18 @@
     "preview": "vite preview"
   },
   "devDependencies": {
-    "@types/node": "^20.12.4",
-    "vite": "^5.2.8",
+    "@types/node": "^20.12.13",
+    "vite": "^5.2.12",
     "vite-plugin-compression": "^0.5.1",
-    "vite-plugin-pwa": "^0.19.7"
+    "vite-plugin-pwa": "^0.19.8",
+    "vite-plugin-wasm": "^3.3.0"
   },
   "dependencies": {
+    "blurhash-wasm": "^0.2.0",
     "fast-average-color": "^9.4.0",
     "hywer": "latest",
-    "workbox-window": "^7.0.0"
+    "idb": "^8.0.0",
+    "safari-14-idb-fix": "^3.0.0",
+    "workbox-window": "^7.1.0"
   }
 }

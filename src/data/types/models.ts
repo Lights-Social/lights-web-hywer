@@ -1,12 +1,52 @@
+import type { DBSchema } from 'idb';
 
+export interface LightsDB extends DBSchema {
 
-export interface MediaAttachment {
-    file?: File;
-    source: string;
-    preview?: string;
-    photo_id?: string;
-    width: number;
-    height: number;
+    posts: {
+		value: IPost;
+		key: string;
+		indexes: {
+            'by-post-id': string,
+        };
+    };
+    translations: {
+		value: ITranslation;
+		key: string;
+		indexes: {
+            'by-hash': number,
+        };
+    };
+    users: {
+		value: IProfile;
+		key: string;
+		indexes: {
+            'by-id': string,
+            'by-username': string
+        };
+    };
+
+    friends: {
+		value: IFriend;
+		key: string;
+		indexes: {
+            'by-id': string,
+        };
+    };
+}
+
+export interface ITranslation {
+    hash: number;
+    text: string;
+}
+
+export interface IAudio {
+    isrc: string;
+    title: string;
+    artist: string;
+    artwork: string;
+    spotify: string;
+    apple_music: string;
+    youtube: string;
 }
 
 export interface IReaction {
@@ -15,13 +55,13 @@ export interface IReaction {
     id: string;
 }
 
-export interface IPhotoAttachment {
-    photo_id: string;
-    url?: string;
+export interface IMediaAttachment {
+    id: string;
     alt: string;
-    preview: string;
+    blurhash: string;
     width: number;
     height: number;
+    type: string;
 }
 
 export interface ILinkAttachment {
@@ -51,8 +91,9 @@ export interface IPost {
     text: string;
     language: string;
     attachments: {
-        photos: IPhotoAttachment[];
+        media: IMediaAttachment[];
         links?: ILinkAttachment[];
+        audios: IAudio[];
     };
     date: string;
     reactions: IReaction[];
@@ -68,6 +109,7 @@ export interface IPost {
         objects: Object[];
         initialPosts: IPost[];
     }
+    is_favorite: boolean;
 }
 
 export interface IMoment {
@@ -76,7 +118,7 @@ export interface IMoment {
     text: string;
     language: string;
     attachments: {
-        photos?: IPhotoAttachment[];
+        media?: IMediaAttachment[];
         links?: ILinkAttachment[];
     };
     date: string;
@@ -105,7 +147,7 @@ export interface IComment {
     text: string;
     language: string;
     attachments: {
-        photos: IPhotoAttachment[];
+        media: IMediaAttachment[];
         links?: ILinkAttachment[];
     };
     date: string;
@@ -115,9 +157,9 @@ export interface IComment {
 }
 
 export interface IAvatar {
-    photo_id: string;
+    id: string;
     wrapper: string;
-    preview: string;
+    blurhash: string;
     date: number;
     url?: string;
 }
@@ -150,6 +192,11 @@ export interface IProfile {
     wallet_uri: string;
     posts: number;
     moments: number;
+}
+
+export interface IFriend {
+    id: string;
+    is_pinned: boolean;
 }
 
 type Includes = {

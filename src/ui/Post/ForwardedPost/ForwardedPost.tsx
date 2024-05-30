@@ -7,37 +7,41 @@ import "./styles.css"
 import type { IPost, IProfile } from "@/data/types/models";
 import VerifiedIcon from '@/ui/icons/verified'
 import EditedIcon from "@/ui/icons/edited"
-import Pictures from "../Pictures";
+import Media from "../Media/Media";
 import Picture from "@/ui/Picture";
 import AvatarPlaceholder from "@/ui/AvatarPlaceholder/AvatarPlaceholder";
 import Duration from "../Duration";
+import { store } from "@/data";
+import FormatText from "@/ui/FormatText";
 
 interface ForwardedPostProps {
     item: IPost
-    profile: IProfile
 }
 
-export default function ForwardedPost({ item, profile }: ForwardedPostProps) {
+export default function ForwardedPost({ item }: ForwardedPostProps) {
+    //const user = store.getProfileById(item.peer.id)!
+
+    //const profile = user.get()
 
     return (
         <div onDblClick={(e: Event) => e.stopPropagation()} class="forwardedPost">
             <div class="top">
-                {
-                    profile.avatar.length > 0 ?
+                {/* {
+                    profile.val.avatar.length > 0 ?
                     <div class="avatar">
-                        <Picture picture={{photo_id: profile.avatar[0].photo_id, alt: "", preview: profile.avatar[0].preview, width: 1, height: 1}} />
-                    </div> : <AvatarPlaceholder name={profile.name != "" ? profile.name : profile.username} />
-                }
+                        <Picture src={`${import.meta.env.VITE_LIGHTS_CDN_URL}/picture/${profile.val.avatar[0].id}.webp`} picture={{type: "photo", id: profile.val.avatar[0].id, alt: "", blurhash: profile.val.avatar[0].blurhash, width: 1, height: 1}} />
+                    </div> : <AvatarPlaceholder name={profile.val.name != "" ? profile.val.name : profile.val.username} />
+                } */}
                 <div class="center">
                     <div class="title">
-                        <div class="info">
-                            <span class="name">{profile.name != "" ? profile.name : profile.username}</span>
+                        {/* <div class="info">
+                            <span class="name">{profile.val.name != "" ? profile.val.name : profile.val.username}</span>
                             
-                            { profile.verified ? <VerifiedIcon /> : null }
+                            { profile.val.verified ? <VerifiedIcon /> : null }
                             { item.is_edited ? <EditedIcon /> : null }
 
                             <Duration date={item.date} />                          
-                        </div>
+                        </div> */}
 
                     </div>
                     
@@ -46,14 +50,14 @@ export default function ForwardedPost({ item, profile }: ForwardedPostProps) {
                         {
                             item.text != "" ?
                             <div class="text">
-                                {/* <FormatText> */}
+                                <FormatText>
                                     {item.text}
-                                {/* </FormatText> */}
+                                </FormatText>
                             </div> : null
                         }
                         
                         
-                        <Pictures pictures={item.attachments.photos} />
+                        <Media media={item.attachments.media} />
                     </div>
                 </div>
                 

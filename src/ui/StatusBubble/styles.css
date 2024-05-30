@@ -3,30 +3,33 @@
     display: grid;
     align-items: center;
     justify-content: center;
-    width: fit-content;
+    height: 19px;
     min-width: 19px;
     min-height: 19px;
+    max-width: 70px;
     border-radius: 12px;
     box-sizing: border-box;
-    font-weight: 500;
+    font-weight: 450;
     font-size: 11px;
     font-family: 'Rubik', sans-serif;
     padding: 4px;
     color: white;
     overflow: hidden;
-    transition: 0.2s;
+    transition: 0.2s ease-in-out;
+    line-height: 100%;
 }
 .statusBubble.active {
+    max-width: 19px;
     background: var(--active-status-color);
 }
 
 .statusBubble .lastActivity {
+    width: max-content;
     transition: 0.2s;
 }
 
 .statusBubble.active .lastActivity {
     opacity: 0;
-    width: 0px;
 }
 
 .statusBubble .point {
@@ -34,4 +37,9 @@
     height: 9px;
     border-radius: 11px;
     background: var(--main-color);
+    transition: 0.2s;
+}
+
+.statusBubble.active .point {
+    scale: 0;
 }

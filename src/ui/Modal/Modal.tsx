@@ -1,11 +1,14 @@
 import { type JSX } from 'hywer/jsx-runtime';
 import './styles.css'
+import './flow.css'
+import './bar.css'
 
 interface ModalProps {
-    children: JSX.Element;
+    children: JSX.Element[];
     'aria-labelledby'?: string;
     'aria-describedby'?: string;
     id: string;
+    type: string;
 }
 
 const handleModalClick = (e: MouseEvent) => {
@@ -43,12 +46,12 @@ export function closeModal(id: string) {
 
 }
 
-export function openModal(id: string, haptic: boolean, closeByBack: boolean = true) {
+export function openModal(id: string, haptic: number[], closeByBack: boolean = true) {
     const dialog = document.querySelector<HTMLDialogElement>('#' + id)
 
     dialog?.showModal()
 
-    if (haptic && navigator.vibrate) navigator.vibrate([7,7,7,7])
+    if (haptic.length > 0 && navigator.vibrate) navigator.vibrate(haptic)
       
     closeByBack && dialog?.addEventListener("click", handleModalClick);
 }
@@ -56,7 +59,7 @@ export function openModal(id: string, haptic: boolean, closeByBack: boolean = tr
 export function Modal(props: ModalProps) {
     
     return (
-        <dialog id={props.id} class="modal" onCancel={(e: Event) => {e.preventDefault(); closeModal(props.id)}}>
+        <dialog id={props.id} class={"modal"+(props.type == "flow" ? " "+props.type : "")+(props.type == "flowFull" ? " flow full" : "")} onCancel={(e: Event) => {e.preventDefault(); closeModal(props.id)}}>
             {props.children}
         </dialog>
     )

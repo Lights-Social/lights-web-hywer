@@ -137,7 +137,7 @@ img {
 		box-sizing: border-box;
 	}
 
-	.postsList.feed {
+	main.homeView .postsList {
 		margin-top: calc(55px + env(safe-area-inset-top) + 10px);
 	}
 }
@@ -196,4 +196,23 @@ main .window {
     display: flex;
     flex-direction: column;
     gap: 15px;
+}
+
+
+input[type=text] {
+    color: var(--font-color);
+    outline: none;
+
+    background: var(--input-color);
+    border-radius: 24px;
+    padding: 15px;
+    display: flex;
+    height: fit-content;
+    cursor: text;
+    align-items: center;
+    
+    border: none;
+    caret-color: var(--accent-color);
+    font-size: 16px;
+
 }

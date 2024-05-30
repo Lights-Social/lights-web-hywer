@@ -1,0 +1,87 @@
+.musicWidget {
+    display: grid;
+    gap: 10px;
+    font-family: 'Rubik', sans-serif;
+}
+
+.musicWidget .track {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    width: 100%;
+}
+
+.musicWidget .track .info {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.musicWidget .track .info .title {
+    font-weight: 450;
+    font-size: 15px;
+
+}
+
+.musicWidget .track .info .artist {
+    opacity: 0.75;
+    font-size: 14px;
+}
+
+.musicWidget .track .photoWrapper {
+    width: 43px;
+    height: 43px;
+    border-radius: 10px;
+    position: relative;
+}
+
+
+
+.musicWidget .track .photo {
+    width: 43px;
+    height: 43px;
+    border-radius: 10px;
+}
+
+.musicWidget .track .playButton {
+    width: 43px;
+    height: 43px;
+    border-radius: 25px;
+    position: relative;
+    border: none;
+    outline: none;
+    background: var(--accent-color);
+    margin-inline-start: auto;
+    cursor: pointer;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+}
+
+.musicWidget .track .playButton .badge {
+    position: absolute;
+    bottom: -2px;
+    right: -2px;
+    width: fit-content;
+    height: fit-content;
+    background: var(--main-color);
+    padding: 4px;
+    border-radius: 20px;
+    display: flex;
+}
+
+
+.musicWidget .track .playButton .badge.appleMusic svg {
+    border-radius: 20px;
+}
+
+.musicWidget .track .playButton .badge svg {
+    width: 20px;
+    height: 20px;
+}
+
+.musicWidget .track .playButton > svg {
+    width: 20px;
+    height: 20px;
+    fill: color-mix(in srgb, var(--accent-color) 30%, var(--main-color));
+}

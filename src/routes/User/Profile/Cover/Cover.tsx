@@ -1,22 +1,32 @@
 import type { IProfile } from '@/data/types/models';
 import { HSLtoString, generateHSL } from '@/ui/utils/HSLgen';
 import { FastAverageColor } from 'fast-average-color';
+import * as blurhash from "blurhash-wasm";
+import type { RecReactiveProxy } from 'hywer/x/store';
+import { effect } from 'hywer/jsx-runtime';
 
 
 interface CoverProps {
-	profile: IProfile
+	profile: RecReactiveProxy<IProfile>;
 }
 
 export default function Cover(props: CoverProps) {
 
-    function setCoverColor() {
+    async function setCoverColor() {
         const coverElement = document.querySelector<HTMLDivElement>('.cover')
-        if (props.profile.avatar[0]) {
-            let image = new Image();
-            image.src = props.profile.avatar[0].preview
+        if (props.profile.avatar.val[0]) {
+
+            const pixels = blurhash.decode(props.profile.avatar.val[0].blurhash, 32, 32);
+            // Set the pixels to the canvas
+            const asClamped = new Uint8ClampedArray(pixels!);
+            const imageData = new ImageData(asClamped, 32, 32);
+
+
+            const bitmap = await createImageBitmap(imageData, 0, 0, 32, 32)
+
 
             const fac = new FastAverageColor();
-            fac.getColorAsync(image)
+            fac.getColorAsync(bitmap)
                 .then(color => {
                     coverElement?.style.setProperty('--user-color', color.hex);
                 })
@@ -24,7 +34,7 @@ export default function Cover(props: CoverProps) {
                     console.log(e);
                 });
         } else {
-            coverElement?.style.setProperty('--user-color', HSLtoString(generateHSL(props.profile.name != "" ? props.profile.name : props.profile.username), 20));
+            coverElement?.style.setProperty('--user-color', HSLtoString(generateHSL(props.profile.name.val != "" ? props.profile.name.val : props.profile.username.val), 20));
         }
 
         coverElement?.animate([
@@ -35,11 +45,14 @@ export default function Cover(props: CoverProps) {
                 opacity: 1
             }
         ], 400)
-    }
-
+    }    
     setTimeout(() => {
         setCoverColor()
     })
+
+    effect(() => {
+        setCoverColor()
+    }, [props.profile.avatar])
     
 
     return (

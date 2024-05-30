@@ -168,14 +168,22 @@
     "nobodyIsActive.description": "Хм, здається, ніхто з ваших друзів поки що не активний.",
 
     "offline": "Не в мережі",
-    "cleanCache": "Очистити кеш",
+    "clearCache": "Очистити кеш",
+    "clearCacheDescription": "Усі медіавкладення, як і раніше, доступні на серверах Lights, однак їх прийдеться завантажувати заново.",
 
     "back": "Назад",
+    "close": "Закрити",
     "of": "із",
 
     "copyLink": "Скопіювати посилання",
     "more": "Ще",
     "thisPostIsUnavailable": "Цей пост недоступний",
-    "repost": "Зробити репост"
-
+    "repost": "Зробити репост",
+    "favorites": "Обране",
+    "addToFavorites": "Додати в обране",
+    "removeFromFavorites": "Видалити з обраного",
+    "music": "Музика",
+    "findMusicDescription": "Знаходьте треки в Spotify і додавайте їх до постів!",
+    "add": "Додати",
+    "photo": "Фото"
 }

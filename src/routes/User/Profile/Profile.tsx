@@ -8,30 +8,34 @@ import AvatarPlaceholder from "@/ui/AvatarPlaceholder/AvatarPlaceholder";
 import Cover from "./Cover/Cover";
 import showBubble, { Bubble } from "@/ui/Bubble/Bubble";
 import StatusBubble from "@/ui/StatusBubble/StatusBubble";
+import FriendshipConfirmation from "./FriendshipConfirmation/FriendshipConfirmation";
+import FormatText from "@/ui/FormatText";
+import type { RecReactiveProxy } from "hywer/x/store";
+import { derive } from "hywer/jsx-runtime";
 
 
 interface ProfileProps {
-    profile: IProfile;
+    profile: RecReactiveProxy<IProfile>;
 }
 
 export default function Profile({profile}: ProfileProps) {
 
     const {strings} = store.locale()
     const isAuthorized = store.auth.isAuthorized()
+    const user_id = store.auth.user_id()
+
 
     function copyToClipboard() {
-        navigator.clipboard.writeText(profile.username).then(() => {
+        navigator.clipboard.writeText(profile.username.val).then(() => {
             showBubble("copyToClipboard")
         })
     }
-
-    console.log(typeof profile.note)
     
     return (
         <>
-            <Bubble id="copyToClipboard">
+            {/* <Bubble id="copyToClipboard">
                 Copied to clipboard!
-            </Bubble>
+            </Bubble> */}
             <div class="profile">
                 <div class="coverWrapper">
                     <Cover profile={profile}/>
@@ -39,52 +43,62 @@ export default function Profile({profile}: ProfileProps) {
                 <div class="wrapper">
                     <div class="avatarWrapper">
                         {
-                            profile.avatar.length > 0 ?
-                            <div class="avatar">
-                                <Picture picture={{photo_id: profile.avatar[0].photo_id, alt: "", preview: profile.avatar[0].preview, width: 1, height: 1}} />
-                            </div> : <AvatarPlaceholder name={profile.name != "" ? profile.name : profile.username} />
+                            profile.avatar.derive((val) => {
+                                if (val.length > 0) {
+                                    return <div class="avatar"><Picture src={val[0].id} picture={{id: val[0].id, alt: "", blurhash: val[0].blurhash, width: 1, height: 1, type: 'photo'}} /></div>
+                                } else {
+                                    return <AvatarPlaceholder name={derive(([name, username]) => name.val != "" ? name.val : username.val, [profile.name, profile.username])} />
+                                }
+                            })
                         }
                         <div class="statusBubbleWrapper">
-                            {/* <StatusContextBubble status={props.profile.status}/>
-                            <StatusBubble status={props.profile.status} /> */}
+                            {/* <StatusContextBubble status={props.profile.status}/> */}
                             <StatusBubble status={profile.status} />
                         </div>
                     </div>
                     <div class="title" onClick={copyToClipboard}>
                         <div class="name">
-                            <div class="text">{profile.name != "" ? profile.name : profile.username}</div>
-                            { profile.verified ? <VerifiedIcon /> : null }
-                            { profile.is_premium ? <RoseIcon /> : null }
+                            <div class="text">{derive(([name, username]) => name.val != "" ? name.val : username.val, [profile.name, profile.username])}</div>
+                            
+                            {profile.verified.derive((val) => val ? <VerifiedIcon /> : <div style="display: none;" />)}
+                            {profile.is_premium.derive((val) => val ? <RoseIcon /> : <div style="display: none;" />)}
+
                         </div>
                         <span class="username">
-                            {profile.username}
+                            {profile.username.derive((val) => val)}
                         </span>
                     </div>
                     
 
-                    <Buttons />
+                    {/* <Buttons profile={profile} /> */}
 
                     {/* <Show when={props.profile.friends.friendship_state == "confirmation"}>
                         <FriendshipConfirmation onAccept={acceptFriendRequest} onIgnore={ignoreFriendRequest} />
                     </Show> */}
 
-                    {
+                    {/* {
+                        profile.friends.friendship_state == "confirmation" ?
+                        <FriendshipConfirmation />
+                        : null
+                    } */}
+
+                    {/* {
                         profile.about != "" ?
                         <div class="about">
-                            {/* <FormatText> */}
+                            <FormatText>
                                 {profile.about}
-                            {/* </FormatText> */}
+                            </FormatText>
                         </div> : null
-                    }
-                    {
-                        isAuthorized ?
+                    } */}
+                    {/* {
+                        isAuthorized && profile.id != user_id ?
                         <div class="note">
                             <h4>{strings["note"]}</h4>
                             <textarea id="noteInput" onChange={(e: Event)  => store.editNote(profile.id, (e.target as HTMLTextAreaElement).value)} placeholder={strings["clickToAddANote"]} maxLength={200}>
                                 {profile.note}
                             </textarea>
                         </div> : null
-                    }
+                    } */}
                 </div>
             </div>
         </>

@@ -1,13 +1,13 @@
-import { useI18n } from '@solid-primitives/i18n';
+import { store } from '@/data'
 import './styles.css'
 
 export default function ErrorPlaceholder() {
 
-    const [t] = useI18n();
+    const {strings} = store.locale()
 
     return (
-        <div onDblClick={(e) => e.stopPropagation()} class="forwardedPost">
-            <span class='error'>{t("thisPostIsUnavailable")}</span>
+        <div onDblClick={(e: Event) => e.stopPropagation()} class="forwardedPost">
+            <span class='error'>{strings["thisPostIsUnavailable"]}</span>
         </div>
     )
 

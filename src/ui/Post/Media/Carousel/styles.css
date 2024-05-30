@@ -78,6 +78,19 @@ article.post .carouselPictures .container .photo {
 }
 
 
+article.post .carouselPictures .container .video {
+    scroll-snap-align: start;
+    width: 100%;
+    flex: 0 0 auto;
+    aspect-ratio: 1 !important;
+    border-radius: 15px;
+    overflow: hidden;
+    position: relative;
+
+    transition: margin 0.3s; /* Анимация для плавного изменения отступов */
+}
+
+
 article.post .carouselPictures .counter {
     position: absolute;
     top: 10px;

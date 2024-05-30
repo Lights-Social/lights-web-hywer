@@ -6,12 +6,14 @@ export default function MomentsErrorModal() {
     const {strings} = store.locale()
 
     return (
-        <Modal id="momentsErrorModal">
+        <Modal type="modal" id="momentsErrorModal">
             <h1>{strings["momentsIsNotAvailable"]} 😅</h1>
             <p>
                 {strings["tryAgainLater"]}
             </p>
-            <button class="close" onClick={() => closeModal("momentsErrorModal")}>OK</button>
+            <div class="buttons">
+                <button class="accent" onClick={() => closeModal("momentsErrorModal")}>OK</button>
+            </div>
         </Modal>
     )
 }

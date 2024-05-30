@@ -5,9 +5,12 @@ import './styles.css';
 // import Avatar from "../Avatar";
 import FriendsIcon from "@/ui/icons/friends"
 import HomeIcon from "@/ui/icons/home"
-import Link from "@/ui/utils/crutches/Link"
+import { Link, NavLink, navigateTo } from "hywer/x/router"
+import AvatarPlaceholder from '@/ui/AvatarPlaceholder/AvatarPlaceholder';
+import Picture from '@/ui/Picture';
 
-export function scrollTopFeed() {
+
+export async function scrollTopFeed() {
 	if (location.pathname == "/home") {
 		window.scrollTo({
 			top: 0,
@@ -19,37 +22,46 @@ export function scrollTopFeed() {
 function Header() {
 
     const {strings} = store.locale()
-	//const isAuthorized = store.isAuthorized()
+	const user_id = store.auth.user_id()
+	//const user = store.getProfileById(user_id!)!.get()
+
 
 	return (
 		<header class={"desktop"}>
-			<Link class="logo" href='/home' aria-label="Lights">
+			<Link class="logo" path='/home' aria-label="Lights">
 				<img width="45px" height="45px" src={"/logo.svg"} alt="" />
 			</Link>
 			{<nav>
-				<Link href='/home' aria-label={strings["home"]} onClick={scrollTopFeed}>
+				<NavLink id="homeButton" activeClass='selected' path='/home' aria-label={strings["home"]} onClick={scrollTopFeed}>
 					<HomeIcon />
-				</Link>
+				</NavLink>
 
-				<Link href='/friends' aria-label={strings["friends"]} onClick={scrollTopFeed}>
+				<NavLink id="friendsButton" activeClass='selected' path='/friends' aria-label={strings["friends"]}>
 					<FriendsIcon />
-				</Link>
+				</NavLink>
 			</nav>}
 
 
 
 			
-			<div class="otherButtons">
-				{/* {!user ? <button onClick={() => navigate(`/login`, { replace: false })} class="signInButton" aria-label={t("signIn")}>
-					{t("signIn")}
+			{/* <div class="otherButtons">
+				{!user_id ? <button onClick={() => navigateTo(`/login`, { replace: false })} class="signInButton" aria-label={strings["signIn"]}>
+					{strings["signIn"]}
 				</button> :
 				<>
-					<button onClick={() => navigate(`/u/${user.username}`, { replace: false })} id="profileAvatar" aria-label="My profile">
-						<Avatar avatar={user?.avatar} name={user.name != "" ? user.name : user.username} />
+					<button onClick={() => navigateTo(`/u/${user.val.username}`, { replace: false })} id="profileAvatar" aria-label="My profile">						
+						<div class="avatarWrapper">
+							{
+								user.val.avatar.length > 0 ?
+								<div class="avatar">
+									<Picture src={`${import.meta.env.VITE_LIGHTS_CDN_URL}/picture/${user.val.avatar[0].id}.webp`} picture={{type: 'photo', id: user.val.avatar[0].id, alt: "", blurhash: user.val.avatar[0].blurhash, width: 1, height: 1}} />
+								</div> : <AvatarPlaceholder name={user.val.name != "" ? user.val.name : user.val.username} />
+							}
+						</div>
 					</button>
 				</>
-				} */}
-			</div>
+				}
+			</div> */}
 		</header>
 	);
 }
