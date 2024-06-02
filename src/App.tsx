@@ -30,8 +30,6 @@ import { MediaViewer } from './ui/MediaViewer/MediaViewer'
 
 
 function handleAfterRoute() {
-	console.log(location.pathname.split("/")[1])
-
 	document.querySelectorAll("header nav a").forEach((elem) => {
 		elem.classList.remove("selected")
 	})
@@ -51,10 +49,10 @@ function handleAfterRoute() {
 			document.querySelector("#friendsButtonMobile")?.classList.add("selected")
 
 			break;
-		// case `/u/${store.getProfileById(store.auth.user_id()!)?.get().val.username}`:
-		// 	document.querySelector("#profileButtonMobile")?.classList.add("selected")
+		case `/u/${store.getProfileById(store.auth.user_id()!).user.get().username.val}`:
+			document.querySelector("#profileButtonMobile")?.classList.add("selected")
 
-		// 	break;
+			break;
 		default:
 			break;
 	}

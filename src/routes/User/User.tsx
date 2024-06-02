@@ -2,9 +2,7 @@ import { store } from "@/data";
 import Profile from "./Profile/Profile";
 import "./styles.css"
 import CategorySlider from "./CategorySlider/CategorySlider";
-import { derive, ref } from "hywer/jsx-runtime";
-import { future } from "hywer/x/future";
-import { ReactiveProfile } from "@/data/ReactiveProfile";
+import { derive, effect, ref } from "hywer/jsx-runtime";
 import Placeholder from "./Profile/Placeholder";
 import {PostsList} from "@/ui/PostsList/PostsList";
 import { showUserNotFoundModal } from "./UserNotFoundModal";
@@ -33,6 +31,16 @@ function User({username}: UserProps) {
     const {user, state} = store.getProfileByUsername(username)
     const profile = user.get()
 
+    effect(() => {
+        if (state.val == "error") {
+            navigateTo(`/home`)
+
+            setTimeout(() => {
+                showUserNotFoundModal(username)
+            })
+        }
+    }, [state])
+
     const activeTab = ref("posts");
 
 	function selectTab(tab: string) {
@@ -48,6 +56,10 @@ function User({username}: UserProps) {
         activeTab.val = tab;
 	}
 
+    effect(([newUsername]) => {
+        history.replaceState(null, "", `/u/${newUsername.val}`)
+    }, [profile.username])
+
     return <>
         <main class="userView">
             {
@@ -56,21 +68,21 @@ function User({username}: UserProps) {
                 })
             }
             <div class="items">
-                {/* {
-                    profile.derive((val) => {
-                        return <>{val.id == "" ? null : <CategorySlider profile={val} onSelectTab={selectTab} tab={activeTab} posts={val.posts} moments={val.moments}/>}</>
+                {
+                    state.derive((val) => {
+                        return <>{val != "success" ? <div style="display: none;" /> : <CategorySlider profile={profile} onSelectTab={selectTab} tab={activeTab}/>}</>
                     })
-                } */}
-                {/* {
-                    derive(([tab, profileData]) => {
-                        if (tab.val == "posts" && profileData.val.id == user_id) {
+                }
+                {
+                    derive(([tab, profileId]) => {
+                        if (tab.val == "posts" && profileId.val == user_id) {
                             return <PostEditor type="create"/>
                         } else {
                             return <div style="display: none;" />
                         }
-                    }, [activeTab, profile])
+                    }, [activeTab, profile.id])
 
-                } */}
+                }
 
                 {
                     derive(([tab]) => {

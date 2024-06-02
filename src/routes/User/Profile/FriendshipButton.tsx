@@ -1,7 +1,7 @@
 import { store } from "@/data";
 import type { IProfile } from "@/data/types/models";
 import shake from "@/ui/shake";
-import { ref } from "hywer/jsx-runtime";
+import { ref, type Reactive } from "hywer/jsx-runtime";
 
 import Friendship_friendsIcon from "@/ui/icons/friendship_friends";
 import Friendship_pendingIcon from "@/ui/icons/friendship_pending";
@@ -9,13 +9,11 @@ import Friendship_notFriendsIcon from "@/ui/icons/friendship_notFriends";
 
 
 interface FriendshipButtonProps {
-    friendship_state: IProfile['friends']['friendship_state'];
-    user_id: IProfile['id'];
+    friendship_state: Reactive<IProfile['friends']['friendship_state']>;
+    user_id: Reactive<IProfile['id']>;
 }
 
-export default function FriendshipButton(props: FriendshipButtonProps) {
-
-    const friendship_state = ref<IProfile['friends']['friendship_state']>(props.friendship_state);
+export default function FriendshipButton({friendship_state, user_id}: FriendshipButtonProps) {
 
     async function sendFriendRequest() {
         const button = document.querySelector<HTMLButtonElement>(".friendshipButton")
@@ -25,7 +23,7 @@ export default function FriendshipButton(props: FriendshipButtonProps) {
         if (button) button.className = "friendshipButton pending";
         friendship_state.val = "pending";
 
-        const response = await store.addFriend(props.user_id)
+        const response = await store.addFriend(user_id.val)
 
         if (!response) {
             if (button) button.className = "friendshipButton notFriends";
@@ -48,7 +46,7 @@ export default function FriendshipButton(props: FriendshipButtonProps) {
         if (button) button.className = "friendshipButton notFriends";
         friendship_state.val = "notFriends";
 
-        const response = await store.deleteFriend(props.user_id)
+        const response = await store.deleteFriend(user_id.val)
 
         if (!response) {
             if (button) button.className = "friendshipButton pending";

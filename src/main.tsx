@@ -11,9 +11,7 @@ await store.setLocale()
 await idbReady();
 if (store.auth.isAuthorized()) {
 
-	store.init()
-
-	//store.getProfileByUsername('@me')
+	await store.init()
 }
 document.getElementById('root')!.append(
 	...<>

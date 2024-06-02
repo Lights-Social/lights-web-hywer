@@ -70,35 +70,50 @@ export default function Profile({profile}: ProfileProps) {
                     </div>
                     
 
-                    {/* <Buttons profile={profile} /> */}
+                    <Buttons profile={profile} />
 
                     {/* <Show when={props.profile.friends.friendship_state == "confirmation"}>
                         <FriendshipConfirmation onAccept={acceptFriendRequest} onIgnore={ignoreFriendRequest} />
                     </Show> */}
 
-                    {/* {
-                        profile.friends.friendship_state == "confirmation" ?
-                        <FriendshipConfirmation />
-                        : null
-                    } */}
+                    {
+                        profile.friends.friendship_state.derive((val) => {
+                            if (val == "confirmation") {
+                                return <FriendshipConfirmation />
+                            } else {
+                                return <div style="display: none;" />
+                            }
+                        })
+                    }
 
-                    {/* {
-                        profile.about != "" ?
-                        <div class="about">
-                            <FormatText>
-                                {profile.about}
-                            </FormatText>
-                        </div> : null
-                    } */}
-                    {/* {
-                        isAuthorized && profile.id != user_id ?
-                        <div class="note">
-                            <h4>{strings["note"]}</h4>
-                            <textarea id="noteInput" onChange={(e: Event)  => store.editNote(profile.id, (e.target as HTMLTextAreaElement).value)} placeholder={strings["clickToAddANote"]} maxLength={200}>
-                                {profile.note}
-                            </textarea>
-                        </div> : null
-                    } */}
+                    {
+                        profile.about.derive((val) => {
+                            if (val != "") {
+                                return <div class="about">
+                                    <FormatText>
+                                        {val}
+                                    </FormatText>
+                                </div>
+                            } else {
+                                return <div style="display: none;" />
+                            }
+                        })
+                    }
+
+                    {
+                        profile.id.derive((val) => {
+                            if (val != user_id && isAuthorized) {
+                                return <div class="note">
+                                    <h4>{strings["note"]}</h4>
+                                    <textarea id="noteInput" onChange={(e: Event)  => store.editNote(val, (e.target as HTMLTextAreaElement).value)} placeholder={strings["clickToAddANote"]} maxLength={200}>
+                                        {profile.note.derive((val) => val)}
+                                    </textarea>
+                                </div>
+                            } else {
+                                return <div style="display: none;" />
+                            }
+                        })
+                    }
                 </div>
             </div>
         </>

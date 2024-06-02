@@ -2,11 +2,13 @@ import { Api } from "@/api"
 import type { IAudio, IFriend, IPost, IProfile, IResponsePosts, LightsDB } from "./types/models"
 import { derive, ref, type Reactive } from "hywer/jsx-runtime"
 import { getCookieValue } from "@/ui/utils/getCookieValue"
-import { ReactiveProfile } from "./ReactiveProfile"
-import { ReactivePost } from "./ReactivePost"
+import { ReactiveProfile, emptyProfile } from "./ReactiveProfile"
+import { ReactivePost, emptyPost } from "./ReactivePost"
 
-import { openDB, deleteDB, wrap, unwrap, type IDBPDatabase } from 'idb';
+import { openDB, type IDBPDatabase } from 'idb';
 import { hashCode } from "@/ui/utils/hash"
+
+//getGlobalProfile.get('ef34808c-c861-4094-9931-87ef18d364e2').name = 'хуй'
 
 
 const availableLangs = ["en-US", "uk"]
@@ -18,32 +20,6 @@ interface ILocale {
 interface IResponseSession {
     access_token: string;
     refresh_token: string;
-}
-
-
-const defaultProfile = {
-    id: "",
-    name: "",
-    about: "",
-    username: "",
-    is_premium: false,
-    sex: null,
-    avatar: [],
-    cover: "",
-    verified: false,
-    status: {last_activity: 0, status: "inactive"},
-    followers: {
-        count: 0,
-        is_following: false,
-    },
-    friends: {
-        count: 0,
-        friendship_state: "notFriends",
-    },
-    note: "",
-    wallet_uri: "",
-    posts: 0,
-    moments: 0,
 }
 
 export class Store {
@@ -59,6 +35,9 @@ export class Store {
             favorites: ref<string[]>([]),
         }
     }
+
+    private profiles = new Map<string, ReactiveProfile>()
+    private usernames = new Map<string, string>()
 
     private friends: IFriend[] = []
 
@@ -105,6 +84,21 @@ export class Store {
               console.log('terminated');
             },
         });
+
+        globalThis.getGlobalProfile = this.profiles
+
+        const response = await Api(`users/getByUsername/@me`)
+        if (!response.ok) {
+            return null
+        }
+
+        let json: IResponsePosts<IProfile> = await response.json();
+
+        this.user_id = json.data[0].id
+
+        this.db?.put('users', json.data[0])
+
+        //await this.fetchProfile('@me', 'username', new ReactiveProfile(json.data[0]), ref("success"))
     }
 
     auth = {
@@ -204,14 +198,27 @@ export class Store {
         json.includes.users.forEach((profile) => {
 
             this.db?.put('users', profile).then((lol) => {
-                console.log("profile saved", lol)
+
+
+
+                let user = this.profiles.get(profile.id)
+
+                if (!user) {
+                    user = new ReactiveProfile(emptyProfile)
+                    this.profiles.set(profile.id, user)
+                    this.usernames.set(profile.username, profile.id)
+                } else {
+                    user.profile = profile
+                }
+
+
             })
         })
 
 
         json.data.forEach((post) => {
             this.db?.put('posts', post).then((lol) => {
-                console.log("post saved", lol)
+                //console.log("post saved", lol)
             })
 
             this.posts.items.set(post.id, post)
@@ -303,136 +310,93 @@ export class Store {
     sendPost(text: string) {
 
 
-        let item: IPost = {
-            id: "",
-            access: "all",
-            is_edited: false,
-            is_pinned: false,
-            text: text,
-            random_id: 0,
-            language: "",
-            attachments: {
-                media: [],
-                links: [],
-                audios: [],
-            },
-            date: new Date().toISOString(),
-            reactions: [],
-            comments: {
-                commenting: true,
-                count: 0,
-            },
-            views: 0,
-            peer: {
-                id: this.user_id!,
-                type: "user",
-            },
-            reposts: {
-                count: 0,
-                objects: [],
-                initialPosts: [],
-            },
-            is_favorite: false
-        }
-
-
         //this.myPosts.posts.val.unshift(item)
     }
 
 
     async getPost(post_id: string) {
+        const state = ref('pending')
 
         let post = this.posts.items.get(post_id)
 
-        console.log(post)
+        if (!post) {
+            let tempPost = new ReactivePost(emptyPost)
+            //post = this.posts.items.set(post_id, tempPost).get(user_id)!
 
-        if (post) {
-            return new ReactivePost(post)
+            //this.fetchProfile(user_id, 'id', tempUser, state)
+        } else {
+            state.val = 'success'
+        }
+
+        return {post, state}
+    }
+
+    async fetchProfile(query: string, index: string, user: ReactiveProfile, state: Reactive<string>) {
+        const idbresp = await this.db?.getFromIndex('users', index == 'username' ? 'by-username' : 'by-id', query)
+
+        if (idbresp) {
+            user.profile = idbresp
+            state.val = 'success'
+
+            this.usernames.set(idbresp.username, idbresp.id)
+            this.profiles.set(idbresp.id, user)
+            return
         }
 
         
-        const response = await Api(`posts/${post_id}`);
-
+        const response = await Api(`users/${index == 'username' ? 'getByUsername' : 'getById'}/${query}`)
         if (!response.ok) {
+            state.val = 'error'
             return null
         }
-    
-        let json: IResponsePosts<IPost> = await response.json();
 
+        let json: IResponsePosts<IProfile> = await response.json();
 
-        json.includes.users.forEach((profile) => {
-            this.db?.put('users', profile).then((lol) => {
-                console.log("profile saved", lol)
-            })
-        })
+        if (query == '@me' && index == 'getByUsername') {
+            this.user_id = json.data[0].id
+        }
 
+        this.db?.put('users', json.data[0])
 
-        this.posts.items.set(json.data[0].id, json.data[0])
-
-        post = json.data[0]
-
-        return new ReactivePost(post)
+        user.profile = json.data[0]
+        this.usernames.set(json.data[0].username, json.data[0].id)
+        //this.profiles.set(json.data[0].id, user)
+        
+        
+        state.val = 'success'
     }
     
     getProfileById(user_id: string) {
-        const user = new ReactiveProfile(defaultProfile)
         const state = ref('pending')
 
-        // if (!navigator.onLine && user_id == this.user_id) {
-        //     return user = new ReactiveProfile(defaultProfile)
-        // }
+        let user = this.profiles.get(user_id)
 
-        this.db?.getFromIndex('users', 'by-id', user_id).then((profile) => {
-            if (profile) {
-                user.profile = profile
-            }            
-        })
+        if (!user) {
+            let tempUser = new ReactiveProfile(emptyProfile)
+            user = this.profiles.set(user_id, tempUser).get(user_id)!
 
-
+            this.fetchProfile(user_id, 'id', tempUser, state)
+        } else {
+            state.val = 'success'
+        }
 
         return {user, state}
     }
 
     getProfileByUsername(username: string) {
-        const user = new ReactiveProfile(defaultProfile)
         const state = ref('pending')
 
-        this.db?.getFromIndex('users', 'by-username', username).then((profile) => {
-            if (profile) {
-                user.profile = profile
-            }            
-        })
+        const user_id = this.usernames.get(username)
+        let user = this.profiles.get(user_id!)
 
-
-        if (!navigator.onLine && username == '@me') {
-            this.user_id = defaultProfile.id
-
-
-            //return user = new ReactiveProfile(defaultProfile!)
+        if (!user) {
+            user = new ReactiveProfile(emptyProfile)            
+            this.fetchProfile(username, 'username', user, state)
+        } else {
+            state.val = 'success'
         }
 
 
-
-        Api(`users/getByUsername/${username}`).then(async (response) => {
-            if (!response.ok) {
-                return null
-            }
-
-            let json: IResponsePosts<IProfile> = await response.json();
-    
-            if (username == '@me') {
-                this.user_id = json.data[0].id
-            }
-    
-            this.db?.put('users', json.data[0]).then((lol) => {
-                console.log("profile saved", lol)
-            })
-
-            user.profile = json.data[0]
-            state.val = 'success'
-        });
-
-        
         return {user, state}
     }
 
@@ -477,9 +441,7 @@ export class Store {
 
 
                 json.data.forEach((profile) => {
-                    this.db?.put('users', json.data[0]).then((lol) => {
-                        console.log("profile saved", lol)
-                    })
+                    this.db?.put('users', json.data[0])
 
                     this.friends.push({id: profile.id, is_pinned: false})
                 })
@@ -600,9 +562,9 @@ export class Store {
             
                 this.posts.items.delete(id)
 
-                this.db?.delete('posts', id).then((lol) => {
-                    console.log("post deleted", lol)
-                })
+                this.db?.delete('posts', id)
+
+                //--this.profiles.get(this.user_id!)!.posts
 
             }
 		}).catch(() => {

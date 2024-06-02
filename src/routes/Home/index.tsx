@@ -6,8 +6,6 @@ import { store } from "@/data";
 function Home() {
     const {strings} = store.locale()
 
-    console.log("dd")
-
     return <>
         <MobileHeader>
             <div class="title">{strings["home"]}</div>

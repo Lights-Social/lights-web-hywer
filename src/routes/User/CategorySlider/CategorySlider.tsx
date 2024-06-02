@@ -6,22 +6,21 @@ import MomentIcon from '@/ui/icons/moment';
 import type { IProfile } from '@/data/types/models';
 import type { Reactive } from 'hywer/jsx-runtime';
 import FavoritesIcon from '@/ui/icons/favorites';
+import type { RecReactiveProxy } from 'hywer/x/store';
 
 interface CategorySliderProps {
     tab: Reactive<string>;
-    posts: number;
-    moments: number;
     onSelectTab: (tab: string) => void;
-    profile: IProfile
+    profile: RecReactiveProxy<IProfile>
 }
 
-export default function CategorySlider(props: CategorySliderProps) {
+export default function CategorySlider({tab, onSelectTab, profile}: CategorySliderProps) {
     const {strings} = store.locale()
     const user_id = store.auth.user_id()
 
 
     function setTab(tab: string) {
-        props.onSelectTab(tab);
+        onSelectTab(tab);
 
         if (navigator.vibrate) navigator.vibrate([1])
 
@@ -33,43 +32,57 @@ export default function CategorySlider(props: CategorySliderProps) {
     return (
         <div class="categorySlider">
             {
-                props.posts > 0 ?
-                <button onClick={() => setTab("posts")} class={props.tab.derive((val) => val === "posts" ? "active" : "")}>
-                    <EditedIcon />
+                profile.posts.derive((val) => {
+                    if (val > 0) {
+                        return <button onClick={() => setTab("posts")} class={tab.derive((val) => val === "posts" ? "active" : "")}>
+                            <EditedIcon />
 
-                    <div class="title">
-                        {strings["posts"]}
-                        <span>
-                            {props.posts}
-                        </span>
-                    </div>
-                </button> : null
+                            <div class="title">
+                                {strings["posts"]}
+                                <span>
+                                    {val}
+                                </span>
+                            </div>
+                        </button>
+                    } else {
+                        return <div style="display: none;" />
+                    }
+                })
             }
-            {
-                props.moments > 0 ?
-                <button onClick={() => setTab("moments")} class={props.tab.derive((val) => val === "moments" ? "active" : "")}>
-                    <MomentIcon />
-                    <div class="title">
-                        {strings["moments"]}
-                        <span>
-                            {/* <DigitCounter count={props.moments} /> */} {props.moments}
-                        </span>
-                    </div>
-                    
-                </button> : null
-            }
-            {
-                props.profile.id == user_id ?
-                <button onClick={() => setTab("favorites")} class={props.tab.derive((val) => val === "favorites" ? "active" : "")}>
-                    <FavoritesIcon />
-                    <div class="title">
-                        {strings["favorites"]}
 
-                        {/* <span>
-                            <DigitCounter count={props.moments} />
-                        </span> */}
-                    </div>
-                </button> : null
+            {
+                profile.moments.derive((val) => {
+                    if (val > 0) {
+                        return <button onClick={() => setTab("moments")} class={tab.derive((val) => val === "moments" ? "active" : "")}>
+                            <MomentIcon />
+
+                            <div class="title">
+                                {strings["moments"]}
+                                <span>
+                                    {val}
+                                </span>
+                            </div>
+                        </button>
+                    } else {
+                        return <div style="display: none;" />
+                    }
+                })
+            }
+
+            {
+                profile.id.derive((val) => {
+                    if (val == user_id) {
+                        return <button onClick={() => setTab("favorites")} class={tab.derive((val) => val === "favorites" ? "active" : "")}>
+                            <FavoritesIcon />
+
+                            <div class="title">
+                                {strings["favorites"]}
+                            </div>
+                        </button>
+                    } else {
+                        return <div style="display: none;" />
+                    }
+                })
             }
         </div>
     )

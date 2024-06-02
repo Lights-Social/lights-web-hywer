@@ -2,6 +2,38 @@ import { effect, ref, type Reactive } from "hywer";
 import type { IPost } from "./types/models";
 import { store } from ".";
 
+export const emptyPost: IPost = {
+    id: "",
+    access: "all",
+    is_edited: false,
+    is_pinned: false,
+    text: '',
+    random_id: 0,
+    language: "",
+    attachments: {
+        media: [],
+        links: [],
+        audios: [],
+    },
+    date: new Date().toISOString(),
+    reactions: [],
+    comments: {
+        commenting: true,
+        count: 0,
+    },
+    views: 0,
+    peer: {
+        id: '',
+        type: "user",
+    },
+    reposts: {
+        count: 0,
+        objects: [],
+        initialPosts: [],
+    },
+    is_favorite: false
+}
+
 export class ReactivePost {
     private _postRef: Reactive<IPost>
     constructor(post: IPost) {

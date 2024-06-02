@@ -6,14 +6,16 @@ import './styles.css'
 import Picture from "@/ui/Picture"
 import AvatarPlaceholder from "@/ui/AvatarPlaceholder/AvatarPlaceholder"
 import { NavLink } from "hywer/x/router"
+import { derive } from "hywer/jsx-runtime"
 
 export default function TabBar() {
     
     const {strings} = store.locale()
 
     const user_id = store.auth.user_id()
-	//const user = store.getProfileById(user_id!)!.get()
-
+    const {user, state} = store.getProfileById(user_id!)
+    const profile = user.get()
+    
     return (
         <nav class="tabBar">
             <NavLink id="homeButtonMobile" activeClass='selected' path='/home' aria-label={strings["home"]} onClick={scrollTopFeed}>
@@ -23,14 +25,19 @@ export default function TabBar() {
             <NavLink id="friendsButtonMobile" activeClass='selected' path='/friends' aria-label={strings["friends"]}>
                 <FriendsIcon />
             </NavLink>
-            {/* <NavLink class="me" id="profileButtonMobile" activeClass='selected' path={`/u/${user.val.username}`}>
-                {
-                    user.val.avatar.length > 0 ?
-                    <div class="avatar">
-                        <Picture src={`${import.meta.env.VITE_LIGHTS_CDN_URL}/picture/${user.val.avatar[0].id}.webp`} picture={{type: 'photo', id: user.val.avatar[0].id, alt: "", blurhash: user.val.avatar[0].blurhash, width: 1, height: 1}} />
-                    </div> : <AvatarPlaceholder name={user.val.name != "" ? user.val.name : user.val.username} />
-                }
-            </NavLink> */}
+            <NavLink class="me" id="profileButtonMobile" activeClass='selected' path={`/u/${profile.username.val}`}>
+            {
+                profile.avatar.derive((val) => {
+                    if (val.length > 0) {
+                        return <div class="avatar"><Picture src={val[0].id} picture={{id: val[0].id, alt: "", blurhash: val[0].blurhash, width: 1, height: 1, type: 'photo'}} /></div>
+                    } else {
+                        return <AvatarPlaceholder name={derive(([name, username]) => name.val != "" ? name.val : username.val, [profile.name, profile.username])} />
+                    }
+                })
+            }
+            </NavLink>
+
+            
         </nav>
     )
 }
