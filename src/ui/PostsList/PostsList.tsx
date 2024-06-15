@@ -61,7 +61,7 @@ export function PostsList({uri}: PostsListProps) {
                 {
                     (post, i) => (
                         <Post
-                            post={post}
+                            item={post}
                             onVisible={i == Number(posts.posts.val.length - 5) ? next : undefined}
                             onDelete={deleteHandler}
                         />

@@ -1,7 +1,5 @@
 import './styles.css'
 import { store } from "@/data"
-import { type IPost } from "@/data/types/models"
-
 import EditedIcon from "@/ui/icons/edited"
 import CommentIcon from "@/ui/icons/comment"
 import AccessBadge from "./AccessBadge/AccessBadge"
@@ -10,7 +8,7 @@ import VerifiedIcon from '@/ui/icons/verified'
 import AvatarPlaceholder from '../AvatarPlaceholder/AvatarPlaceholder'
 import Media from './Media/Media.tsx'
 import ForwardedPost from './ForwardedPost/ForwardedPost.tsx'
-import Duration from './Duration.tsx'
+import Duration from '../Duration.tsx'
 import Picture from '../Picture/index.tsx'
 // import Link from '@/ui/utils/crutches/Link.tsx'
 import shake from '../shake.ts'
@@ -19,25 +17,28 @@ import Reactions from '@/ui/Reactions/Reactions.tsx'
 // import Poll from '../Poll/Poll.tsx'
 import FormatText from '../FormatText.tsx'
 import MusicWidget from '../MusicWidget/MusicWidget.tsx'
-import { Link } from 'hywer/x/router'
+import { Link, navigateTo } from 'hywer/x/router'
 import { showContextMenu } from '../ContextMenu/ContextMenu.tsx'
 import ShareIcon from '../icons/share.tsx'
-import { object } from './ShareFlow/ShareFlow.tsx'
+import { object } from '../ShareFlow/ShareFlow.tsx'
 import { openModal } from '../Modal/Modal.tsx'
 import LanguageIcon from '../icons/language.tsx'
 import { showTranslateFlow } from '@/ui/TranslateFlow/TranslateFlow.tsx'
 import ErrorPlaceholder from './ForwardedPost/ErrorPlacheolder.tsx'
 import PointsIcon from '@/ui/icons/points'
 import DeleteIcon from '../icons/delete.tsx'
-import { derive, effect } from 'hywer/jsx-runtime'
+import { derive } from 'hywer/jsx-runtime'
+import type { ReactivePost } from '@/data/ReactivePost.ts'
+import Video from '../Video/Video.tsx'
 
 interface PostProps {
-    post: IPost
+    item: ReactivePost
     onVisible?: () => void
     onDelete: (id: string) => void
+    full?: boolean
 }
 
-function Post({post, onVisible, onDelete}: PostProps) {
+function Post({item, onVisible, onDelete, full}: PostProps) {
 
     const options = {
         // родитель целевого элемента - область просмотра
@@ -66,13 +67,15 @@ function Post({post, onVisible, onDelete}: PostProps) {
 
     setTimeout(() => {
         if (!onVisible) return
-
-        observer.observe(document.querySelector('.post.trackable')!)
+        
+        const trackablePost = document.querySelector('.post.trackable')
+        if (trackablePost) observer.observe(trackablePost)
     })
 
     const {strings, locale} = store.locale()
 
-    const {user, state} = store.getProfileById(post.peer.id)
+    const post = item.get()
+    const {user, state} = store.getProfileById(post.peer.id.val)
     const profile = user.get()
 
     const user_id = store.auth.user_id()
@@ -93,20 +96,26 @@ function Post({post, onVisible, onDelete}: PostProps) {
 
         return (
             <>
-                <button onClick={() => {object.val = {id: post.id, type: "post"}; openModal("shareFlow", [1], false)}}>
+                <button onClick={() => {object.val = {id: post.id.val, type: "post"}; openModal("shareFlow", [1], false)}}>
                     <ShareIcon />
                     {strings['share']}
                 </button>
                 {
-                    post.language != "notSet" && post.language != locale.split("-")[0] ?
-                    <button onClick={() => {showTranslateFlow(post)}}>
-                        <LanguageIcon />
-                        {strings['translate']}
-                    </button> : null
+                    post.language.derive((val) => {
+                        if (val != "notSet" && val != locale.split("-")[0]) {
+                            return <button onClick={() => {showTranslateFlow(post.id.val, 'post', post.text.val, post.language.val)}}>
+                                <LanguageIcon />
+                                {strings['translate']}
+                            </button>
+                        } else {
+                            return <div style="display: none;" />
+                        }
+                    })
                 }
+
                 {
-                    post.peer.id == user_id ?
-                    <button class="delete" onClick={() => {onDelete(post.id)}}>
+                    post.peer.id.val == user_id ?
+                    <button class="delete" onClick={() => {onDelete(post.id.val)}}>
                         <DeleteIcon />
                         {strings['delete']}
                     </button> : null
@@ -149,9 +158,25 @@ function Post({post, onVisible, onDelete}: PostProps) {
                         })
 
                     }
-                    { post.is_edited ? <EditedIcon /> : null }
-                    <Duration date={post.date} />
-                    { post.is_pinned ? <PinnedIcon /> : null}
+                    {
+                        post.is_edited.derive((val) => {
+                            if (val) {
+                                return <EditedIcon />
+                            } else {
+                                return <div style="display: none;" />
+                            }
+                        })
+                    }
+                    <Duration date={post.date.val} />
+                    {
+                        post.is_pinned.derive((val) => {
+                            if (val) {
+                                return <PinnedIcon />
+                            } else {
+                                return <div style="display: none;" />
+                            }
+                        })
+                    }
                 </div>
 
                 {
@@ -166,29 +191,73 @@ function Post({post, onVisible, onDelete}: PostProps) {
             <div class="content">
                 <AccessBadge access={post.access} />
                 {
-                    post.text != "" ?
-                    <div class="text">
-                        <FormatText>
-                            {post.text}
-                        </FormatText>
-                    </div> : null
+                    post.text.derive((val) => {
+                        if (val != "") {
+                            return <div class="text">
+                                <FormatText>
+                                    {val}
+                                </FormatText>
+                            </div>
+                        } else {
+                            return <div style="display: none;" />
+                        }
+                    })
                 }
                 
+
                 {
-                    post.reposts.count > 0 ? (post.reposts.objects[0].notAvailable ? <ErrorPlaceholder /> : <ForwardedPost item={post.reposts.initialPosts[0]} />) : null
+                    derive(([count, objects, initialPosts]) => {
+                        if (count.val > 0) {
+                            if (objects.val[0].notAvailable) {
+                                return <ErrorPlaceholder />
+                            } else {
+                                return <ForwardedPost user_id={initialPosts.val[0].peer.id} post_id={objects.val[0].post_id} />
+                            }
+                        } else {
+                            return <div style="display: none;" />
+                        }
+                    }, [post.reposts.count, post.reposts.objects, post.reposts.initialPosts])
+                }
+
+                {
+                    post.attachments.media.derive((val) => {
+                        if (val.length > 0) {
+                            return <Media media={val} />
+                        } else {
+                            return <div style="display: none;" />
+                        }
+                    })
+                }
+
+                {
+                    post.attachments.audios.derive((val) => {
+                        if (val.length > 0) {
+                            return <MusicWidget type='post' audios={post.attachments.audios.val}/>
+                        } else {
+                            return <div style="display: none;" />
+                        }
+                    })
                 }
                 
-                {post.attachments.media.length > 0 ? <Media media={post.attachments.media}/> : null}
-
-                {post.attachments.audios.length > 0 ? <MusicWidget type='post' audios={post.attachments.audios}/> : null}
-
                 {/* <Poll /> */}
             </div>
             <Link onClick={shakeOnClick} class="avatar" path={derive(([username]) => `/u/${username.val}`, [profile.username])} aria-label={derive(([name, username]) => name.val != "" ? name.val : username.val, [profile.name, profile.username])}>
                 {
                     profile.avatar.derive((val) => {
                         if (val.length > 0) {
-                            return <Picture src={val[0].id} picture={{id: val[0].id, alt: "", blurhash: val[0].blurhash, width: 1, height: 1, type: 'photo'}} />
+                            if (val[0].type == 'photo') {
+                                return <div class="avatar">
+                                    <Picture src={val[0].id} picture={{id: val[0].id, alt: "", blurhash: val[0].blurhash, width: 1, height: 1, type: 'photo'}} />
+                                </div>
+                            } else {
+                                return <div class="avatar">
+                                    <Video
+                                        src={`${import.meta.env.VITE_LIGHTS_CDN_URL}/video/${val[0].id}.mp4`}
+                                        muted={true}
+                                    />
+                                </div>
+                            }
+
                         } else {
                             return <AvatarPlaceholder name={derive(([name, username]) => name.val != "" ? name.val : username.val, [profile.name, profile.username])} />
                         }
@@ -198,23 +267,48 @@ function Post({post, onVisible, onDelete}: PostProps) {
                 
 
 
-
-            {/* <A onDblClick={(e: Event) => e.stopPropagation()} onClick={showUserModal} aria-label={props.profile.name != "" ? props.profile.name : props.profile.username} class="avatarWrapper" href={`/u/${props.profile.username}`}>
-                <Avatar avatar={props.profile.avatar} name={props.profile.name != "" ? props.profile.name : props.profile.username} />
-            </A> */}
             {/* <Show when={!props.full}> */}
                 <div class="line">
                     <hr />
                 </div>
                 <div class="buttons">
-                    <div class="replies">
+                    <div class="replies" onClick={() => navigateTo(`/p/${post.id.val}`, { replace: false })}>
                         <CommentIcon />
                         {
-                            post.comments.count == 0 ? strings["leaveAComment"] : `${post.comments.count}`
+                            post.comments.count.derive((val) => {
+                                if (val == 0) {
+                                    return strings["leaveAComment"]
+                                } else {
+                                    return val
+                                }
+                            })
                         }
                     </div>
                 </div>
             {/* </Show> */}
+
+
+            {
+                full ? <>
+                    <div class="line">
+                        <hr />
+                    </div>
+                    <div class="buttons">
+                        <div class="replies" onClick={() => navigateTo(`/p/${post.id.val}`, { replace: false })}>
+                            <CommentIcon />
+                            {
+                                post.comments.count.derive((val) => {
+                                    if (val == 0) {
+                                        return strings["leaveAComment"]
+                                    } else {
+                                        return val
+                                    }
+                                })
+                            }
+                        </div>
+                    </div>
+                </> : <div style="display: none;" />
+            }
             
 
             <Reactions onReact={onReact} reactions={post.reactions} />

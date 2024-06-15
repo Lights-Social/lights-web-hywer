@@ -1,0 +1,28 @@
+.messageEditor {
+    position: fixed;
+    bottom: 0;
+	height: 60px;
+    width: 100%;
+
+    padding-top: 0px;
+	padding-left: calc(0px + env(safe-area-inset-left));
+	padding-right: calc(0px + env(safe-area-inset-right));
+	padding-bottom: calc(0px + env(safe-area-inset-bottom));
+
+    border-top: 1px solid color-mix(in srgb, hsl(0, 0%, 50%) 15%, var(--main-color));
+    background: var(--main-color);
+
+    display: grid;
+    grid-auto-flow: column;
+    align-items: center;
+    justify-items: center;
+
+	z-index: 2;
+}
+
+@media only screen and (min-width: 480px) {
+	.messageEditor {
+		display: none;
+	}
+}
+

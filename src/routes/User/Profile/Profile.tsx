@@ -12,6 +12,7 @@ import FriendshipConfirmation from "./FriendshipConfirmation/FriendshipConfirmat
 import FormatText from "@/ui/FormatText";
 import type { RecReactiveProxy } from "hywer/x/store";
 import { derive } from "hywer/jsx-runtime";
+import Video from "@/ui/Video/Video";
 
 
 interface ProfileProps {
@@ -45,7 +46,18 @@ export default function Profile({profile}: ProfileProps) {
                         {
                             profile.avatar.derive((val) => {
                                 if (val.length > 0) {
-                                    return <div class="avatar"><Picture src={val[0].id} picture={{id: val[0].id, alt: "", blurhash: val[0].blurhash, width: 1, height: 1, type: 'photo'}} /></div>
+                                    if (val[0].type == 'photo') {
+                                        return <div class="avatar">
+                                            <Picture src={val[0].id} picture={{id: val[0].id, alt: "", blurhash: val[0].blurhash, width: 1, height: 1, type: 'photo'}} />
+                                        </div>
+                                    } else {
+                                        return <div class="avatar">
+                                            <Video
+                                                src={`${import.meta.env.VITE_LIGHTS_CDN_URL}/video/${val[0].id}.mp4`}
+                                                muted={true}
+                                            />
+                                        </div>
+                                    }
                                 } else {
                                     return <AvatarPlaceholder name={derive(([name, username]) => name.val != "" ? name.val : username.val, [profile.name, profile.username])} />
                                 }

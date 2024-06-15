@@ -21,6 +21,7 @@
     "hywer": "latest",
     "idb": "^8.0.0",
     "safari-14-idb-fix": "^3.0.0",
+    "workbox-precaching": "^7.1.0",
     "workbox-window": "^7.1.0"
   }
 }

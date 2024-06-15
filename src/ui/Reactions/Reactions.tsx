@@ -1,9 +1,10 @@
 import DigitCounter from '@/ui/DigitCounter/DigitCounter';
 import './styles.css'
 import type { IPost, IReaction } from '@/data/types/models';
+import type { Reactive } from 'hywer/jsx-runtime';
 
 interface ReactionsProps {
-    reactions: IPost['reactions'];
+    reactions: Reactive<IReaction[]>;
     onReact: (id: string) => void
 }
 
@@ -78,7 +79,7 @@ export default function Reactions(props: ReactionsProps) {
     return (<>
         <div class={"reactions"} onDblClick={(e: Event) => e.stopPropagation()} >
             {
-                props.reactions.map(item => {
+                props.reactions.val.map(item => {
                     return <Reaction reaction={item} onReact={props.onReact} />
                 })
             }

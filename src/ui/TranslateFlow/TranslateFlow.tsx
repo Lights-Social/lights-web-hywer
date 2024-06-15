@@ -6,8 +6,9 @@ import { store } from '@/data';
 import { effect, ref } from 'hywer/jsx-runtime';
 import { Modal, closeModal, openModal } from '@/ui/Modal/Modal';
 import LongArrowIcon from '@/ui/icons/longArrow';
+import type { RecReactiveProxy } from 'hywer/x/store';
 
-const item = ref<{id: string, language: string, text: string}>({id: "", language: "", text: ""})
+const item = ref<{id: string, language: string, text: string, type: string}>({id: "", language: "", text: "", type: ""})
 
 
 export default function TranslateFlow() {
@@ -18,7 +19,7 @@ export default function TranslateFlow() {
     const translatedText = ref("")
     
     async function translate() {
-        const text = await store.getTranslation(item.val.text, item.val.id, locale)
+        const text = await store.getTranslation(item.val.text, item.val.id, item.val.type, locale)
 
         translatedText.val = text
 
@@ -75,9 +76,9 @@ export default function TranslateFlow() {
     )
 }
 
-export function showTranslateFlow(itemToTranslate: IPost) {
+export function showTranslateFlow(id: string, type: string, text: string, language: string) {
 
-    item.val = {id: itemToTranslate.id, language: itemToTranslate.language, text: itemToTranslate.text}
+    item.val = {id: id, type: type, language: language, text: text}
     
     openModal("translateFlow", [1], false)
 }

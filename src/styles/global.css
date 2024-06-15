@@ -216,3 +216,14 @@ input[type=text] {
     font-size: 16px;
 
 }
+
+.spoiler {
+    transition: 0.2s;
+    background: var(--following-color);
+}
+
+.spoiler.spoilered {
+    background: var(--following-color);
+    color: transparent;
+    cursor: pointer;
+}

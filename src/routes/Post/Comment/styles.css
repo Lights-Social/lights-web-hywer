@@ -1,0 +1,343 @@
+article.comment {
+    transition: opacity 0.5s;
+    background: var(--main-color);
+    padding: 7.5px 15px 7.5px 15px;
+    border-radius: 20px;
+    gap: 10px;
+
+    height: fit-content;
+    display: flex;
+}
+
+article.comment .top {
+    display: flex;
+    gap: 10px;
+    flex: 1;
+}
+
+article.comment .center {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
+    width: 100%;
+
+}
+
+article.comment .reactions {
+    grid-area: unset;
+
+}
+
+/* article.post .content p {
+    -webkit-user-select: text;
+    user-select: text;
+} */
+
+article.comment:first-of-type {
+    margin-top: 10px;
+}
+
+article.comment .content .photo {
+    border-radius: 20px;
+    max-height: 575px;
+    overflow: hidden;
+}
+
+
+article.comment.loading {
+    opacity: 0.6;
+    animation: postLoading 0.6s;
+
+}
+
+@keyframes postLoading {
+    0% {
+        max-height: 0px;
+        opacity: 0;
+    }
+    40% {
+        max-height: var(--height);
+    }
+    80% {
+        opacity: 0.6;
+    }
+}
+
+article.comment .content .text {
+    width: fit-content;
+    height: fit-content;
+
+    line-height: 1.3125;
+
+}
+
+article.comment a {
+    transition: 0.2s;
+    color: var(--accent-color);
+    width: fit-content;
+    height: fit-content;
+}
+article.comment a:hover {
+    opacity: 0.75;
+}
+
+article.comment .title {
+    align-items: center;
+    gap: 5px;
+    height: fit-content;
+    max-width: 100%;
+    
+    font-size: 14px;
+
+    display: grid;
+    grid-auto-flow: column;
+}
+
+article.comment .title .info {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    height: fit-content;
+
+    overflow: hidden;
+    
+}
+
+article.comment .title .info .name {
+    color: var(--font-color);
+    text-decoration: none;
+    transition: 0.2s;
+    width: fit-content;
+    height: fit-content;
+    line-height: 1;
+    font-weight: 500;
+    font-family: 'Rubik', sans-serif;
+
+    max-width: 100%;
+
+    white-space: nowrap; 
+    overflow: hidden;
+    text-overflow: ellipsis;
+    
+
+}
+
+article.comment .title .info .name.creator {
+    background: color-mix(in srgb, var(--font-color) 40%, var(--main-color));
+    padding: 3px 7px 3px 7px;
+    border-radius: 20px;
+    color: white;
+}
+
+article.comment .title .info time {
+    color: var(--buttons-color);
+    text-decoration: none;
+
+    min-width: fit-content;
+    overflow: hidden;
+
+    
+    height: fit-content;
+    line-height: 1;
+    font-size: 12px;
+    font-weight: 400;
+    font-family: 'Rubik', sans-serif;
+}
+
+article.comment .title .info .edited {
+    color: var(--buttons-color);
+    text-decoration: none;
+
+    min-width: fit-content;
+    overflow: hidden;
+
+    
+    height: fit-content;
+    line-height: 1;
+    font-size: 13px;
+    font-weight: 400;
+    font-family: 'Rubik', sans-serif;
+}
+
+article.comment .title .info .name:hover {
+    opacity: 0.75;
+}
+
+article.comment .title .info > svg {
+    fill: var(--buttons-color);
+    width: 13px;
+    min-width: 13px;
+
+}
+
+article.comment .title .info svg.verified {
+    fill: var(--accent-color);
+}
+
+article.comment > .buttons {
+    display: flex;
+    align-items: center;
+
+
+}
+
+article.comment > .buttons .replies {
+    height: fit-content;
+    color: var(--accent-color);
+    font-family: 'Rubik', sans-serif;
+    font-weight: 400;
+    font-size: 15px;
+    cursor: pointer;
+
+    display: flex;
+    gap: 5px;
+    align-items: center;
+    width: fit-content;
+    line-height: 1;
+
+}
+
+article.comment > .buttons .replies svg {
+    fill: var(--accent-color);
+    width: 18px;
+}
+
+article.comment .title .shareButton {
+    background: transparent;
+    width: 20px;
+    min-width: 20px;
+    height: 20px;
+    margin-inline-start: auto;
+    border: none;
+    cursor: pointer;
+}
+
+article.comment .title .optionsButton {
+    background: transparent;
+    width: 20px;
+    min-width: 20px;
+    height: fit-content;
+    margin-inline-start: auto;
+    border: none;
+    cursor: pointer;
+}
+article.comment .title .optionsButton svg {
+    fill: var(--buttons-color);
+}
+
+article.comment .title .shareButton svg {
+    width: 100%;
+    height: 100%;
+    fill: var(--accent-color);
+}
+
+article.comment.placeholder {
+    height: fit-content;
+}
+
+article.comment .avatarWrapper {
+    position: relative;
+
+}
+
+article.comment .avatar {
+    width: 32px;
+    height: 32px;
+
+    border-radius: 20px;
+
+    min-width: 32px;
+    min-height: 32px;
+
+}
+
+article.comment.placeholder .content {
+    display: grid;
+    gap: 9px;
+}
+
+article.comment.placeholder .content div {
+    height: 13px;
+    border-radius: 20px;
+}
+
+
+
+article.comment.placeholder:last-of-type {
+    margin-bottom: unset;
+}
+
+article.comment.placeholder .title {
+
+    height: 13px;
+    border-radius: 20px;
+
+    width: 120px;
+}
+
+article.comment.placeholder .buttons .replies {
+
+    height: 20px;
+    border-radius: 20px;
+
+    width: 100px;
+
+}
+
+article.comment.placeholder .reactions {
+    height: 35px;
+    border-radius: 20px;
+
+    width: 50px;
+}
+
+article.comment .content {
+    display: grid;
+    gap: 5px;
+
+    word-break: break-word;
+    white-space: pre-wrap;
+}
+
+@media only screen and (max-width: 480px) {
+
+    article.comment .title {
+        font-size: 13px;
+    }
+
+    article.comment .content {
+        font-size: 15px;
+    }
+}
+
+.emptyPlaceholder {
+    display: flex;
+    margin: auto;
+
+}
+
+.emptyPlaceholder .title {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Rubik', sans-serif;
+    font-weight: 400;
+    z-index: 1;
+    font-size: 15px;
+    padding: 7px;
+    color: white;
+    border-radius: 15px;
+    height: fit-content;
+}
+
+.comment .onePicture {
+    width: 50%;
+
+    max-height: 575px;
+
+    position: relative;
+    overflow: hidden;
+    border-radius: 15px;
+    
+}

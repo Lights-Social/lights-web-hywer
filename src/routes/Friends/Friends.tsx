@@ -1,11 +1,13 @@
 //import { MobileHeader } from "../../components/MobileHeader";
 
 import './styles.css';
-import Cell from "./Cell";
-//import Search from "./Search";
-import { Placeholder } from "./Cell/Placeholder";
 import { store } from "@/data";
 import { MobileHeader } from '@/ui/MobileHeader/MobileHeader';
+import { ref } from 'hywer/jsx-runtime';
+import MapErrorModal from '@/ui/MapErrorModal';
+import MessengerErrorModal from '@/ui/MessengerErrorModal';
+import { FriendList } from './FriendList';
+import {Search} from './Search';
 
 export default function Friends() {
 
@@ -13,44 +15,39 @@ export default function Friends() {
 
     const {strings} = store.locale()    
 
-
+    const searchQuery = ref("")
 
     function onInputQuery(e: InputEvent) {
-        const text = e.data!.trim()
-
-        if (text !== '') {
-            //setSearchQuery(text)
-
-        } else {
-
-            //setSearchQuery()
-        }
+        const input = e.target as HTMLInputElement
+        searchQuery.val = input.value
     }
 
-    const friends = store.getFriends(0)
 
 
     return <>
         <MobileHeader>
             <span class="title">{strings["friends"]}</span>
         </MobileHeader>
+        <MapErrorModal />
+        <MessengerErrorModal />
         <main class="friendsView">
             <div class="window">
                 <input id="searchField" enterkeyhint="search" placeholder={strings["search"]} onInput={onInputQuery} type="text" />
-                
-                {
-                    <div class="friendList">
-                        {
-                            friends.users.derive(val => val.length == 0 ? <Placeholder /> : <div style="display: none"></div>)
-                        }
-                        {friends.users.derive(val => {
-                            return val.map(item => {
-                                return <Cell type={"friend"} item={item} />
-                            })
-                        })}
-                    </div>
-                }
 
+
+                {
+                    searchQuery.derive(val => {
+                        if (val == "") {
+                            return <div>
+                                <FriendList />
+                            </div>
+                        } else {
+                            return <div>
+                                <Search query={val} />
+                            </div>
+                        }
+                    })
+                }
                 
                 {/* <Switch>
                     <Match when={!searchQuery()}>

@@ -9,6 +9,13 @@ export interface LightsDB extends DBSchema {
             'by-post-id': string,
         };
     };
+    comments: {
+		value: IComment;
+		key: string;
+		indexes: {
+            'by-comment-id': string,
+        };
+    };
     translations: {
 		value: ITranslation;
 		key: string;
@@ -149,6 +156,7 @@ export interface IComment {
     attachments: {
         media: IMediaAttachment[];
         links?: ILinkAttachment[];
+        audios: IAudio[];
     };
     date: string;
     reactions: IReaction[];
@@ -162,6 +170,7 @@ export interface IAvatar {
     blurhash: string;
     date: number;
     url?: string;
+    type: string;
 }
 
 export interface IStatus {
@@ -177,7 +186,7 @@ export interface IProfile {
     is_premium: boolean;
     sex: null;
     avatar: IAvatar[];
-    cover: string;
+    cover: IMediaAttachment[];
     verified: boolean;
     status: IStatus;
     followers: {

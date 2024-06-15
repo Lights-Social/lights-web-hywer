@@ -1,5 +1,5 @@
 import { areArraysEqual } from "@/ui/utils/areArraysEqual";
-import type { IAvatar, IProfile } from "./types/models";
+import type { IAvatar, IMediaAttachment, IProfile } from "./types/models";
 import { store as hywerStore, type RecReactiveProxy } from "hywer/x/store";
 
 export const emptyProfile = {
@@ -10,7 +10,7 @@ export const emptyProfile = {
     is_premium: false,
     sex: null,
     avatar: [],
-    cover: "",
+    cover: [],
     verified: false,
     status: {last_activity: 0, status: "inactive"},
     followers: {
@@ -44,7 +44,6 @@ export class ReactiveProfile {
         this._profileRef.is_premium.val = profile.is_premium
         this._profileRef.verified.val = profile.verified
         this._profileRef.about.val = profile.about
-        this._profileRef.cover.val = profile.cover
         this._profileRef.friends.count.val = profile.friends.count
         this._profileRef.friends.friendship_state.val = profile.friends.friendship_state
         this._profileRef.id.val = profile.id
@@ -57,6 +56,11 @@ export class ReactiveProfile {
         if (!areArraysEqual(this._profileRef.avatar.val, profile.avatar)) {
             this._profileRef.avatar.val = profile.avatar
             this._profileRef.avatar.react()
+        }
+
+        if (!areArraysEqual(this._profileRef.cover.val, profile.cover)) {
+            this._profileRef.cover.val = profile.cover
+            this._profileRef.cover.react()
         }
     }
     set name(name: string) {
@@ -79,8 +83,8 @@ export class ReactiveProfile {
         this._profileRef.about.val = about
     }
 
-    set cover(cover: string) {
-        this._profileRef.cover.val = cover
+    set cover(cover: IMediaAttachment) {
+        this._profileRef.cover.val = [cover]
     }
 
     set friends_count(friends_count: number) {

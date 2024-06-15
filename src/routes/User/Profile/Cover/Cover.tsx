@@ -4,19 +4,20 @@ import { FastAverageColor } from 'fast-average-color';
 import * as blurhash from "blurhash-wasm";
 import type { RecReactiveProxy } from 'hywer/x/store';
 import { effect } from 'hywer/jsx-runtime';
+import Video from '@/ui/Video/Video';
 
 
 interface CoverProps {
 	profile: RecReactiveProxy<IProfile>;
 }
 
-export default function Cover(props: CoverProps) {
+export default function Cover({profile}: CoverProps) {
 
     async function setCoverColor() {
         const coverElement = document.querySelector<HTMLDivElement>('.cover')
-        if (props.profile.avatar.val[0]) {
+        if (profile.avatar.val[0] && profile.avatar.val[0].type == 'photo') {
 
-            const pixels = blurhash.decode(props.profile.avatar.val[0].blurhash, 32, 32);
+            const pixels = blurhash.decode(profile.avatar.val[0].blurhash, 32, 32);
             // Set the pixels to the canvas
             const asClamped = new Uint8ClampedArray(pixels!);
             const imageData = new ImageData(asClamped, 32, 32);
@@ -34,9 +35,14 @@ export default function Cover(props: CoverProps) {
                     console.log(e);
                 });
         } else {
-            coverElement?.style.setProperty('--user-color', HSLtoString(generateHSL(props.profile.name.val != "" ? props.profile.name.val : props.profile.username.val), 20));
+            coverElement?.style.setProperty('--user-color', HSLtoString(generateHSL(profile.name.val != "" ? profile.name.val : profile.username.val), 20));
         }
+    }    
+    setTimeout(() => {
+        setCoverColor()
 
+
+        const coverElement = document.querySelector<HTMLDivElement>('.cover')
         coverElement?.animate([
             {
                 opacity: 0
@@ -45,18 +51,31 @@ export default function Cover(props: CoverProps) {
                 opacity: 1
             }
         ], 400)
-    }    
-    setTimeout(() => {
-        setCoverColor()
     })
 
     effect(() => {
         setCoverColor()
-    }, [props.profile.avatar])
+    }, [profile.avatar, profile.username, profile.name])
     
 
     return (
         <div class="cover">
+            {
+                profile.cover.derive((val) => {
+                    if (val.length == 0) {
+                        return <div style="display: none;" />
+                    } else {
+                        if (val[0].type == 'video') {
+                            return <Video
+                                src={`${import.meta.env.VITE_LIGHTS_CDN_URL}/video/${val[0].id}.mp4`}
+                                muted={true}
+                            />
+                        } else {
+                            return <div />
+                        }
+                    }
+                })
+            }
             {/* {props.profile.cover !== "" && <picture>
                 <source srcset={`${import.meta.env.VITE_LIGHTS_CDN_URL}/picture/${props.profile.cover}.webp`} type="image/webp" />
                 {

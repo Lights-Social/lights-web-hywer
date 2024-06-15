@@ -1,0 +1,258 @@
+.createComment {
+    background: var(--main-color);
+    padding: 15px;
+    border-radius: 0px 0px 20px 20px;
+    gap: 15px;
+    display: grid;
+    z-index: 1;
+    position: sticky;
+    bottom: 0;
+
+    border-top: solid 2px var(--highlight-color);
+
+    padding-bottom: calc(env(safe-area-inset-bottom) + 15px);
+
+    z-index: 4;
+
+  }
+
+  .createComment .editBlock {
+    display: flex;
+    gap: 10px;
+    position: relative;
+  }
+  .createComment .editBlock .avatarWrapper {
+    width: 45px;
+    height: 45px;
+    transition: 0.15s;
+    cursor: pointer;
+  }
+  .createComment .editBlock .avatarWrapper:hover {
+    opacity: 0.65;
+  }
+  .createComment .editBlock .addMenu {
+    position: absolute;
+    z-index: 1;
+    left: 25px;
+    bottom: 45px;
+    padding: 7px;
+    visibility: hidden;
+    background: var(--main-blur-color);
+    min-width: 175px;
+    backdrop-filter: blur(30px);
+    -webkit-backdrop-filter: blur(30px);
+    border-radius: 15px;
+    box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.25);
+    transform: scale(0.9);
+    transform-origin: -3px 0px;
+    opacity: 0;
+    transition: 0.15s;
+  }
+  .createComment .editBlock .addMenu input[type=file] {
+    display: none;
+  }
+  .createComment .editBlock .addMenu button {
+    background: transparent;
+    cursor: pointer;
+    font-size: 14px;
+    color: var(--var-font-color);
+    transition: 0.2s;
+    font-weight: 600;
+    border: none;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 5px;
+    border-radius: 5px;
+  }
+  .createComment .editBlock .addMenu button svg {
+    width: 22px;
+    height: 22px;
+    fill: var(--buttons-color);
+  }
+  .createComment .editBlock .addMenu button:hover {
+    background: var(--highlight-color);
+  }
+  .createComment .editBlock .addMenu button:active {
+    transform: scale(0.9);
+  }
+  .createComment .editBlock .addMenu.shown {
+    opacity: 1;
+    transform: scale(1);
+    visibility: visible;
+  }
+  .createComment .editBlock .inputArea {
+    width: 100%;
+    background: var(--input-color);
+    border-radius: 26px;
+    padding: 15px;
+    display: flex;
+    gap: 10px;
+    cursor: text;
+	
+  }
+  .createComment .editBlock .inputArea .showAddMenuButton {
+    width: 25px;
+    height: 25px;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    transition: 0.2s;
+    position: absolute;
+	bottom: 13px;
+  }
+  .createComment .editBlock .inputArea .showAddMenuButton svg {
+    transition: 0.2s;
+    fill: #a6a6a6;
+  }
+  .createComment .editBlock .inputArea .showAddMenuButton.active svg {
+    transform: rotate(45deg);
+  }
+  .createComment .editBlock .inputArea .textInput {
+    background: transparent;
+    border: none;
+    color: var(--font-color);
+    outline: none;
+    resize: none;
+    font-style: normal;
+    font-family: system-ui;
+    font-size: 16px;
+    caret-color: var(--accent-color);
+    width: 100%;
+    padding: 0px 0px 0px 35px;
+    max-height: 200px;
+    overflow: auto;
+    width: 100%;
+    word-break: break-word;
+    white-space: pre-wrap;
+    line-height: 1.3125;
+  }
+  .createComment .editBlock .inputArea .textInput::before {
+    content: attr(placeholder);
+    color: #a6a6a6;
+    opacity: 0;
+    transition: 0.2s;
+    position: absolute;
+    transform: translateX(25px);
+  }
+  .createComment .editBlock .inputArea .textInput:empty::before {
+    content: attr(placeholder);
+    color: #a6a6a6;
+    opacity: 1;
+    transform: translateX(0px);
+  }
+  .createComment .attachments {
+    height: fit-content;
+  }
+  .createComment .attachments .media {
+    display: flex;
+  }
+  .createComment .attachments .media .preview {
+    position: relative;
+    width: 40%;
+    border-radius: 20px;
+    overflow: hidden;
+  }
+  .createComment .attachments .media .preview .remove {
+    top: 0;
+    right: 0;
+    position: absolute;
+    border: none;
+    outline: none;
+    width: 20px;
+    height: 20px;
+    background: rgba(0, 0, 0, 0.25);
+    transition: 0.1s;
+    cursor: pointer;
+    opacity: 0;
+    z-index: 1;
+  }
+  .createComment .attachments .media .preview img {
+    width: 100%;
+  }
+  .createComment .attachments .media .preview:hover .remove {
+    opacity: 1;
+  }
+  .createComment hr {
+    width: 100%;
+    background: rgba(128, 128, 128, 0.15);
+    border: none;
+    height: 1.25px;
+  }
+  .createComment .buttons {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+	align-self:flex-end;
+  }
+  .createComment .buttons .optionButton {
+    background: transparent;
+    border: 0;
+    display: flex;
+    cursor: pointer;
+    align-items: center;
+    color: var(--accent-color);
+    font-size: 15px;
+    font-weight: 600;
+    gap: 10px;
+  }
+  .createComment .buttons .optionButton svg {
+    width: 22px;
+    fill: var(--accent-color);
+    /*
+     .optionButton:hover {
+     background: var(--var-accent-color);
+     }
+     */
+  }
+  .createComment .buttons .postButtons {
+    margin-inline-start: auto;
+    display: flex;
+    gap: 10px;
+
+  }
+  .createComment .buttons .postButtons button {
+    width: fit-content;
+    background: color-mix(in srgb, var(--accent-color) 15%, var(--main-color));
+    border-radius: 50px;
+    border: none;
+    color: white;
+    transition: 0.2s;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+
+    width: 51px;
+    height: 51px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .createComment .buttons .cancelButton {
+    background: var(--highlight-color) !important;
+  }
+
+  .createComment .buttons .cancelButton svg {
+    fill: var(--buttons-color);
+
+  }
+
+  .createComment .buttons button svg {
+    width: 22px;
+    height: 22px;
+    fill: var(--accent-color);
+  }
+  .createComment .buttons button:disabled {
+    opacity: 0.65;
+  }
+
+
+
+@media only screen and (max-width: 480px) {
+	.createComment {
+		border-radius: 0px;
+	}
+}

@@ -1,5 +1,5 @@
 import { Api } from "@/api"
-import type { IAudio, IFriend, IPost, IProfile, IResponsePosts, LightsDB } from "./types/models"
+import type { IAudio, IComment, IFriend, IPost, IProfile, IResponsePosts, LightsDB } from "./types/models"
 import { derive, ref, type Reactive } from "hywer/jsx-runtime"
 import { getCookieValue } from "@/ui/utils/getCookieValue"
 import { ReactiveProfile, emptyProfile } from "./ReactiveProfile"
@@ -7,9 +7,7 @@ import { ReactivePost, emptyPost } from "./ReactivePost"
 
 import { openDB, type IDBPDatabase } from 'idb';
 import { hashCode } from "@/ui/utils/hash"
-
-//getGlobalProfile.get('ef34808c-c861-4094-9931-87ef18d364e2').name = 'хуй'
-
+import { ReactiveComment } from "./ReactiveComment"
 
 const availableLangs = ["en-US", "uk"]
 
@@ -22,13 +20,49 @@ interface IResponseSession {
     refresh_token: string;
 }
 
+
+function createObjectStores(db: IDBPDatabase<LightsDB>) {
+    if (!db.objectStoreNames.contains('users')) {
+        const userStore = db.createObjectStore('users', {
+            keyPath: ['id'],
+        });
+        userStore.createIndex('by-id', 'id', {unique: true});
+        userStore.createIndex('by-username', 'username', {unique: true});
+    }
+
+    if (!db.objectStoreNames.contains('posts')) {
+        const postStore = db.createObjectStore('posts', {
+            keyPath: ['id'],
+        });
+        postStore.createIndex('by-post-id', 'id', {unique: true});
+    }
+
+    if (!db.objectStoreNames.contains('comments')) {
+        const commentStore = db.createObjectStore('comments', {
+            keyPath: ['id'],
+        });
+        commentStore.createIndex('by-comment-id', 'id', {unique: true});
+    }
+
+    if (!db.objectStoreNames.contains('translations')) {
+        const translationStore = db.createObjectStore('translations', {
+            keyPath: ['hash'],
+        });
+        translationStore.createIndex('by-hash', 'hash', {unique: true});
+    }
+}
+
 export class Store {
 
     private strings: ILocale = {}
     private globalLang = "en-US"
 
+    private comments = {
+        items: new Map<string, ReactiveComment>(),
+    }
+
     private posts = {
-        items: new Map<string, IPost>(),
+        items: new Map<string, ReactivePost>(),
         lists: {
             users: new Map<string, string[]>(),
             feed: ref<string[]>([]),
@@ -39,40 +73,17 @@ export class Store {
     private profiles = new Map<string, ReactiveProfile>()
     private usernames = new Map<string, string>()
 
-    private friends: IFriend[] = []
+    private friends = ref<string[]>([])
+
 
     private user_id: string | null = null
 
     private db: IDBPDatabase<LightsDB> | null = null
 
     async init() {
-        this.db = await openDB<LightsDB>('lights-web', 2, {
-            upgrade(db, oldVersion, newVersion, transaction, event) {
-                const userStore = db.createObjectStore('users', {
-                    keyPath: ['id'],
-                });
-                
-
-                userStore.createIndex('by-id', 'id', {unique: true});
-                userStore.createIndex('by-username', 'username', {unique: true});
-
-                const postStore = db.createObjectStore('posts', {
-                    keyPath: ['id'],
-                });
-
-                postStore.createIndex('by-post-id', 'id', {unique: true});
-
-                const translationStore = db.createObjectStore('translations', {
-                    keyPath: ['hash'],
-                });
-
-                translationStore.createIndex('by-hash', 'hash', {unique: true});
-
-                //console.log('upgrade', oldVersion, newVersion, transaction, event);
-
-
-
-
+        this.db = await openDB<LightsDB>('lights-web', 5, {
+            upgrade(db, oldVersion, newVersion, transaction, event) {   
+                createObjectStores(db)
             },
             blocked(currentVersion, blockedVersion, event) {
               console.log('blocked', currentVersion, blockedVersion, event);
@@ -85,7 +96,11 @@ export class Store {
             },
         });
 
-        globalThis.getGlobalProfile = this.profiles
+        createObjectStores(this.db)
+
+
+        globalThis.getGlobalProfile = this.profiles;
+        globalThis.getGlobalPost = this.posts.items;
 
         const response = await Api(`users/getByUsername/@me`)
         if (!response.ok) {
@@ -173,18 +188,10 @@ export class Store {
     }
 
     private async fetchPosts(uri: string, list: Reactive<string[]>, container: {
-        posts: Reactive<IPost[]>;
+        posts: Reactive<ReactivePost[]>;
         state: Reactive<string>;
     }) {
         const offset = list.val.length;
-
-        
-
-        // if (!navigator.onLine) {
-        //     list.state.val = 'errored'
-
-        //     return null
-        // }
 
         const response = await Api(`${uri}?offset=${offset}&limit=${15}`);
 
@@ -198,8 +205,6 @@ export class Store {
         json.includes.users.forEach((profile) => {
 
             this.db?.put('users', profile).then((lol) => {
-
-
 
                 let user = this.profiles.get(profile.id)
 
@@ -217,17 +222,39 @@ export class Store {
 
 
         json.data.forEach((post) => {
-            this.db?.put('posts', post).then((lol) => {
-                //console.log("post saved", lol)
-            })
+            this.db?.put('posts', post)
 
-            this.posts.items.set(post.id, post)
+            let postObject = this.posts.items.get(post.id)
+
+            if (!postObject) {
+                postObject = new ReactivePost(post)
+                this.posts.items.set(post.id, postObject)
+            } else {
+                postObject.post = post
+            }
+
             list.val.push(post.id)
+
+
+            if (post.reposts.initialPosts) {
+                post.reposts.initialPosts.forEach((initialPost) => {
+                    this.db?.put('posts', initialPost)
+    
+                    let postObject = this.posts.items.get(initialPost.id)
+    
+                    if (!postObject) {
+                        this.posts.items.set(initialPost.id, new ReactivePost(initialPost))
+                    } else {
+                        postObject.post = initialPost
+                    }
+                })
+            }
+            
         })
 
         const filteredObjects = list.val
         .filter(id => this.posts.items.has(id))
-        .map(id => this.posts.items.get(id)) as IPost[]
+        .map(id => this.posts.items.get(id)) as ReactivePost[]
 
         container.posts.val = [...container.posts.val, ...filteredObjects]
     }
@@ -236,10 +263,10 @@ export class Store {
     getPosts(uri: string) {
 
         let container: {
-            posts: Reactive<IPost[]>;
+            posts: Reactive<ReactivePost[]>;
             state: Reactive<string>;
         } = {
-            posts: ref<IPost[]>([]),
+            posts: ref<ReactivePost[]>([]),
             state: ref('pending')
         }
 
@@ -256,7 +283,7 @@ export class Store {
         derive(([newList]) => {
             const filteredObjects = newList.val
             .filter(id => this.posts.items.has(id))
-            .map(id => this.posts.items.get(id)) as IPost[]
+            .map(id => this.posts.items.get(id)) as ReactivePost[]
 
             container.posts.val = [...container.posts.val, ...filteredObjects]
 
@@ -268,13 +295,6 @@ export class Store {
 
         if (list.val.length == 0) {
             this.fetchPosts(uri, list, container)
-        } else {
-            const filteredObjects = list.val
-            .filter(id => this.posts.items.has(id))
-            .map(id => this.posts.items.get(id)) as IPost[]
-
-            container.posts.val = [...container.posts.val, ...filteredObjects]
-
         }
 
         
@@ -283,8 +303,100 @@ export class Store {
         return {container, next}
     }
 
+    getComments(post_id: string) {
+        let container: {
+            comments: Reactive<ReactiveComment[]>;
+            state: Reactive<string>;
+        } = {
+            comments: ref<ReactiveComment[]>([]),
+            state: ref('pending')
+        }
 
-    async getTranslation(text: string, id: string, language: string) {
+        let list = ref<string[]>([])
+
+
+        derive(([newList]) => {
+            const filteredObjects = newList.val
+            .filter(id => this.comments.items.has(id))
+            .map(id => this.comments.items.get(id)) as ReactiveComment[]
+
+            container.comments.val = [...container.comments.val, ...filteredObjects]
+
+        }, [list])
+
+        // else if (uri == `users/getByUsername/${this.profiles.val.get(this.user_id!)?.username}/wall`) {            
+
+        // }
+
+        if (list.val.length == 0) {
+            this.fetchComments(post_id, list, container)
+        }
+
+        const next = () => this.fetchComments(post_id, list, container)
+
+        return {container, next}
+    }
+
+    private async fetchComments(post_id: string, list: Reactive<string[]>, container: {
+        comments: Reactive<ReactiveComment[]>;
+        state: Reactive<string>;
+    }) {
+        const offset = list.val.length;
+
+        const response = await Api(`posts/${post_id}/comments?offset=${offset}&limit=${15}`);
+
+
+        if (!response.ok) {
+            return null
+        }
+            
+        let json: IResponsePosts<IComment> = await response.json();
+
+        json.includes.users.forEach((profile) => {
+
+            this.db?.put('users', profile).then((lol) => {
+
+                let user = this.profiles.get(profile.id)
+
+                if (!user) {
+                    user = new ReactiveProfile(emptyProfile)
+                    this.profiles.set(profile.id, user)
+                    this.usernames.set(profile.username, profile.id)
+                } else {
+                    user.profile = profile
+                }
+
+
+            })
+        })
+
+
+        json.data.forEach((comment) => {
+            this.db?.put('comments', comment).then((lol) => {
+                //console.log("post saved", lol)
+            })
+
+            let commentObject = this.comments.items.get(comment.id)
+
+            if (!commentObject) {
+                commentObject = new ReactiveComment(comment)
+                this.comments.items.set(comment.id, commentObject)
+            } else {
+                commentObject.comment = comment
+            }
+
+            list.val.push(comment.id)
+        })
+
+        const filteredObjects = list.val
+        .filter(id => this.comments.items.has(id))
+        .map(id => this.comments.items.get(id)) as ReactiveComment[]
+
+        container.comments.val = [...container.comments.val, ...filteredObjects]
+    }
+
+
+    async getTranslation(text: string, id: string, type: string, language: string) {
         const hash = hashCode(text+language)
 
         const translation = await this.db?.getFromIndex('translations', 'by-hash', hash)
@@ -293,16 +405,16 @@ export class Store {
             return translation.text
         }
 
-        const response = await Api(`posts/${id}/translation?language=${language}`)
+        const response = await Api(`${type == 'post' ? 'posts' : 'comments'}/${id}/translation?language=${language}`)
         const data = await response.json()
 
-
-        //this.postTranslations.set(id, data.text)
-
-        this.db?.put('translations', {
-            text: data.text,
-            hash: hash
-        })
+        if (response.ok) {
+            this.db?.put('translations', {
+                text: data.text,
+                hash: hash
+            })
+        }
+        
 
         return data.text
     }
@@ -313,22 +425,65 @@ export class Store {
         //this.myPosts.posts.val.unshift(item)
     }
 
+    async fetchPost(post_id: string, post: ReactivePost, state: Reactive<string>) {
+        const idbresp = await this.db?.getFromIndex('posts', 'by-post-id', post_id)
 
-    async getPost(post_id: string) {
-        const state = ref('pending')
-
-        let post = this.posts.items.get(post_id)
-
-        if (!post) {
-            let tempPost = new ReactivePost(emptyPost)
-            //post = this.posts.items.set(post_id, tempPost).get(user_id)!
-
-            //this.fetchProfile(user_id, 'id', tempUser, state)
-        } else {
+        if (idbresp) {
+            post.post = idbresp
             state.val = 'success'
+
+            this.posts.items.set(post_id, post)
+            return
         }
 
-        return {post, state}
+        const response = await Api(`posts/${post_id}`)
+        if (!response.ok) {
+            state.val = 'error'
+            return null
+        }
+
+        let json: IResponsePosts<IPost> = await response.json();
+
+        this.db?.put('posts', json.data[0])
+
+        post.post = json.data[0]
+        //this.posts.items.set(post_id, post)
+        if (json.data[0].reposts.initialPosts) {
+
+            json.data[0].reposts.initialPosts.forEach((initialPost) => {
+                this.db?.put('posts', initialPost)
+
+                let postObject = this.posts.items.get(initialPost.id)
+
+                if (!postObject) {
+                    this.posts.items.set(initialPost.id, new ReactivePost(initialPost))
+                } else {
+                    postObject.post = initialPost
+                }
+            })
+
+        }
+
+        json.includes.users.forEach((profile) => {
+
+            this.db?.put('users', profile).then((lol) => {
+
+                let user = this.profiles.get(profile.id)
+
+                if (!user) {
+                    user = new ReactiveProfile(emptyProfile)
+                    this.profiles.set(profile.id, user)
+                    this.usernames.set(profile.username, profile.id)
+                } else {
+                    user.profile = profile
+                }
+
+
+            })
+        })
+        
+        
+        state.val = 'success'
     }
 
     async fetchProfile(query: string, index: string, user: ReactiveProfile, state: Reactive<string>) {
@@ -383,6 +538,23 @@ export class Store {
         return {user, state}
     }
 
+    getPost(post_id: string) {
+        const state = ref('pending')
+
+        let post = this.posts.items.get(post_id)
+
+        if (!post) {
+            let tempPost = new ReactivePost(emptyPost)
+            post = this.posts.items.set(post_id, tempPost).get(post_id)!
+
+            this.fetchPost(post_id, tempPost, state)
+        } else {
+            state.val = 'success'
+        }
+
+        return {post, state}
+    }
+
     getProfileByUsername(username: string) {
         const state = ref('pending')
 
@@ -424,74 +596,118 @@ export class Store {
         })
     }
 
-    getFriends(offset: number) {
+
+    private async fetchProfiles(uri: string, list: Reactive<string[]>, container: {
+        users: Reactive<ReactiveProfile[]>;
+        state: Reactive<string>;
+    }) {
+        const offset = list.val.length;
+
+        const response = await Api(`${uri}?offset=${offset}&limit=${15}`);
+
+
+        if (!response.ok) {
+            return null
+        }
+            
+        let json: IResponsePosts<IProfile> = await response.json();
+
+        json.data.forEach((profile) => {
+            this.db?.put('users', profile)
+
+            let profileObject = this.profiles.get(profile.id)
+
+            if (!profileObject) {
+                profileObject = new ReactiveProfile(profile)
+                this.profiles.set(profile.id, profileObject)
+            } else {
+                profileObject.profile = profile
+            }
+
+            list.val.push(profile.id)
+        })
+
+        const filteredObjects = list.val
+        .filter(id => this.profiles.has(id))
+        .map(id => this.profiles.get(id)) as ReactiveProfile[]
+
+        container.users.val = [...container.users.val, ...filteredObjects]
+
+        container.state.val = 'success'
+    }
+
+    getFriends() {
+
         let container: {
-            users: Reactive<IProfile[]>;
+            users: Reactive<ReactiveProfile[]>;
+            requests: {
+                incoming: number
+                outgoing: number
+            }
             state: Reactive<string>;
         } = {
-            users: ref<IProfile[]>([]),
+            users: ref<ReactiveProfile[]>([]),
+            requests: {
+                incoming: 0,
+                outgoing: 0
+            },
             state: ref('pending')
         }
 
-        if (this.friends.length == 0) {
-            (async () => {
-                const response = await Api(`friends/?offset=${offset}&limit=${15}`);
-		
-                let json: IResponsePosts<IProfile> = await response.json();
+        derive(([newList]) => {
+            const filteredObjects = newList.val
+            .filter(id => this.profiles.has(id))
+            .map(id => this.profiles.get(id)) as ReactiveProfile[]
+
+            container.users.val = [...container.users.val, ...filteredObjects]
 
 
-                json.data.forEach((profile) => {
-                    this.db?.put('users', json.data[0])
-
-                    this.friends.push({id: profile.id, is_pinned: false})
-                })
-
-                // this.db?.getAll('users').then((users) => {
-                //     this.friends
-                //     .filter(profile => users.has(profile.id))
-                //     .map(profile => this.profiles.get(profile.id)) as IProfile[]
-                // })
-
-                // const filteredObjects = this.friends
-                // .filter(profile => this.profiles.has(profile.id))
-                // .map(profile => this.profiles.get(profile.id)) as IProfile[]
-
-                //container.users.val = [...container.users.val, ...filteredObjects]
+        }, [this.friends])
 
 
-                //this.friends.val = json.data
-            })()
-        } else {
-            // const filteredObjects = this.friends
-            // .filter(profile => this.profiles.has(profile.id))
-            // .map(profile => this.profiles.get(profile.id)) as IProfile[]
-
-            // container.users.val = [...container.users.val, ...filteredObjects]
+        if (this.friends.val.length == 0) {
+            this.fetchProfiles('friends/', this.friends, container)
         }
+
         
-        return container
+        const next = () => this.fetchProfiles('friends/', this.friends, container)
+
+        return {container, next}
     }
 
-    searchUsers(query: string, offset: number) {
-        if (this.friends.length == 0) {
-            (async () => {
-                const response = await Api(`users/search/${encodeURIComponent(query)}/?offset=${offset}&limit=${15}`);
-		
-                let json: IResponsePosts<IProfile> = await response.json();
 
+    searchUsers(query: string) {
 
-                // json.data.forEach((profile) => {
-                //     this.profiles.set(profile.id, profile)
-                //     this.usernames.set(profile.username, profile.id)
-
-                    
-                // })
-
-                //this.friends.val = json.data
-            })()
+        let container: {
+            users: Reactive<ReactiveProfile[]>;
+            state: Reactive<string>;
+        } = {
+            users: ref<ReactiveProfile[]>([]),
+            state: ref('pending')
         }
+
+        let list = ref<string[]>([])
+
+
+        derive(([newList]) => {
+            const filteredObjects = newList.val
+            .filter(id => this.profiles.has(id))
+            .map(id => this.profiles.get(id)) as ReactiveProfile[]
+
+            container.users.val = [...container.users.val, ...filteredObjects]
+
+
+        }, [list])
+
+
+        if (list.val.length == 0) {
+            this.fetchProfiles(`users/search/${encodeURIComponent(query)}/`, list, container)
+        }
+
         
-        return this.friends
+        const next = () => this.fetchProfiles(`users/search/${encodeURIComponent(query)}/`, list, container)
+
+        return {container, next}
     }
 
     async deleteFriend(id: string) {
@@ -517,6 +733,14 @@ export class Store {
     editNote(user_id: string, text: string) {
         Api(`notes/${user_id}?text=${text}`, 'PATCH').then(response => {
             if (!response?.ok) {
+            }
+
+            const profile = this.profiles.get(user_id)
+
+            if (profile) {
+                profile.note = text
+
+                //this.db?.put('users', profile.get())
             }
         }).catch(() => {
 

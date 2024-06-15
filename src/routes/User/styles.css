@@ -45,6 +45,12 @@ main.userView {
 
 }
 
+.profile .cover video {
+    width: auto;
+}
+
+
+
 .profile .cover img {
     width: 100%;
     transition: opacity 0.2s;
@@ -109,6 +115,11 @@ main.userView {
 
     position: relative;
 }
+.profile .wrapper .avatarWrapper video {
+    width: unset;
+}
+
+
 .profile .wrapper .avatarWrapper .photo {
     cursor: pointer;
 }

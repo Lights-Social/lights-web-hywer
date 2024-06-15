@@ -10,54 +10,113 @@ import EditedIcon from "@/ui/icons/edited"
 import Media from "../Media/Media";
 import Picture from "@/ui/Picture";
 import AvatarPlaceholder from "@/ui/AvatarPlaceholder/AvatarPlaceholder";
-import Duration from "../Duration";
+import Duration from "../../Duration";
 import { store } from "@/data";
 import FormatText from "@/ui/FormatText";
+import { derive } from "hywer/jsx-runtime";
+import { navigateTo } from "hywer/x/router";
+import Video from "@/ui/Video/Video";
 
 interface ForwardedPostProps {
-    item: IPost
+    post_id: string;
+    user_id: string
+
 }
 
-export default function ForwardedPost({ item }: ForwardedPostProps) {
-    //const user = store.getProfileById(item.peer.id)!
+export default function ForwardedPost({ post_id, user_id }: ForwardedPostProps) {
+    const item = store.getPost(post_id)
+    const post = item.post.get()
 
-    //const profile = user.get()
+    const user = store.getProfileById(user_id)
+
+    const profile = user.user.get()
 
     return (
-        <div onDblClick={(e: Event) => e.stopPropagation()} class="forwardedPost">
+        <div onClick={() => navigateTo(`/p/${post_id}`, { replace: false })} onDblClick={(e: Event) => e.stopPropagation()} class="forwardedPost">
             <div class="top">
-                {/* {
-                    profile.val.avatar.length > 0 ?
-                    <div class="avatar">
-                        <Picture src={`${import.meta.env.VITE_LIGHTS_CDN_URL}/picture/${profile.val.avatar[0].id}.webp`} picture={{type: "photo", id: profile.val.avatar[0].id, alt: "", blurhash: profile.val.avatar[0].blurhash, width: 1, height: 1}} />
-                    </div> : <AvatarPlaceholder name={profile.val.name != "" ? profile.val.name : profile.val.username} />
-                } */}
+                <div class="avatar">
+                    {
+                        profile.avatar.derive((val) => {
+                            if (val.length > 0) {
+                                if (val[0].type == 'photo') {
+                                    return <div class="avatar">
+                                        <Picture src={val[0].id} picture={{id: val[0].id, alt: "", blurhash: val[0].blurhash, width: 1, height: 1, type: 'photo'}} />
+                                    </div>
+                                } else {
+                                    return <div class="avatar">
+                                        <Video
+                                            src={`${import.meta.env.VITE_LIGHTS_CDN_URL}/video/${val[0].id}.mp4`}
+                                            muted={true}
+                                        />
+                                    </div>
+                                }
+                            } else {
+                                return <AvatarPlaceholder name={derive(([name, username]) => name.val != "" ? name.val : username.val, [profile.name, profile.username])} />
+                            }
+                        })
+                    }
+                </div>
                 <div class="center">
                     <div class="title">
-                        {/* <div class="info">
-                            <span class="name">{profile.val.name != "" ? profile.val.name : profile.val.username}</span>
-                            
-                            { profile.val.verified ? <VerifiedIcon /> : null }
-                            { item.is_edited ? <EditedIcon /> : null }
+                        <div class="info">
+                            {
+                                derive(([name, username]) => {
+                                    return <span class="name">
+                                        {name.val != "" ? name.val : username.val}
+                                    </span>
+                                }, [profile.name, profile.username])
+                            }
 
-                            <Duration date={item.date} />                          
-                        </div> */}
+                            {
+                                profile.verified.derive((val) => {
+                                    if (val) {
+                                        return <VerifiedIcon />
+                                    } else {
+                                        return <div style="display: none;" />
+                                    }
+                                })
+
+                            }
+                                                        {
+                                post.is_edited.derive((val) => {
+                                    if (val) {
+                                        return <EditedIcon />
+                                    } else {
+                                        return <div style="display: none;" />
+                                    }
+                                })
+                            }
+
+                            <Duration date={post.date.val} />                         
+                        </div>
 
                     </div>
                     
                     
                     <div class="content">
                         {
-                            item.text != "" ?
-                            <div class="text">
-                                <FormatText>
-                                    {item.text}
-                                </FormatText>
-                            </div> : null
+                            post.text.derive((val) => {
+                                if (val != "") {
+                                    return <div class="text">
+                                        <FormatText>
+                                            {val}
+                                        </FormatText>
+                                    </div>
+                                } else {
+                                    return <div style="display: none;" />
+                                }
+                            })
                         }
-                        
-                        
-                        <Media media={item.attachments.media} />
+
+                        {
+                            post.attachments.media.derive((val) => {
+                                if (val.length > 0) {
+                                    return <Media media={val} />
+                                } else {
+                                    return <></>
+                                }
+                            })
+                        }
                     </div>
                 </div>
                 

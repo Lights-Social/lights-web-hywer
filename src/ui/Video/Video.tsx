@@ -13,7 +13,7 @@ export default function Video({src, muted, onClick}: VideoProps) {
 
     return (
         <div onClick={onClick ? () => onClick() : undefined} class="video">
-            <video autoplay muted={muted} loop>
+            <video playsinline={true} controls={false} autoplay muted={muted} loop>
                 <source src={src} type="video/mp4" />
             </video>
         </div>

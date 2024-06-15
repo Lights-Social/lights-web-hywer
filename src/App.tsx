@@ -14,6 +14,7 @@ import { createRouterContext, Router, getParams, Redirect } from "hywer/x/router
 
 import Home from '@/routes/Home/index'
 import User from '@/routes/User/User'
+import Messenger from './routes/Messenger/Messenger'
 import Friends from '@/routes/Friends/Friends'
 import Settings from '@/routes/Settings/Settings'
 import AppUpdateModal from './AppUpdateModal'
@@ -23,10 +24,11 @@ import { store } from './data'
 //import Redirect from '@/ui/utils/crutches/Redirect'
 import {OpenLinkModal} from './ui/OpenLinkModal'
 import LogoiPhoneBadge from './ui/LogoiPhoneBadge/LogoiPhoneBadge'
-import { ShareFlow } from './ui/Post/ShareFlow/ShareFlow'
+import { ShareFlow } from './ui/ShareFlow/ShareFlow'
 import TranslateFlow from './ui/TranslateFlow/TranslateFlow'
 import UserNotFoundModal from './routes/User/UserNotFoundModal'
 import { MediaViewer } from './ui/MediaViewer/MediaViewer'
+import PostView from './routes/Post/Post'
 
 
 function handleAfterRoute() {
@@ -64,7 +66,9 @@ createRouterContext(
 		'/': () => <Redirect path="/home" />,
 		'/home': () => store.auth.isAuthorized() ? <Home /> : <Redirect path="/login" />,
 		'/u/:username': () => <User username={getParams()["username"]} />,
+		'/p/:post_id': () => <PostView post_id={getParams()["post_id"]} />,
 		'/friends': () => store.auth.isAuthorized() ? <Friends /> : <Redirect path="/login" />,
+		'/messenger': () => store.auth.isAuthorized() ? <Messenger /> : <Redirect path="/login" />,
 		'/settings': () => store.auth.isAuthorized() ? <Settings /> : <Redirect path="/login" />,
 		'/login': () => <OnBoarding />,
 
