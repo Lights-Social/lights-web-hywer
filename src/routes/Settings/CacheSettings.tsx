@@ -39,7 +39,7 @@ export default function CacheSettings() {
 	computeCacheSize()
 
     return (
-		<>
+		<div class='window'>
 			<MobileHeader>
 				<span class="title">{strings["dataAndStorage"]}</span>
 			</MobileHeader>
@@ -63,6 +63,6 @@ export default function CacheSettings() {
 					<button onClick={() => closeModal("clearCacheModal")}>{strings["cancel"]}</button>
 				</div>
 			</Modal>
-		</>
+		</div>
     )
 }

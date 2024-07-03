@@ -3,6 +3,8 @@ dialog.flow {
 
     padding-bottom: calc(env(safe-area-inset-bottom) + 20px) !important;
     overflow: hidden;
+
+    will-change: transform, opacity;
 }
 
 dialog.flow.full {
@@ -38,11 +40,11 @@ dialog.flow.full {
 
 @keyframes flowFade {
     0% {
-        transform: translateY(100%);
+        transform: translate3d(0, 100%, 0);
         opacity: 0;
     }
     100% {
-        transform: translateY(0);
+        transform: translate3d(0, 0, 0);
         opacity: 1;
     }
 }

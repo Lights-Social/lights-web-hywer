@@ -1,0 +1,10 @@
+.userListWrapper {
+    padding-bottom: 132px;
+    overflow: auto;
+
+}
+
+.userList {
+    display: grid;
+    gap: 10px;
+}

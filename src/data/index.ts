@@ -1,15 +1,96 @@
 import { Api } from "@/api"
-import type { IAudio, IComment, IFriend, IPost, IProfile, IResponsePosts, LightsDB } from "./types/models"
+import idbReady from 'safari-14-idb-fix';
+import type { IAudio, IComment, IPeer, IPost, IProfile, IResponsePosts, LightsDB } from "./types/models"
 import { derive, ref, type Reactive } from "hywer/jsx-runtime"
-import { getCookieValue } from "@/ui/utils/getCookieValue"
+import { deleteCookie, getCookieValue } from "@/ui/utils/getCookieValue"
 import { ReactiveProfile, emptyProfile } from "./ReactiveProfile"
 import { ReactivePost, emptyPost } from "./ReactivePost"
 
 import { openDB, type IDBPDatabase } from 'idb';
 import { hashCode } from "@/ui/utils/hash"
 import { ReactiveComment } from "./ReactiveComment"
+import getNativeLanguageName from "@/ui/utils/getNativeLanguageName"
 
-const availableLangs = ["en-US", "uk"]
+import { store as hywerStore, type RecReactiveProxy } from "hywer/x/store";
+
+
+const availableLangs = ["en-US", "en-GB", "uk"]
+
+const defaultSettings: ISettings = {
+    notifications: {
+        reactions: {
+            notifications: false,
+            categories: {
+                messages: true,
+                moments: true,
+                posts: true,
+                comments: true
+            }
+        }
+    },
+    privacy: {
+        avatar: {
+            access: "everybody",
+            exceptions: []
+        },
+        bio: {
+            access: "everybody",
+            exceptions: []
+        },
+        activity: {
+            access: "everybody",
+            exceptions: []
+        },
+        posts: {
+            access: "everybody",
+            exceptions: []
+        },
+        moments: {
+            access: "everybody",
+            exceptions: []
+        },
+        comments: {
+            access: "everybody",
+            exceptions: []
+        },
+        messages: {
+            access: "everybody",
+            exceptions: []
+        },
+        calls: {
+            access: "everybody",
+            exceptions: []
+        },
+        invites: {
+            access: "everybody",
+            exceptions: []
+        },
+        p2p: {
+            access: "nobody",
+            exceptions: []
+        },
+        map: {
+            access: "friends",
+            exceptions: []
+        },
+        forwarded_messages: {
+            access: "everybody",
+            exceptions: []
+        },
+        date_of_birth: {
+            access: "everybody",
+            exceptions: []
+        },
+        wallets: {
+            access: "nobody",
+            exceptions: []
+        },
+        spotify_connection: {
+            access: "everybody",
+            exceptions: []
+        }
+    }
+}
 
 interface ILocale {
     [key: string]: string
@@ -20,6 +101,73 @@ interface IResponseSession {
     refresh_token: string;
 }
 
+export interface ISettings {
+    notifications: INotificationSettings;
+    privacy: IPrivacySettings;
+}
+
+export interface IPrivacySettingException {
+    permission: boolean;
+    peer: IPeer;
+}
+
+export interface IPrivacySetting {
+    access: string;
+    exceptions: IPrivacySettingException[]
+}
+
+export interface IPrivacySettings {
+    avatar: IPrivacySetting;
+    bio: IPrivacySetting;
+    activity: IPrivacySetting;
+    posts: IPrivacySetting;
+    moments: IPrivacySetting;
+    comments: IPrivacySetting;
+    messages: IPrivacySetting;
+    calls: IPrivacySetting;
+    invites: IPrivacySetting;
+    p2p: IPrivacySetting;
+    map: IPrivacySetting;
+    forwarded_messages: IPrivacySetting;
+    date_of_birth: IPrivacySetting;
+    wallets: IPrivacySetting;
+    spotify_connection: IPrivacySetting;
+}
+
+export interface INotificationSettings {
+    reactions: {
+        notifications: boolean;
+        categories: {
+            messages: boolean;
+            moments: boolean;
+            posts: boolean;
+            comments: boolean;
+        };
+    }
+}
+
+
+interface AvailableTranslateLanguage {
+    language: string
+    name: string
+}
+
+export interface Session {
+    session_id: string
+	last_activity: string
+	last_geo: string
+	device: string
+	app_name: string
+    is_mobile: string;
+    browser: string;
+    createdate: string;
+    calls: boolean;
+}
+
+interface SessionsResponse {
+    data: Session[]
+    current_session_id: string
+}
 
 function createObjectStores(db: IDBPDatabase<LightsDB>) {
     if (!db.objectStoreNames.contains('users')) {
@@ -52,10 +200,78 @@ function createObjectStores(db: IDBPDatabase<LightsDB>) {
     }
 }
 
+function clearObjectStores(db: IDBPDatabase<LightsDB>) {
+    console.log("clearing db")
+    if (db.objectStoreNames.contains('users')) {
+        db.getAllKeys('users').then((keys) => {
+            keys.forEach((key) => {
+                db.delete('users', key)
+            })
+        })
+    }
+
+    if (db.objectStoreNames.contains('users')) {
+        db.getAllKeys('users').then((keys) => {
+            keys.forEach((key) => {
+                db.delete('users', key)
+            })
+        })
+    }
+
+    if (db.objectStoreNames.contains('friends')) {
+        db.getAllKeys('friends').then((keys) => {
+            keys.forEach((key) => {
+                db.delete('friends', key)
+            })
+        })
+    }
+
+    if (db.objectStoreNames.contains('posts')) {
+        db.getAllKeys('posts').then((keys) => {
+            keys.forEach((key) => {
+                db.delete('posts', key)
+            })
+        })
+    }
+
+    if (db.objectStoreNames.contains('translations')) {
+        db.getAllKeys('translations').then((keys) => {
+            keys.forEach((key) => {
+                db.delete('translations', key)
+            })
+        })
+    }
+
+}
+
+let availableTargetTranslateLanguages: string[] = [];
+let availableSourceTranslateLanguages: string[] = [];
+
+
+async function fetchLangs() {
+	let resp = await Api('languages/?type=target', 'GET')
+	let body = await (resp.json() as Promise<AvailableTranslateLanguage[]>)
+
+	availableTargetTranslateLanguages = Intl.getCanonicalLocales(body.map((item) => item.language))
+
+	let resp2 = await Api('languages/?type=source', 'GET')
+
+	let body2 = await (resp2.json() as Promise<AvailableTranslateLanguage[]>)
+
+	availableSourceTranslateLanguages = Intl.getCanonicalLocales(body2.map((item) => item.language))
+}
+
 export class Store {
 
     private strings: ILocale = {}
-    private globalLang = "en-US"
+    private globalLang = ref("en-US")
+
+    private doNotTranslateLanguages: string[] = []
+    private defaultTranslationLanguage = ref("default")
+
+    private sessions = ref<Session[]>([])
+
+    private currentSession: string = ''
 
     private comments = {
         items: new Map<string, ReactiveComment>(),
@@ -75,46 +291,101 @@ export class Store {
 
     private friends = ref<string[]>([])
 
+    public settings: RecReactiveProxy<ISettings> | undefined
 
     private user_id: string | null = null
 
     private db: IDBPDatabase<LightsDB> | null = null
 
+
+	async loadUserProfile() {
+		const response = await Api(`users/getByUsername/@me`)
+
+		if (response.status === 401) {
+			this.auth.logout()
+			return null
+		}
+
+		let json: IResponsePosts<IProfile> = await response.json();
+		this.user_id = json.data[0].id
+		this.db?.put('users', json.data[0])
+	}
+
+	async loadSessionsInfo() {
+		let resp = await Api('account/sessions/', 'GET')
+        let body = await (resp.json() as Promise<SessionsResponse>)
+        
+        this.sessions.val = body.data
+        this.currentSession = body.current_session_id
+	}
+
+    async loadSettingsInfo() {
+		let resp = await Api('account/settings/', 'GET')
+        let body = await (resp.json() as Promise<ISettings>)
+        
+        this.settings = hywerStore<ISettings>(body)
+
+	}
+
+	async fetchAccountInfo() {
+		if (store.auth.isAuthorized()) {
+			await Promise.all([
+				this.loadUserProfile(),
+				this.loadSessionsInfo(),
+                this.loadSettingsInfo(),
+			]);
+		}
+	}
+
     async init() {
+		await idbReady()
+
         this.db = await openDB<LightsDB>('lights-web', 5, {
             upgrade(db, oldVersion, newVersion, transaction, event) {   
                 createObjectStores(db)
             },
             blocked(currentVersion, blockedVersion, event) {
-              console.log('blocked', currentVersion, blockedVersion, event);
+                console.log('blocked', currentVersion, blockedVersion, event);
             },
             blocking(currentVersion, blockedVersion, event) {
-              console.log('blocking', currentVersion, blockedVersion, event);
+                console.log('blocking', currentVersion, blockedVersion, event);
             },
             terminated() {
-              console.log('terminated');
+                console.log('terminated');
             },
         });
 
-        createObjectStores(this.db)
+		createObjectStores(this.db)
+
+		await Promise.all([
+			store.setLocale(),
+            fetchLangs(),
+			this.fetchAccountInfo(),
+        ]);
+
 
 
         globalThis.getGlobalProfile = this.profiles;
         globalThis.getGlobalPost = this.posts.items;
 
-        const response = await Api(`users/getByUsername/@me`)
-        if (!response.ok) {
-            return null
-        }
 
-        let json: IResponsePosts<IProfile> = await response.json();
-
-        this.user_id = json.data[0].id
-
-        this.db?.put('users', json.data[0])
 
         //await this.fetchProfile('@me', 'username', new ReactiveProfile(json.data[0]), ref("success"))
+    
+        navigator.languages.forEach((lang) => {
+            let locale = lang
+            if (lang == "en-US" || lang == "en-GB") {
+                locale = "en"
+            }
+
+            if (!this.doNotTranslateLanguages.includes(locale) && availableTargetTranslateLanguages.includes(lang)) {
+                this.doNotTranslateLanguages.push(locale)
+            }
+
+        })
+
     }
+
 
     auth = {
         requestCode: async (email: string) => {
@@ -139,6 +410,8 @@ export class Store {
                 document.cookie = `access_token=${tokens.access_token}; expires=Thu, 01 Jan 2026 00:00:00 UTC; path=/; domain=${window.location.hostname}`;
                 document.cookie = `refresh_token=${tokens.refresh_token}; expires=Thu, 01 Jan 2026 00:00:00 UTC; path=/; domain=${window.location.hostname}`;
 
+				await this.fetchAccountInfo()
+
                 return true;
 
             } catch (error) {
@@ -152,39 +425,168 @@ export class Store {
         },
         user_id: () => {
             return this.user_id
+        },
+        logout: () => {
+            deleteCookie("access_token", "/", window.location.hostname);
+            deleteCookie("refresh_token", "/", window.location.hostname);
+
+            if (this.db) {
+                clearObjectStores(this.db)
+            }
         }
     }
 
 
     async setLocale(locale?: string) {
-
         if (locale) {
             document.documentElement.setAttribute("lang", locale)
-            locale = locale
+            //this.globalLang.val = locale
         } else {
-            navigator.languages.forEach(lang => {
-                if (availableLangs.includes(lang)) {
-                    document.documentElement.setAttribute("lang", lang)
-                    locale = lang
+            for (let i = 0, len = navigator.languages.length; i < len; ++i) {
+                if (availableLangs.includes(navigator.languages[i])) {
+                    document.documentElement.setAttribute("lang", navigator.languages[i])
+                    break;
                 }
-            })
+            }
         }
 
         if (document.documentElement.getAttribute("lang") === null) {
             document.documentElement.setAttribute("lang", "en-US")
 
-            locale = "en-US"
+            //this.globalLang.val = "en-US"
         }
 
         await fetch(`/i18n/${document.documentElement.getAttribute("lang")}.json`).then(res => res.json()).then(json => {
 
+            if (document.documentElement.getAttribute("lang") == "en-US" || document.documentElement.getAttribute("lang") == "en-GB") {
+                const item = this.doNotTranslateLanguages.includes("en")
+
+                if (!item) this.doNotTranslateLanguages.push("en")
+                
+            } else {
+                const item = this.doNotTranslateLanguages.includes(document.documentElement.getAttribute("lang")!)
+
+                if (!item) this.doNotTranslateLanguages.push(document.documentElement.getAttribute("lang")!)
+            }
+
             this.strings = json
+            this.globalLang.val = document.documentElement.getAttribute("lang")!
         })
+    }
+
+    searchLanguages(query: string, type: string) {
+        
+        let languages: string[]
+
+        if (type == "target") {
+            languages = availableTargetTranslateLanguages
+        } else if (type == "source") {
+            languages = availableSourceTranslateLanguages
+        } else {
+            languages = availableLangs
+        }
+
+        function checkLang(name: string) {
+
+            const escapedWord = query.trim().replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+            const regex = new RegExp('^(?<!\\w)(?:'+escapedWord+')\\w*', 'iu');
+
+            let matches = name.match(regex);
+
+            return matches
+
+        }
+
+        // Фильтруем языки по совпадению в name или canonicalName, тоже приведенные к нижнему регистру
+        const result = languages.filter(language =>
+            checkLang(language) || checkLang(getNativeLanguageName(language))
+        );
+
+        //console.log(result)
+
+
+        return result
     }
 
 
     locale() {
         return {strings: this.strings, locale: this.globalLang}
+    }
+
+    getAvailableLanguages(type: string) {
+
+        if (type == "source") {
+            return availableSourceTranslateLanguages
+        } else {
+            return availableTargetTranslateLanguages
+        }
+    }
+
+    getDoNotTranslateLanguages() {
+        return this.doNotTranslateLanguages
+    }
+
+    addDoNotTranslateLanguage(lang: string) {
+        const item = this.doNotTranslateLanguages.includes(lang)
+
+        if (item) return
+
+        this.doNotTranslateLanguages.push(lang)
+    }
+
+    removeDoNotTranslateLanguage(lang: string) {
+        this.doNotTranslateLanguages = this.doNotTranslateLanguages.filter((item) => item != lang)
+    }
+
+    getDefaultTranslationLanguage() {
+        return this.defaultTranslationLanguage
+    }
+
+    setDefaultTranslationLanguage(lang: string) {
+        this.defaultTranslationLanguage.val = lang
+    }
+
+    getSessions() {
+        return {currentSession: this.currentSession, sessions: this.sessions}
+    }
+
+    async terminateSession(session_id: string) {
+        const response = await Api(`account/sessions/${session_id}`, 'DELETE')
+
+        if (!response?.ok) {
+            return false
+        } else {
+            this.sessions.val = this.sessions.val.filter((session) => session.session_id != session_id)
+
+            return true
+        }
+    }
+
+    async terminateAllSessions() {
+        const response = await Api(`account/all_sessions`, 'DELETE')
+
+        if (!response?.ok) {
+            return false
+        } else {
+            const i = this.sessions.val.findIndex((session) => session.session_id == this.currentSession)
+            this.sessions.val = [this.sessions.val[i]]
+            
+            return true
+        }
+    }
+
+    async sessionToggleCalls(session_id: string, calls: boolean) {
+        const response = await Api(`account/sessions/${session_id}?calls=${calls}`, 'PATCH')
+
+        if (!response?.ok) {
+            return false
+        } else {
+            const i = this.sessions.val.findIndex((session) => session.session_id == session_id)
+
+            this.sessions.val[i].calls = calls
+
+            return true
+        }
     }
 
     private async fetchPosts(uri: string, list: Reactive<string[]>, container: {
@@ -393,6 +795,8 @@ export class Store {
         .map(id => this.comments.items.get(id)) as ReactiveComment[]
 
         container.comments.val = [...container.comments.val, ...filteredObjects]
+
+        container.state.val = 'success'
     }
 
 
@@ -521,8 +925,19 @@ export class Store {
         state.val = 'success'
     }
     
-    getProfileById(user_id: string) {
+    getProfileById(user_id?: string) {
         const state = ref('pending')
+
+        if (!user_id) {
+            if (!this.user_id) {
+                let tempUser = new ReactiveProfile(emptyProfile)
+                state.val = 'errored'
+                return {user: tempUser, state}
+            } else {
+                user_id = this.user_id
+            }
+
+        }
 
         let user = this.profiles.get(user_id)
 
@@ -531,9 +946,13 @@ export class Store {
             user = this.profiles.set(user_id, tempUser).get(user_id)!
 
             this.fetchProfile(user_id, 'id', tempUser, state)
-        } else {
-            state.val = 'success'
         }
+        
+        user.get().id.derive((val) => {
+            if (val == user_id) {
+                state.val = 'success'
+            }
+        })
 
         return {user, state}
     }

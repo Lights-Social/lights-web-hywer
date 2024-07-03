@@ -20,8 +20,6 @@ import MusicWidget from '../MusicWidget/MusicWidget.tsx'
 import { Link, navigateTo } from 'hywer/x/router'
 import { showContextMenu } from '../ContextMenu/ContextMenu.tsx'
 import ShareIcon from '../icons/share.tsx'
-import { object } from '../ShareFlow/ShareFlow.tsx'
-import { openModal } from '../Modal/Modal.tsx'
 import LanguageIcon from '../icons/language.tsx'
 import { showTranslateFlow } from '@/ui/TranslateFlow/TranslateFlow.tsx'
 import ErrorPlaceholder from './ForwardedPost/ErrorPlacheolder.tsx'
@@ -30,15 +28,18 @@ import DeleteIcon from '../icons/delete.tsx'
 import { derive } from 'hywer/jsx-runtime'
 import type { ReactivePost } from '@/data/ReactivePost.ts'
 import Video from '../Video/Video.tsx'
+import type { ReactiveProfile } from '@/data/ReactiveProfile.ts'
+import { showPostShareFlow } from '../ShareFlow/PostShareFlow.tsx'
 
 interface PostProps {
     item: ReactivePost
+    user: ReactiveProfile;
     onVisible?: () => void
     onDelete: (id: string) => void
     full?: boolean
 }
 
-function Post({item, onVisible, onDelete, full}: PostProps) {
+function Post({item, user, onVisible, onDelete, full}: PostProps) {
 
     const options = {
         // родитель целевого элемента - область просмотра
@@ -75,7 +76,6 @@ function Post({item, onVisible, onDelete, full}: PostProps) {
     const {strings, locale} = store.locale()
 
     const post = item.get()
-    const {user, state} = store.getProfileById(post.peer.id.val)
     const profile = user.get()
 
     const user_id = store.auth.user_id()
@@ -96,13 +96,13 @@ function Post({item, onVisible, onDelete, full}: PostProps) {
 
         return (
             <>
-                <button onClick={() => {object.val = {id: post.id.val, type: "post"}; openModal("shareFlow", [1], false)}}>
+                <button onClick={() => {showPostShareFlow(post)}}>
                     <ShareIcon />
                     {strings['share']}
                 </button>
                 {
                     post.language.derive((val) => {
-                        if (val != "notSet" && val != locale.split("-")[0]) {
+                        if (val != "notSet" && val != locale.val.split("-")[0]) {
                             return <button onClick={() => {showTranslateFlow(post.id.val, 'post', post.text.val, post.language.val)}}>
                                 <LanguageIcon />
                                 {strings['translate']}
@@ -137,7 +137,7 @@ function Post({item, onVisible, onDelete, full}: PostProps) {
 
 
     return (
-        <article onDblClick={react} class={"post"+(onVisible ? " trackable" : "")} onContextMenu={showMenu}>
+        <article data-post-id={post.id.val} onDblClick={react} class={"post"+(onVisible ? " trackable" : "")} onContextMenu={showMenu}>
             <div class="title">
                 <div class="info"> 
                     {
@@ -181,7 +181,7 @@ function Post({item, onVisible, onDelete, full}: PostProps) {
 
                 {
                     isIOS ?
-                    <button onClick={(e: Event) => {/*toggle({x: e.pageX - 330, y: e.pageY + 10}, contextMenuButtons())*/}} class="optionsButton">
+                    <button onClick={(e: MouseEvent) => {showContextMenu(<Menu />, {x: e.pageX - 330, y: e.pageY + 10}) /*toggle({x: e.pageX - 330, y: e.pageY + 10}, contextMenuButtons())*/}} class="optionsButton">
                         <PointsIcon />
                     </button> : null
                 }

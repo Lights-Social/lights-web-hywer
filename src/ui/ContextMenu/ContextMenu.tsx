@@ -153,6 +153,15 @@ export function showContextMenu(element: JSX.Element, coordinates: {x: number, y
 
     document.body.append(contextMenu);
 
+	function addListeners() {
+		console.log("removed")
+
+		
+		document.addEventListener('click', removeAllMenus);
+		document.addEventListener('scroll', removeAllMenus);
+	}
+
+
 	contextMenu.animate([
 		{
 			transform: 'scale(0.9)',
@@ -165,6 +174,6 @@ export function showContextMenu(element: JSX.Element, coordinates: {x: number, y
 
 	], 100)
 
-	document.addEventListener('click', removeAllMenus);
-	document.addEventListener('scroll', removeAllMenus);
+	setTimeout(() => addListeners(), 100)
+
 }

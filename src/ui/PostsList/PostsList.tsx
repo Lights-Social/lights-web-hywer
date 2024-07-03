@@ -59,13 +59,17 @@ export function PostsList({uri}: PostsListProps) {
             </div> :
             <ArrayRender in={posts.posts} elem={<div class="postsList"/>}>
                 {
-                    (post, i) => (
-                        <Post
+                    (post, i) => {
+                        const postObject = post.get()
+                        const {user, state} = store.getProfileById(postObject.peer.id.val)
+
+                        return <Post
+                            user={user}
                             item={post}
                             onVisible={i == Number(posts.posts.val.length - 5) ? next : undefined}
                             onDelete={deleteHandler}
                         />
-                    )
+                    }
                 }
             </ArrayRender>
             

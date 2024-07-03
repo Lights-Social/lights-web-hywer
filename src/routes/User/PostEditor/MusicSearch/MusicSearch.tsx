@@ -6,6 +6,7 @@ import { effect, ref, type Reactive } from 'hywer/jsx-runtime';
 import Cell from './Cell';
 import Search from './Search';
 import { ArrayRender } from 'hywer/x/array';
+import SearchInput from '@/ui/SearchInput/SearchInput';
 
 interface MusicSearchProps {
     onDone: (tracks: IAudio[]) => void;
@@ -41,8 +42,8 @@ export default function MusicSearch({selectedTracks, onDone}: MusicSearchProps) 
 
     return (
         <>
-            <input autofocus onInput={onInputQuery} name="search" enterkeyhint="search" placeholder={strings["search"]} type="text" />
-            
+            <SearchInput id="musicSearchInput" autofocus={true} onInput={(text) => searchQuery.val = text} />
+
 			{
 				searchQuery.derive((val) => {
 					if (val == "" && selectedTracks.val.length == 0) {
@@ -64,26 +65,6 @@ export default function MusicSearch({selectedTracks, onDone}: MusicSearchProps) 
 				})
 			}
 
-            {/* <Switch>
-                <Match when={!searchQuery() && selectedTracks().length == 0}>
-                    <div class="findMusicDescription">
-                        <span class="text">{strings["findMusicDescription"]}</span>
-                    </div>
-
-                </Match>
-                <Match when={!searchQuery() && selectedTracks().length > 0}>
-                    <div class="searchTrackList">
-                        <For each={selectedTracks()}>
-                            {(item) => (
-                                <Cell isSelected={true} onRemoveTrack={removeTrack} item={item} />
-                            )}
-                        </For>
-                    </div>
-                </Match>
-                <Match when={searchQuery()}>
-                    <Search selectedTracks={selectedTracks()} query={searchQuery()!} onAddTrack={addTrack} onRemoveTrack={removeTrack} />
-                </Match>
-            </Switch> */}
             <div class={addedTracksCounter.derive((val) => val <= 0 ? 'secondBar hidden' : 'secondBar')}>
                 <button class={'addTracks'} onClick={() => onDone(selectedTracks.val)}>
                     {strings["add"]}

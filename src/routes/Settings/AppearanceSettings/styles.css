@@ -46,9 +46,3 @@
 .themeSelector button.selected .icon svg {
     scale: 0.92;
 }
-
-.window .blockTitle {
-    font-family: 'Rubik';
-    font-weight: 500;
-    opacity: 0.5;
-}

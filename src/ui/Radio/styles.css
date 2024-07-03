@@ -1,17 +1,18 @@
-.switch {
+.radio {
     position: relative;
     display: inline-block;
 
-    --width: 55px;
+    --width: 28px;
     width: var(--width);
-    height: calc(var(--width) * 0.5909);
+    height: var(--width);
+    min-width: var(--width);
 }
   
-.switch input {
+.radio input {
     display: none;
 }
   
-.slider {
+.radio .point {
     position: absolute;
     cursor: pointer;
     top: 0;
@@ -23,27 +24,31 @@
     border-radius: var(--width);
 }
 
-.slider:before {
+.radio .point:before {
     position: absolute;
     content: "";
-    height: calc(var(--width) * 0.3182);
-    width: calc(var(--width) * 0.3182);
+    height: 14px;
+    width: 14px;
 
-    left: calc(var(--width) * 0.1364);
-    bottom: calc(var(--width) * 0.1364);
+    left: 7px;
+    bottom: 7px;
     background-color: white;
     transition: .25s;
     border-radius: 50%;
+
+    scale: 0;
+    opacity: 0;
 }
 
-input:checked + .slider {
+input:checked + .point {
     background: var(--accent-color);
 }
 
-input:focus + .slider {
+input:focus + .point {
     box-shadow: 0 0 1px var(--accent-color);
 }
 
-input:checked + .slider:before {
-    transform: translateX(calc(var(--width) * 0.4091));
+input:checked + .point:before {
+    scale: 1;
+    opacity: 1;
 }

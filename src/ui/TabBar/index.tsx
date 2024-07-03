@@ -25,7 +25,7 @@ export default function TabBar() {
             <NavLink id="friendsButtonMobile" activeClass='selected' path='/friends' aria-label={strings["friends"]}>
                 <FriendsIcon />
             </NavLink>
-            <NavLink class="me" id="profileButtonMobile" activeClass='selected' path={`/u/${profile.username.val}`}>
+            <NavLink class="me" id="profileButtonMobile" activeClass='selected' path={derive(([username]) => `/u/${username.val}`, [profile.username])}>
             {
                 profile.avatar.derive((val) => {
                     if (val.length > 0) {

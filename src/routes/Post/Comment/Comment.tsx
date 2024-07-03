@@ -16,9 +16,6 @@ import FormatText from '@/ui/FormatText.tsx'
 import MusicWidget from '@/ui/MusicWidget/MusicWidget.tsx'
 import { Link, navigateTo } from 'hywer/x/router'
 import { showContextMenu } from '@/ui/ContextMenu/ContextMenu.tsx'
-import ShareIcon from '@/ui/icons/share.tsx'
-import { object } from '@/ui/ShareFlow/ShareFlow.tsx'
-import { openModal } from '@/ui/Modal/Modal.tsx'
 import LanguageIcon from '@/ui/icons/language.tsx'
 import { showTranslateFlow } from '@/ui/TranslateFlow/TranslateFlow.tsx'
 //import ErrorPlaceholder from './ForwardedPost/ErrorPlacheolder.tsx'
@@ -92,7 +89,7 @@ function Comment({item, creator_id, onVisible, onDelete}: CommentProps) {
                 </button> */}
                 {
                     comment.language.derive((val) => {
-                        if (val != "notSet" && val != locale.split("-")[0]) {
+                        if (val != "notSet" && val != locale.val.split("-")[0]) {
                             return <button onClick={() => {showTranslateFlow(comment.id.val, 'comment', comment.text.val, comment.language.val)}}>
                                 <LanguageIcon />
                                 {strings['translate']}

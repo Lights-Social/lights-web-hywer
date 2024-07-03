@@ -4,15 +4,17 @@ import { ArrayRender } from "hywer/x/array";
 import { effect, ref } from "hywer/jsx-runtime";
 import { Modal, closeModal, openModal } from "@/ui/Modal/Modal";
 import Comment from "../Comment/Comment";
+import EmptyListComponent from "../Comment/EmptyListComponent";
 
 interface CommentListProps {
     post_id: string;
+    creator_id: string
 }
 
 const commentToDelete = ref<{id: string}>({id: ""})
 
 
-export function CommentList({post_id}: CommentListProps) {
+export function CommentList({post_id, creator_id}: CommentListProps) {
     const {container: comments, next} = store.getComments(post_id)
     const shown = ref(false)
     const {strings} = store.locale()
@@ -37,6 +39,7 @@ export function CommentList({post_id}: CommentListProps) {
     }
 
 
+    console.log(creator_id)
 
     return <>
         {shown.derive(val => 
@@ -49,9 +52,13 @@ export function CommentList({post_id}: CommentListProps) {
                                 <div>bro datz crazy</div>
                             )
                         } else {
-                            return (
-                                <CommentPlaceholder />
-                            )
+                            if (!(comments.state.val == 'success' && comments.comments.val.length == 0)) {
+                                return <CommentPlaceholder />
+                            } else {
+                                return (
+                                    <EmptyListComponent />
+                                )
+                            }
                         }
                     })
                 }
@@ -61,7 +68,7 @@ export function CommentList({post_id}: CommentListProps) {
                     (comment, i) => (
                         <Comment
                             item={comment}
-                            creator_id={post_id}
+                            creator_id={creator_id}
                             onVisible={() => {}}
                             onDelete={deleteHandler}
                         />

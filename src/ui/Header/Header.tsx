@@ -24,7 +24,8 @@ function Header() {
 
     const {strings} = store.locale()
 	const user_id = store.auth.user_id()
-    const {user, state} = store.getProfileById(user_id!)
+
+	const {user, state} = store.getProfileById()
     const profile = user.get()
 
 	return (

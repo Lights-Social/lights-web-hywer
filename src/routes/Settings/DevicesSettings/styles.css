@@ -1,0 +1,42 @@
+.sessionIconWrapper {
+    background: color-mix(in srgb, var(--input-color) 87%, var(--font-color));
+
+    display: flex;
+
+    border-radius: 10px;
+    width: 35px;
+    height: 35px;
+    box-sizing: border-box;
+    align-items: center;
+    justify-content: center;
+}
+
+.sessionIconWrapper svg {
+    fill: color-mix(in srgb, var(--input-color) 50%, var(--font-color)) !important;
+    width: 75%;
+    height: 75%;
+}
+
+.sessionInfo {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+
+    height: 100%;
+    gap: 2px;
+}
+
+.sessionInfo .geo {
+    font-size: 14px;
+    color: color-mix(in srgb, var(--font-color) 50%, var(--main-color));
+    display: flex;
+    gap: 5px;
+    align-items: center;
+}
+
+.category .bubble {
+    background: var(--active-status-color);
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+}

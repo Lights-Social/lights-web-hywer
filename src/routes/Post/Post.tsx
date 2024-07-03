@@ -4,7 +4,7 @@ import Post from "@/ui/Post/Post";
 import { CommentList } from "./CommentList/CommentList";
 import PostPlaceholder from "@/ui/Post/Placeholder";
 import { navigateTo } from "hywer/x/router";
-import { effect } from "hywer/jsx-runtime";
+import { derive, effect } from "hywer/jsx-runtime";
 import CommentEditor from "./CommentEditor/CommentEditor";
 // import { derive, effect, ref } from "hywer/jsx-runtime";
 // import {PostsList} from "@/ui/PostsList/PostsList";
@@ -19,6 +19,10 @@ function PostView({post_id}: PostProps) {
 
     const {post, state} = store.getPost(post_id)
 
+    console.log(post.get().peer.id.val)
+
+
+    const {user, state: userState} = store.getProfileById(post.get().peer.id.val)
 
     const user_id = store.auth.user_id()
 
@@ -43,9 +47,12 @@ function PostView({post_id}: PostProps) {
         <main class="postView">
             <div class="postContainer">
                 {
-                    state.derive((val) => {
-                        if (val == "success") {
+                    derive(([state, userState]) => {
+
+
+                        if (state.val == "success" && userState.val == "success") {
                             return <Post
+                                user={user}
                                 item={post!}
                                 onDelete={deleteHandler}
                                 full={true}
@@ -53,11 +60,11 @@ function PostView({post_id}: PostProps) {
                         } else {
                             return <PostPlaceholder />
                         }
-                    })
+                    }, [state, userState])
                 }
                 <hr />
 
-                <CommentList post_id={post_id} />
+                <CommentList post_id={post_id} creator_id={post.get().peer.id.val} />
                 <CommentEditor />
             </div>
         </main>

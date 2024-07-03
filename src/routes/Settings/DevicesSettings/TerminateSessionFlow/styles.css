@@ -1,0 +1,33 @@
+.terminateSessionFlow {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 20px;
+}
+
+.terminateSessionFlow .date {
+    display: flex;
+    gap: 5px;
+    align-items: center;
+}
+
+.terminateSessionFlow .preview {
+    display: grid;
+    justify-content: center;
+    gap: 10px;
+}
+
+.terminateSessionFlow .sessionIconWrapper {
+    width: 60px;
+    height: 60px;
+    justify-self: center;
+
+}
+
+.terminateSessionFlow .preview .device {
+    font-size: 16px;
+    font-family: 'Rubik';
+    font-weight: 450;
+    justify-self: center;
+
+}

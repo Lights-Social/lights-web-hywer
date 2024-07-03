@@ -1,12 +1,10 @@
 import FormatText from '@/ui/FormatText';
 import './styles.css'
 
-import { type IPost } from "@/data/types/models";
 import { store } from '@/data';
 import { effect, ref } from 'hywer/jsx-runtime';
 import { Modal, closeModal, openModal } from '@/ui/Modal/Modal';
 import LongArrowIcon from '@/ui/icons/longArrow';
-import type { RecReactiveProxy } from 'hywer/x/store';
 
 const item = ref<{id: string, language: string, text: string, type: string}>({id: "", language: "", text: "", type: ""})
 
@@ -14,12 +12,13 @@ const item = ref<{id: string, language: string, text: string, type: string}>({id
 export default function TranslateFlow() {
     const {strings, locale} = store.locale()
 
+    const defaultTranslationLanguage = store.getDefaultTranslationLanguage()
 
 
     const translatedText = ref("")
     
     async function translate() {
-        const text = await store.getTranslation(item.val.text, item.val.id, item.val.type, locale)
+        const text = await store.getTranslation(item.val.text, item.val.id, item.val.type, defaultTranslationLanguage.val)
 
         translatedText.val = text
 
@@ -35,7 +34,7 @@ export default function TranslateFlow() {
         }
     }, [item])
 
-    const languageNames = new Intl.DisplayNames(locale, {
+    const languageNames = new Intl.DisplayNames(locale.val, {
         type: "language",
         style: "short",
         languageDisplay: "standard"
@@ -53,7 +52,7 @@ export default function TranslateFlow() {
                     {item.derive((val) => val.language != "" ? languageNames.of(val.language) : "")}
                     <LongArrowIcon />
 
-                    {languageNames.of(locale)}
+                    {languageNames.of(defaultTranslationLanguage.val)}
 
                 </div>
                 <div class='wrapper'>

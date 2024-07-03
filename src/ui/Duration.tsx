@@ -37,13 +37,13 @@ export default function Duration({ date }: { date: string }) {
         const isToday = (date.getMonth() == new Date().getMonth()) && (date.getFullYear() == new Date().getFullYear()) && ((new Date().getDate() == date.getDate()))
     
         if (isToday) {
-            return new Intl.DateTimeFormat(locale, {hour: 'numeric', minute: 'numeric'}).format(date)
+            return new Intl.DateTimeFormat(locale.val, {hour: 'numeric', minute: 'numeric'}).format(date)
         } else if ((date.getMonth() == new Date().getMonth()) && (date.getFullYear() == new Date().getFullYear()) && ((new Date().getDate() - date.getDate()) == 1)) {  
-            return strings["yd"]+new Intl.DateTimeFormat(locale, {hour: 'numeric', minute: 'numeric'}).format(date)
+            return strings["yd"]+new Intl.DateTimeFormat(locale.val, {hour: 'numeric', minute: 'numeric'}).format(date)
         } else if (new Date().getFullYear() == date.getFullYear()) {
-            return new Intl.DateTimeFormat(locale, {day: 'numeric', month: 'short'}).format(date)
+            return new Intl.DateTimeFormat(locale.val, {day: 'numeric', month: 'short'}).format(date)
         } else {
-            return new Intl.DateTimeFormat(locale, {day: 'numeric', month: 'short', year: 'numeric'}).format(date)
+            return new Intl.DateTimeFormat(locale.val, {day: 'numeric', month: 'short', year: 'numeric'}).format(date)
         }
     }
 

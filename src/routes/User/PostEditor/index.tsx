@@ -1,7 +1,6 @@
 import './styles.css'
 import { Modal, closeModal, openModal } from "@/ui/Modal/Modal";
 import type { IAudio, IPost } from "@/data/types/models";
-import Picture from "@/ui/Picture";
 // import LinkPreview from "./LinkPreview";
 import { store } from "@/data";
 import { ref } from 'hywer/jsx-runtime';

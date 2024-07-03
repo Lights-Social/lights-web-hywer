@@ -1,8 +1,6 @@
 import type { ReactivePost } from "../ReactivePost";
 
-declare module 'css-animation-sync'
-
-interface Document {
+interface Document extends Document {
     startViewTransition: (callback: () => any) => void;
 }
 

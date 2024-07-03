@@ -1,25 +1,39 @@
-import { Show } from "solid-js";
-import { useI18n } from "@solid-primitives/i18n";
-import { createMediaQuery } from "@solid-primitives/media";
-import { MobileHeader } from "../../../components/MobileHeader";
+import { store } from "@/data";
+import { MobileHeader } from "@/ui/MobileHeader/MobileHeader";
+import Arrow from "@/ui/icons/arrow";
+import type { Reactive } from "hywer/jsx-runtime";
+import ExceptionsMenu from "./ExceptionsMenu";
+import PermissionsMenu from "./PermissionsMenu";
 
-export default function ActivityStatus() {
-    const [t] = useI18n();
+interface ActivityStatusProps {
+    category: Reactive<string>
+}
 
-    const isPhone = createMediaQuery("(max-width: 480px)")
+export default function ActivityStatus({category}: ActivityStatusProps) {
+
+    const {strings} = store.locale()
+
 
     return (
-        <>
-            <Show when={isPhone()}>
-                <MobileHeader>
-                    <span class="title">{t("activityStatus")}</span>
-                </MobileHeader>
-            </Show>
-            <main class='settingsView'>
-                <div class='window'>
-                    <span class="blockTitle">{t("whoCanSeeMyActivityStatus")}</span>
-                </div>
-            </main>
-        </>
+        <div class='window'>
+            <MobileHeader>
+                <span class="title">
+                    { strings["activityStatus"] }
+                </span>
+            </MobileHeader>
+            <div class="categoryTitle">
+                <span class="previous" onClick={() => category.val = "privacy"}>{ strings["privacyAndSecurity"] }</span>
+                <Arrow />
+                { strings["activityStatus"] }
+            </div>
+
+            <div class="block">
+                <span class="blockTitle">
+                    { strings["whoCanSeeMyActivityStatus"] }
+                </span>
+                <PermissionsMenu />
+            </div>
+            <ExceptionsMenu />
+        </div>
     )
 }

@@ -1,0 +1,107 @@
+.userList .cell {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    font-size: 16px;
+    outline: none;
+    border: none;
+    font-family: 'Rubik';
+
+    color: var(--font-color);
+
+    transition: 0.2s background-color;
+
+    width: 100%;
+    gap: 10px;
+
+    overflow: hidden;
+    box-sizing: border-box;
+
+    position: relative;
+    
+}
+
+.userList .cell:first-of-type {
+    border-radius: 15px 15px 0px 0px;
+}
+
+.userList .cell:last-of-type {
+    border-radius: 0px 0px 15px 15px;
+}
+
+
+
+.userList .cell:only-child {
+    border-radius: 15px;
+}
+
+
+
+.userList .cell .title {
+    display: grid;
+    height: 100%;
+}
+
+.userList .cell .title .username {
+    opacity: 0.5;
+    font-size: 15px;
+}
+
+.userList .cell .title .info {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    overflow: hidden;
+
+}
+
+.userList .cell .title .info > svg {
+    fill: var(--buttons-color);
+    min-width: 16px;
+    width: 16px;
+
+}
+
+.userList .cell .title .info svg.verified {
+    fill: var(--accent-color);
+}
+
+.userList .cell .title .info .name {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    /* font-size: 15px;
+    font-weight: 500; */
+
+}
+
+
+
+.userList .cell .avatarWrapper {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+
+    min-width: 40px;
+    min-height: 40px;
+    position: relative;
+    overflow: hidden;
+    
+
+}
+
+
+.userList .cell.placeholder {
+    cursor: unset;
+}
+
+.userList .cell.placeholder .info .name {
+    height: 13px;
+    width: 150px;
+    border-radius: 20px;
+}
+
+.userList .cell .checkbox {
+    margin-inline-start: auto;
+    pointer-events: none;
+}

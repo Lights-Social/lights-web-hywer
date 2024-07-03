@@ -43,3 +43,8 @@
 .statusBubble.active .point {
     scale: 0;
 }
+
+
+.statusBubble:has(.lastActivity) .point {
+    display: none;
+}

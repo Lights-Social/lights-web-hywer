@@ -70,6 +70,9 @@
     transition: transform 0.3s, opacity 0.3s;
     opacity: 1;
 
+    border-top: solid 2px var(--highlight-color);
+
+
 
 }
 

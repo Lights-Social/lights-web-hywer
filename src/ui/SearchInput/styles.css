@@ -1,0 +1,66 @@
+.textField {
+    display: flex;
+    background: var(--input-color);
+    border-radius: 24px;
+
+    position: relative;
+}
+
+.textField .clear {
+    border: none;
+    background: transparent;
+    display: flex;
+    padding: 15px;
+    cursor: pointer;
+
+}
+.textField .clear svg {
+    rotate: 45deg;
+    transition: rotate 0.2s, scale 0.2s, opacity 0.25s;
+}
+
+.textField .clear.hidden {
+    pointer-events: none;
+}
+
+.textField .clear.hidden svg {
+    rotate: 0deg;
+    scale: 0.7;
+    opacity: 0;
+
+}
+
+.textField button svg {
+    margin-inline-start: unset;
+
+}
+
+.textField svg {
+    width: 20px;
+    fill: var(--font-color);
+    margin-inline-start: 15px;
+    opacity: 0.4;
+}
+
+.textField .clear {
+    position: absolute;
+    right: 0;
+}
+
+.textField input[type=text] {
+    background: transparent;
+    border: none;
+    color: var(--font-color);
+    caret-color: var(--accent-color);
+    font-size: 16px;
+    padding: 15px;
+    padding-inline-start: 10px;
+    font-family: 'Rubik';
+    width: 100%;
+    border-radius: 0px 24px 24px 0px;
+}
+
+.textField input[type=text]::placeholder {
+    color: var(--font-color);
+    opacity: 0.4;
+}

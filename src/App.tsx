@@ -1,7 +1,6 @@
 import './styles/global.css'
 import './styles/fonts.css'
 import './styles/colors.css'
-import './styles/switcher.css'
 
 import '@/ui/ContextMenu/styles.css'
 import '@/ui/ContextMenu/ReactionsBar.css'
@@ -24,11 +23,11 @@ import { store } from './data'
 //import Redirect from '@/ui/utils/crutches/Redirect'
 import {OpenLinkModal} from './ui/OpenLinkModal'
 import LogoiPhoneBadge from './ui/LogoiPhoneBadge/LogoiPhoneBadge'
-import { ShareFlow } from './ui/ShareFlow/ShareFlow'
 import TranslateFlow from './ui/TranslateFlow/TranslateFlow'
 import UserNotFoundModal from './routes/User/UserNotFoundModal'
 import { MediaViewer } from './ui/MediaViewer/MediaViewer'
 import PostView from './routes/Post/Post'
+import PostShareFlow from './ui/ShareFlow/PostShareFlow'
 
 
 function handleAfterRoute() {
@@ -75,6 +74,7 @@ createRouterContext(
 	}, () => {}, handleAfterRoute)
 
 function App() {
+    const {locale} = store.locale()
 
 	return <>
 		{isIPhone ? <LogoiPhoneBadge /> : ""}
@@ -83,8 +83,13 @@ function App() {
 		<TabBar />
 		<AppUpdateModal />
 		<OpenLinkModal />
-		<ShareFlow />
-		<TranslateFlow />
+		<PostShareFlow />
+
+		{
+			locale.derive(() => {
+				return <TranslateFlow />
+			})
+		}
 		<UserNotFoundModal />
 		<MediaViewer />
 	</>

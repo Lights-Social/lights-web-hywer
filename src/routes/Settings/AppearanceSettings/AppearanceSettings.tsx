@@ -18,7 +18,7 @@ export default function AppearanceSettings() {
     
 
     return (
-        <>
+        <div class='window'>
             <span class="blockTitle">{strings["theme"]}</span>
             <ThemeSelector />
             {/* <span class="blockTitle">{locale["wallpaper"]}</span>
@@ -39,6 +39,6 @@ export default function AppearanceSettings() {
                 </label>
             </div> */}
 
-        </> 
+        </div> 
     )
 }

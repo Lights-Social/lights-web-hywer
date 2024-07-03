@@ -16,12 +16,13 @@ function StatusBubble(props: StatusBubbleProps) {
     return (
         <>
             <div class={props.status.status.derive((val) => {return val == "offline" ? "statusBubble" : "statusBubble active"})}>
+                <div class="point" />
                 {
                     derive(([status, last_activity]) => {
-                        if (status.val == "offline" && last_activity.val === 0) {
-                            return <div class="point" />
-                        } else {
+                        if (!(status.val == "offline" && last_activity.val === 0)) {
                             return <Duration date={props.status.last_activity.val} />
+                        } else {
+                            return <div style="display: none;" />
                         }
                     }, [props.status.status, props.status.last_activity])
                 }

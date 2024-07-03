@@ -1,4 +1,4 @@
-main .window  {
+main.settingsView .window  {
     background: var(--main-color);
     padding: 20px;
     border-radius: 20px;
@@ -9,14 +9,57 @@ main .window  {
 
 }
 @media only screen and (max-width: 480px) {
-	main .window {
+	main.settingsView .window {
 		padding-top: calc(env(safe-area-inset-top) + 55px + 20px);
         padding-bottom: calc(env(safe-area-inset-bottom) + 60px + 20px);
         border-radius: 0px;
-        
         flex: 1;
 
+        width: unset;
     }
+
+    main.settingsView.selected .settingsSidebar {
+        display: none;
+    }
+
+    main.settingsView:not(.selected) .window {
+        display: none;
+    }
+
+    .categoryTitle {
+        display: none !important;
+    }
+
+    main.settingsView .settingsSidebar {
+        width: 100%;
+        box-sizing: border-box;
+
+        padding-top: calc(env(safe-area-inset-top) + 55px + 20px);
+        padding-bottom: calc(env(safe-area-inset-bottom) + 60px + 20px);
+        border-radius: 0px;
+        flex: 1;
+
+        position: unset;
+        top: unset;
+    }
+}
+
+main.settingsView .window .block {
+    display: grid;
+    gap: 7px;
+}
+
+main.settingsView .window .block .blockTitle {
+    font-family: 'Rubik';
+    font-weight: 500;
+    opacity: 0.5;
+}
+
+main.settingsView .window .block .blockDescription {
+    font-family: 'Rubik';
+    font-weight: 400;
+    opacity: 0.5;
+    font-size: 14px;
 }
 
 main.settingsView .window .rose {
@@ -112,40 +155,68 @@ main.settingsView .window .rose {
     display: grid;
     border-radius: 15px;
 
-    padding: 15px;
-    background: var(--main-color);
-    width: 280px;
+    height: fit-content;
+    background: var(--input-color);
+
+    overflow: hidden;
+
 }
 
 .categoriesList .category {
     display: flex;
     align-items: center;
-    padding: 15px;
-    cursor: pointer;
-    font-size: 16px;
+    font-size: 15px;
     outline: none;
     border: none;
     font-family: 'Rubik';
-
-    background: var(--main-color);
+    font-weight: 450;
+    background: var(--input-color);
     color: var(--font-color);
 
-    transition: 0.2s background-color;
+    transition: 0.2s background-color, 0.2s opacity;
+    position: relative;
+    gap: 15px;
+    
+
+    overflow: hidden;
 }
 
-.categoriesList .category.selected {
-    background: var(--accent-color);
-    color: white;
+.categoriesList .category.reset .option {
+    justify-content: center;
+    color: var(--red-pallete-color)
 }
 
-.categoriesList .category.selected svg {
-    fill: white !important;
+.categoriesList .category.reset .option .title {
+    gap: 10px;
 }
 
-.categoriesList .category:not(.selected):hover {
-    background: color-mix(in srgb, var(--input-color) 90%, var(--font-color));
-
+.categoriesList .category.reset .option svg {
+    fill: var(--red-pallete-color);
 }
+
+
+.modal .reset {
+    background: var(--red-pallete-color) !important;
+    color: white !important;
+}
+
+.categoriesList button.category {
+    cursor: pointer;
+}
+
+/* смартфоны, устройства с сенсорным экраном, с которым работают пальцами */
+@media (hover: none) and (pointer: coarse) {
+    .categoriesList button.category:active {
+        background: color-mix(in srgb, var(--input-color) 90%, var(--font-color));
+    }
+}
+/* мышь, тачпад */
+@media (hover: hover) and (pointer: fine) {
+    .categoriesList button.category:hover {
+        background: color-mix(in srgb, var(--input-color) 90%, var(--font-color));
+    }
+}
+
 
 .categoriesList .category:first-of-type {
     border-radius: 15px 15px 0px 0px;
@@ -159,10 +230,19 @@ main.settingsView .window .rose {
     border-radius: 15px;
 }
 
+.categoriesList .category:disabled {
+    opacity: 0.65;
+    pointer-events: none;
+}
+
 .categoriesList .category .title {
     display: flex;
     align-items: center;
     gap: 15px;
+
+    width: fit-content;
+    text-wrap: nowrap;
+
 }
 
 .categoriesList .category .title svg {
@@ -176,18 +256,134 @@ main.settingsView .window .rose {
     margin-inline-start: auto;
     display: flex;
     align-items: center;
-    gap: 5px;
-    opacity: 0.5;
-    font-size: 16px;
-    
+    gap: 10px;
+    font-size: 15px;
+    color: color-mix(in srgb, var(--font-color) 50%, var(--main-color));
+
+
+    overflow: hidden;
 }
+
+.categoriesList .category .subTitle .text {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+}
+
+
+
+.categoriesList .category hr {
+    height: 28px;
+    min-width: 2px;
+    width: 2px;
+    background-color: color-mix(in srgb, var(--font-color) 30%, var(--main-color));
+    border: none;
+    border-radius: 2px;
+    opacity: 0.5;
+}
+
+.categoriesList .category .option {
+    display: flex;
+
+    overflow: hidden;
+    gap: 15px;
+}
+
+.categoriesList .category .option:first-of-type {
+    padding: 15px 0px 15px 15px;
+    width: 100%;
+
+}
+
+.categoriesList .category .option:last-of-type {
+    padding: 15px 15px 15px 0px;
+}
+
+.categoriesList .category .option:only-of-type {
+    padding: 15px;
+}
+
+
 .categoriesList .category .arrow {
     width: 15px;
     height: 15px;
-    fill: var(--font-color);
+    fill: color-mix(in srgb, var(--font-color) 50%, var(--main-color));
 }
 
-.modal .reset {
-    background: var(--red-pallete-color) !important;
-    color: white !important;
+.categoriesList .category .switch {
+    pointer-events: none;
+}
+.categoriesList .category .checkbox {
+    pointer-events: none;
+}
+
+.categoriesList hr {
+    width: calc(100% - 30px);
+    height: 1px; /* Высота линии разделения */
+    border-radius: 2px;
+    background-color: color-mix(in srgb, var(--font-color) 12%, var(--main-color));
+    border: none;
+
+    margin-left: auto;
+    margin-right: auto;
+
+}
+
+.categoriesList hr:last-of-type {
+    display: none;
+}
+
+
+.settingsSidebar {
+    width: 300px;
+    background: var(--main-color);
+    padding: 20px;
+    border-radius: 20px;
+    height: fit-content;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+
+    position: sticky;
+    top: 95px;
+}
+
+.categoryTitle {
+    font-family: 'Rubik', sans-serif;
+    font-weight: 500;
+    font-size: 20px;
+
+    display: flex;
+    gap: 5px;
+    align-items: center;
+}
+
+.categoryTitle .previous {
+    opacity: 0.5;
+    cursor: pointer;
+    transition: opacity 0.2s;
+}
+
+.categoryTitle .previous:hover {
+    opacity: 0.75;
+}
+
+.categoryTitle svg {
+    width: 17px;
+    height: 17px;
+    fill: var(--font-color);
+    opacity: 0.5;
+}
+
+.noResults {
+    font-family: 'Rubik', sans-serif;
+    font-weight: 500;
+    font-size: 20px;
+    color: color-mix(in srgb, var(--font-color) 50%, var(--main-color));
+    margin-top: 20px;
+    justify-items: center;
+    align-items: center;
+    display: grid;
+    flex: 1;
 }
